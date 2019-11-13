@@ -6,7 +6,7 @@
 * `Vebjørn Fonstad Leiros` (`vebjorfl`)
 * `Sindre Østrem` (`sindrost`)
 
-**Project name:** `ELO Analysis Tool`
+**Project name:** `GR8 ELO`
 
 #### Project idea
 
