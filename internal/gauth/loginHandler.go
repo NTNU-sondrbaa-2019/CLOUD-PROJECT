@@ -16,6 +16,16 @@ var googleOauthConfig = &oauth2.Config{
 }
 
 func LoginHandler(w http.ResponseWriter, r *http.Request) {
+    // Check if the sessionID cookie exists
+    sessionIDCookie, _ := r.Cookie("sessionID")
+    if sessionIDCookie.Value != "" {
+        // If the sessionID is found in the database, redirect to logged in page
+        if dbFoundSession(sessionIDCookie.Value){
+            http.Redirect(w, r, "/loggedin", http.StatusPermanentRedirect)
+        }
+    }
+
+    // If there is no userID cookie, go through authentication
     // Create oauthState cookie
     oauthState := generateStateOauthCookie(w)
     authURL := googleOauthConfig.AuthCodeURL(oauthState)
