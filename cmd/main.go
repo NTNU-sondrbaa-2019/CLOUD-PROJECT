@@ -13,6 +13,7 @@ import (
 
 func main() {
 
+	/*
 	type Test struct {
 		Name string `json:"name"`
 		Author string `json:"author"`
@@ -27,6 +28,7 @@ func main() {
 	CO1Cache.WriteJSON("test", test)
 
 	fmt.Println("Hello World!")
+	*/
 
 	port := os.Getenv("PORT")
 	if port == "" {
