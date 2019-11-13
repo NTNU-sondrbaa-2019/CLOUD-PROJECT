@@ -3,6 +3,7 @@ package gauth
 import (
     "golang.org/x/oauth2"
     "golang.org/x/oauth2/google"
+    "log"
     "net/http"
     "os"
 )
@@ -17,8 +18,10 @@ var googleOauthConfig = &oauth2.Config{
 
 func LoginHandler(w http.ResponseWriter, r *http.Request) {
     // Check if the sessionID cookie exists
-    sessionIDCookie, _ := r.Cookie("sessionID")
-    if sessionIDCookie.Value != "" {
+    sessionIDCookie, err := r.Cookie("sessionID")
+    if err != nil {
+        log.Print("No sessionID cookie here, going straight to authentication")
+    } else if sessionIDCookie.Value != "" {
         // If the sessionID is found in the database, redirect to logged in page
         if dbFoundSession(sessionIDCookie.Value){
             http.Redirect(w, r, "/loggedin", http.StatusPermanentRedirect)
