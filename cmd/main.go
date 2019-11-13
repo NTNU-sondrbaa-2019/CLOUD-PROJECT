@@ -19,7 +19,18 @@ func main() {
 
 	CO1Cache.Initialize()
 	CO1Cache.WriteJSON("test", test)
+	
+	
+	http.HandleFunc("/api/", makeHandler(testHandler))
+}
 
-	fmt.Println("Hello World!")
-
+func makeHandler(fn func(http.ResponseWriter, *http.Request, string)) http.HandlerFunc {
+    return func(w http.ResponseWriter, r *http.Request) {
+        m := validPath.FindStringSubmatch(r.URL.Path)
+        if m == nil {
+            http.NotFound(w, r)
+            return
+        }
+        fn(w, r, m[2])
+    }
 }
