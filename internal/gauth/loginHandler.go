@@ -8,7 +8,7 @@ import (
 )
 
 var googleOauthConfig = &oauth2.Config{
-    RedirectURL:    redirectURL,
+    RedirectURL:    os.Getenv("POST_AUTH_REROUTE_URL"),
     ClientID:       os.Getenv("GOOGLE_OAUTH_CLIENT_ID"),
     ClientSecret:   os.Getenv("GOOGLE_OAUTH_CLIENT_SECRET"),
     Scopes:         []string{"https://www.googleapis.com/auth/userinfo.email"},
