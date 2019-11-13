@@ -1,9 +1,10 @@
-## Group `8`: `Group 8`
+## Group `8`: `GR8`
 
 * `Sondre Benjamin Aasen` (`sondrbaa`)
 * `Adrian Emil Chambe-Eng` (`adrianec`)
 * `Marcus Hyge`  (`marcushy`)
 * `Vebjørn Fonstad Leiros` (`vebjorfl`)
+* `Sindre Østrem` (`sindrost`)
 
 **Project name:** `ELO Analysis Tool`
 
@@ -13,7 +14,7 @@ Users login using `Google Identity Platform` and we collect data from `lichess.o
 
 #### Technologies
 
-`GO`, `OpenStack`, `Google Identity Platform`, `lichess.org API`, `Amazon RDS`, `Cron`
+`GO`, `OpenStack`, `Google Identity Platform`, `lichess.org API`, `AWS RDS`, `Cron`
 
 #### Resources
 
