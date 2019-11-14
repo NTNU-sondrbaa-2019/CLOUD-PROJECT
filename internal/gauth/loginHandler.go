@@ -17,18 +17,17 @@ var googleOauthConfig = &oauth2.Config{
 }
 
 func LoginHandler(w http.ResponseWriter, r *http.Request) {
-    // Check if the sessionID cookie exists
-    sessionIDCookie, err := r.Cookie("sessionID")
-    if err != nil {
-        log.Print("No sessionID cookie here, going straight to authentication")
-    } else if sessionIDCookie.Value != "" {
-        // If the sessionID is found in the database, redirect to logged in page
-        if dbFoundSession(sessionIDCookie.Value){
-            http.Redirect(w, r, "/loggedin", http.StatusPermanentRedirect)
-        }
+    // We are only interested in the error, because it can only be nil if the cookie exists or http.ErrNoCookie if the
+    // cookie does not exist
+    _, err := r.Cookie("sessionID")
+    // If the sessionID cookie exists, redirect to the logged in page
+    if err != http.ErrNoCookie {
+        http.Redirect(w, r, "/loggedin", http.StatusTemporaryRedirect)
+        return
     }
+    // If there is no sessionID cookie, go through authentication
+    log.Print("No sessionID cookie here, going straight to authentication")
 
-    // If there is no userID cookie, go through authentication
     // Create oauthState cookie
     oauthState := generateStateOauthCookie(w)
     authURL := googleOauthConfig.AuthCodeURL(oauthState)
