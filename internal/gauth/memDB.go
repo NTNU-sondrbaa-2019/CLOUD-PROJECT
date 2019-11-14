@@ -16,10 +16,9 @@ var users []userInfo
 // Save the user info to memory
 func dbSave(in userInfo) {
     // If this email already exists in memory, only update the LastSessionID
-    for _, i := range users {
-        if i.Email == in.Email {
-            i.LastSessionID = in.LastSessionID
-            return
+    for i := 0; i < len(users); i++ {
+        if users[i].Email == in.Email {
+            users[i].LastSessionID = in.LastSessionID
         }
     }
 
