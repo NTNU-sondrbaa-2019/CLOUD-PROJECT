@@ -27,16 +27,6 @@ func dbSave(in userInfo) {
     users = append(users, in)
 }
 
-// If the compareID is found as the sessionID anywhere in the database, return true
-func dbFoundSession(compareID string) bool{
-    for _, i := range users {
-        if i.LastSessionID == compareID {
-            return true
-        }
-    }
-    return false
-}
-
 func dbPrintSpecificID(w http.ResponseWriter, sessionID string) {
     for _, i := range users {
         if i.LastSessionID == sessionID {
