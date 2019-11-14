@@ -19,6 +19,7 @@ func dbSave(in userInfo) {
     for i := 0; i < len(users); i++ {
         if users[i].Email == in.Email {
             users[i].LastSessionID = in.LastSessionID
+            return
         }
     }
 
