@@ -26,7 +26,9 @@ func main() {
 		"Sondre Benjamin Aasen",
 	}
 
-	http.HandleFunc("/get/member", internal.FakeTeamMembers)
+	http.HandleFunc("/get/fake", internal.FakeTeamMembers)
+	http.HandleFunc("/get/member", internal.GetTeamMembers)
+	http.HandleFunc("/get/connection", internal.GetTeamConnection)
 	CO1Cache.Initialize()
 	CO1Cache.WriteJSON("test", test)
 

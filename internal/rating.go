@@ -1,15 +1,17 @@
 package internal
 
 import (
+	"bufio"
 	"encoding/json"
-	"io/ioutil"
 	"log"
+	"net"
 	"net/http"
 )
 
 type TeamMembers struct {
 	ID string `json:"id"`
 	Username string `json:"username"`
+	CreatedAt int  `json:"createdAt"`
 }
 
 //TeamMembers - Struct for getting essential teammembers information
@@ -63,6 +65,21 @@ func FakeTeamMembers(w http.ResponseWriter, r *http.Request){
 	Teamids[10].Username = "Hyge"
 	Teamids[11].Username = "andreas_nl"
 
+	Teamids[0].CreatedAt = 1572566400
+	Teamids[1].CreatedAt = 1572566400
+	Teamids[2].CreatedAt = 1572566400
+	Teamids[3].CreatedAt = 1572566400
+	Teamids[4].CreatedAt = 1572566400
+	Teamids[5].CreatedAt = 1572566400
+	Teamids[6].CreatedAt = 1572566400
+	Teamids[7].CreatedAt = 1572566400
+	Teamids[8].CreatedAt = 1572566400
+	Teamids[9].CreatedAt = 1572566400
+	Teamids[10].CreatedAt = 1572566400
+	Teamids[11].CreatedAt = 1572566400
+
+
+
 	http.Header.Add(w.Header(), "content-type", "application/json")
 	err := json.NewEncoder(w).Encode(Teamids)
 	if err != nil {
@@ -71,44 +88,106 @@ func FakeTeamMembers(w http.ResponseWriter, r *http.Request){
 	}
 }
 
+func GetRequest(c *http.Client, s string) *http.Response {
+	req, err := http.NewRequest("GET", s, nil)
+	if err != nil {
+		log.Fatalln(err)
+	}
+	resp, err := c.Do(req)
+	if err != nil {
+		log.Fatalln(err)
+	}
+	return resp
+}
+
+func GetTeamConnection(w http.ResponseWriter, r *http.Request) {
+	teamidkey := r.URL.Query().Get("teamid")
+	conn, err := net.Dial("tcp", "lichess.org:9000")
+	request := "https://lichess.org/team/" + teamidkey +  "/users"
+	client := http.DefaultClient
+	response := GetRequest(client, request)
+	log.Print(response.Header)
+
+	if err != nil {
+		log.Print(err)
+	}
+
+	status, err := bufio.NewReader(conn).ReadString('\n')
+	log.Print(status)
+	http.Header.Add(w.Header(), "content-type", "application/json")
+	w.WriteHeader(http.StatusOK)
+}
+
 func GetTeamMembers(w http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 	case http.MethodGet:
-		var Teamids TeamMembers
-			//parts := strings.Split(r.URL.Path, "/")
-			//teamid := len(parts)-1
-			teamidkey := r.URL.Query().Get("teamid")
-			resp, err := http.Get("https://lichess.org/team/" + teamidkey +  "/users")
+		var Teamids[] TeamMembers
+		//parts := strings.Split(r.URL.Path, "/")
+		//teamid := len(parts)-1
+		teamidkey := r.URL.Query().Get("teamid")
+		request := "https://lichess.org/team/" + teamidkey +  "/users"
+		client := http.DefaultClient
+		response := GetRequest(client, request)
+		log.Print(response)
+
+
+		reader := bufio.NewReader(response.Body)
+		var i = 0
+		line, err := reader.ReadBytes('\n')
+		if err != nil {
+			log.Fatal(err)
+		}
+		log.Println(string(line))
+		var tmp TeamMembers
+		json.Unmarshal(line, &tmp)
+		Teamids = append(Teamids, tmp)
+		i++
+
+
+		for string(line) != "EOF" {
+			line, err := reader.ReadBytes('\n')
 			if err != nil {
-				log.Fatalln(err)
-				return
+				continue
 			}
 
 
-			//err = json.NewDecoder(resp.Body).Decode(&Teamids.Members)
+			var tmp TeamMembers
+			json.Unmarshal(line, &tmp)
+			log.Print(tmp.Username)
+			Teamids = append(Teamids, tmp)
+			i++
 
-			/*if err != nil {
-				log.Print(err)
-			}
-*/
-			body, err := ioutil.ReadAll(resp.Body)
+		}
 
-			//log.Print(body)
-			if err != nil {
-				w.WriteHeader(http.StatusInternalServerError)
-			}
-			err1 := json.Unmarshal(body, &Teamids)
-			if err1 != nil {
-				print("UnmarshallError: ")
-				log.Print(err1)
-			}
+		for i = 0; i < 12; i++{
+			print(Teamids[i].Username)
+		}
 
-			http.Header.Add(w.Header(), "content-type", "application/json")
-			err = json.NewEncoder(w).Encode(Teamids)
-			if err != nil {
-				http.Error(w, "Could not encode json", 400)
-				return
-			}
+
+
+
+		//line, err := resp.Read()
+
+		//log.Print(body)
+
+		/*
+		if err != nil {
+			w.WriteHeader(http.StatusInternalServerError)
+		}
+		err1 := json.Unmarshal(body, &Teamids)
+		if err1 != nil {
+			print("UnmarshallError: ")
+			log.Print(err1)
+		}
+
+		http.Header.Add(w.Header(), "content-type", "application/json")
+		err = json.NewEncoder(w).Encode(Teamids)
+		if err != nil {
+			http.Error(w, "Could not encode json", 400)
+			return
+		}
+
+		 */
 
 		}
 	}
