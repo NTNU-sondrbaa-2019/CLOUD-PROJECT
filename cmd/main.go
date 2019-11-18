@@ -13,7 +13,7 @@ func main() {
 	}
 
 	test := Test {
-		"This is a test JSON",
+		"This is a testa JSON",
 		"Sondre Benjamin Aasen",
 	}
 
