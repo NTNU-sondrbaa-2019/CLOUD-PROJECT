@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"log"
 	"net/http"
+	"sort"
 	"strconv"
 	"time"
 )
@@ -144,7 +145,7 @@ func GetTeamMembers(w http.ResponseWriter, r *http.Request) {
 			}
 
 			//TODO Remove
-			GetGamesInTeam(teamMembers)
+			SortGames(GetGamesInTeam(teamMembers))
 
 			http.Header.Add(w.Header(), "content-type", "application/json")
 			err = json.NewEncoder(w).Encode(teamMembers)
@@ -242,5 +243,14 @@ func GetGamesInTeam(teamMembers [] TeamMember) []Game{
 		print(games[i].Winner)
 	}
 
+	return games
+}
+
+func SortGames(games []Game) []Game{
+	sort.Slice(games, func(i, j int) bool { return games[i].CreatedAt < games[j].CreatedAt })
+	// TODO remove print
+	for i := 0; i < len(games); i++ {
+		print("Length of game " + strconv.Itoa(i) + ": " + strconv.Itoa(games[i].CreatedAt) + "\n")
+	}
 	return games
 }
