@@ -8,12 +8,6 @@ import (
 
 )
 
-func getMemberPrint(){
-
-}
-
-
-
 func main() {
 
 	type Test struct {
