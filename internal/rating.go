@@ -9,14 +9,14 @@ import (
 	"strconv"
 )
 
-type TeamMembers struct {
+type TeamMember struct {
 	ID string `json:"id"`
 	Username string `json:"username"`
 	CreatedAt int  `json:"createdAt"`
 }
 
-//TeamMembers - Struct for getting essential teammembers information
-type TeamGames struct {
+//TeamMember - Struct for getting essential teammembers information
+type Game struct {
     ID        string `json:"id"`
     CreatedAt int  `json:"createdAt"`
     Players   struct {
@@ -39,7 +39,7 @@ type TeamGames struct {
 }
 
 func FakeTeamMembers(w http.ResponseWriter, r *http.Request){
-	var Teamids[12] TeamMembers
+	var Teamids[12] TeamMember
 	Teamids[0].ID = "iwindj"
 	Teamids[1].ID = "JoakimPB"
 	Teamids[2].ID = "BeagluZ"
@@ -94,6 +94,7 @@ func GetRequest(c *http.Client, s string) *http.Response {
 	if err != nil {
 		log.Fatalln(err)
 	}
+	req.Header.Add("Accept", "application/x-ndjson")
 	resp, err := c.Do(req)
 	if err != nil {
 		log.Fatalln(err)
@@ -122,57 +123,113 @@ func GetTeamConnection(w http.ResponseWriter, r *http.Request) {
 func GetTeamMembers(w http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 		case http.MethodGet:
-			var Teamids[] TeamMembers
+			var teamMembers [] TeamMember
 			//parts := strings.Split(r.URL.Path, "/")
 			//teamid := len(parts)-1
 			teamidkey := r.URL.Query().Get("teamid")
 			request := "https://lichess.org/team/" + teamidkey +  "/users"
 			client := http.DefaultClient
 			response := GetRequest(client, request)
-			log.Print(response)
-
 
 			reader := bufio.NewReader(response.Body)
 			var i = 0
+
+
 			line, err := reader.ReadBytes('\n')
 			if err != nil {
 				log.Fatal(err)
 			}
-			log.Println(string(line))
-			var tmp TeamMembers
-			json.Unmarshal(line, &tmp)
-			Teamids = append(Teamids, tmp)
+			var tmp TeamMember
+			err = json.Unmarshal(line, &tmp)
+			if err != nil {
+				log.Print(err)
+			}
+			teamMembers = append(teamMembers, tmp)
 			i++
-
 
 			for {
 				line, err := reader.ReadBytes('\n')
 				if err != nil {
-					log.Print(err)
 					break
 				}
-
-
-				var tmp TeamMembers
-				json.Unmarshal(line, &tmp)
-				Teamids = append(Teamids, tmp)
+				var tmp TeamMember
+				err = json.Unmarshal(line, &tmp)
+				if err != nil {
+					log.Print(err)
+				}
+				teamMembers = append(teamMembers, tmp)
 				i++
-
 			}
 
 			for i = 0; i < 12; i++{
-				print(Teamids[i].ID + " " + Teamids[i].Username + " " + strconv.Itoa(Teamids[i].CreatedAt))
+				print(teamMembers[i].ID + " " + teamMembers[i].Username + " " + strconv.Itoa(teamMembers[i].CreatedAt))
 			}
 
-
 			http.Header.Add(w.Header(), "content-type", "application/json")
-			err = json.NewEncoder(w).Encode(Teamids)
+			err = json.NewEncoder(w).Encode(teamMembers)
 			if err != nil {
 				http.Error(w, "Could not encode json", 400)
 				w.WriteHeader(http.StatusInternalServerError)
 			}
-			w.WriteHeader(http.StatusOK)
 		}
 	}
 
 
+
+
+func GetGamesOfMember(w http.ResponseWriter, r *http.Request){
+	switch r.Method {
+		case http.MethodGet:
+			var games [] Game
+			member := r.URL.Query().Get("member")
+			vsMember := r.URL.Query().Get("vsMember")
+			request := "https://lichess.org/api/games/user/" + member + "?vs=" + vsMember +  "&perftype=blitz,classical,rapid,correspondence"
+			client := http.DefaultClient
+			response := GetRequest(client, request)
+			print(response.Body)
+
+			reader := bufio.NewReader(response.Body)
+			var i = 0
+
+
+			line, err := reader.ReadBytes('\n')
+			if err != nil {
+				log.Fatal(err)
+			}
+			var tmp Game
+			err = json.Unmarshal(line, &tmp)
+			if err != nil {
+				log.Print("Unmarshall Error:")
+				log.Print(err)
+			}
+			games = append(games, tmp)
+			i++
+
+			for {
+				line, err := reader.ReadBytes('\n')
+				if err != nil {
+					break
+				}
+				print(line)
+				var tmp Game
+				err = json.Unmarshal(line, &tmp)
+				if err != nil {
+					log.Print("Unmarshall Error:")
+					log.Print(err)
+				}
+				games = append(games, tmp)
+				i++
+			}
+
+			for i = 0; i < 1; i++{
+				print(games[i].ID + ":\n\tWhite: " + games[i].Players.White.User.Name + "\n\tBlack: " + games[i].Players.Black.User.Name + "\n\tWinner: " + games[i].Winner)
+			}
+
+			http.Header.Add(w.Header(), "content-type", "application/json")
+			err = json.NewEncoder(w).Encode(games)
+			if err != nil {
+				http.Error(w, "Could not encode json", 400)
+				w.WriteHeader(http.StatusInternalServerError)
+			}
+	}
+}
