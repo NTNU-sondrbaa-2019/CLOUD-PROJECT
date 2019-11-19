@@ -6,6 +6,7 @@ import (
 	"log"
 	"net/http"
 	"strconv"
+	"time"
 )
 
 type TeamMember struct {
@@ -142,9 +143,8 @@ func GetTeamMembers(w http.ResponseWriter, r *http.Request) {
 				i++
 			}
 
-			for i = 0; i < 12; i++{
-				print(teamMembers[i].ID + " " + teamMembers[i].Username + " " + strconv.Itoa(teamMembers[i].InternalCreatedAt))
-			}
+			//TODO Remove
+			GetGamesInTeam(teamMembers)
 
 			http.Header.Add(w.Header(), "content-type", "application/json")
 			err = json.NewEncoder(w).Encode(teamMembers)
@@ -153,39 +153,35 @@ func GetTeamMembers(w http.ResponseWriter, r *http.Request) {
 				w.WriteHeader(http.StatusInternalServerError)
 			}
 		}
-	}
-
-
-
+}
 
 func GetGamesOfMember(member TeamMember, vsMember TeamMember) []Game{
 		var games [] Game
-		request := "https://lichess.org/api/games/user/" + member.ID + "?vs=" + vsMember.ID +  "&perftype=blitz,classical,rapid,correspondence&since=" + strconv.Itoa(member.InternalCreatedAt)
+		lastCreatedAt := 0
+		if member.InternalCreatedAt < vsMember.InternalCreatedAt {
+			lastCreatedAt = vsMember.InternalCreatedAt
+		} else {
+			lastCreatedAt = member.InternalCreatedAt
+		}
+		//TODO set lastCreatedAt to zero after we have made lastCreatedAt on a member
+		lastCreatedAt = 1572607209000
+		print("Match: " + member.Username + "\t vs \t" + vsMember.Username + "\n")
+		request := "https://lichess.org/api/games/user/" + member.Username + "?vs=" + vsMember.Username +  "&perftype=blitz,classical,rapid,correspondence&since=" + strconv.Itoa(lastCreatedAt)
 		client := http.DefaultClient
 		response := GetRequest(client, request)
-
+		if response.StatusCode == 429 {
+			log.Print("Rate limit on lichess.org reached. sleeping for 70 seconds...")
+			time.Sleep(70 * time.Second)
+			response = GetRequest(client, request)
+		}
 		reader := bufio.NewReader(response.Body)
-		var i = 0
+		var i= 0
 
 		line, err := reader.ReadBytes('\n')
-		if err != nil {
-			log.Fatal(err)
-		}
-		var tmp Game
-		err = json.Unmarshal(line, &tmp)
-		if err != nil {
-			log.Print("Unmarshall Error:")
-			log.Print(err)
-		}
-		games = append(games, tmp)
-		i++
-
-		for {
-			line, err := reader.ReadBytes('\n')
+		if string(line) != "" {
 			if err != nil {
-				break
+				log.Print(err)
 			}
-			print(line)
 			var tmp Game
 			err = json.Unmarshal(line, &tmp)
 			if err != nil {
@@ -194,10 +190,57 @@ func GetGamesOfMember(member TeamMember, vsMember TeamMember) []Game{
 			}
 			games = append(games, tmp)
 			i++
-		}
+			ifPrint := false
+			for {
+				if err != nil {
+					break
+				}
+				line, err := reader.ReadBytes('\n')
+				if err != nil {
+					break
+				}
+				print(line)
+				var tmp Game
+				err = json.Unmarshal(line, &tmp)
+				if err != nil {
+					log.Print("Unmarshall Error:")
+					log.Print(err)
+				}
+				games = append(games, tmp)
+				i++
+				ifPrint = true
+			}
 
-		for i = 0; i < 1; i++{
-			print(games[i].ID + ":\n\tWhite: " + games[i].Players.White.User.Name + "\n\tBlack: " + games[i].Players.Black.User.Name + "\n\tWinner: " + games[i].Winner)
+			if ifPrint {
+				for i = 0; i < 1; i++ {
+					print("Game :\n\tWhite: " + games[i].Players.White.User.Name + "\n\tBlack: " + games[i].Players.Black.User.Name + "\n\tWinner: " + games[i].Winner + "\n")
+				}
+			}
 		}
 		return games
+}
+
+func GetGamesInTeam(teamMembers [] TeamMember) []Game{
+	var games [] Game
+	var tmpGames [] Game
+	print("Third Member:" + teamMembers[2].Username + "\n")
+
+	for i := 0; i < len(teamMembers); i++ {
+		for j := i + 1; j < len(teamMembers); j++ {
+			tmpGames = GetGamesOfMember(teamMembers[i], teamMembers[j])
+			//print(tmpGames[i].Winner)
+			//print(strconv.Itoa(i) + "  " +  strconv.Itoa(j) + "\t")
+			//print(teamMembers[i].Username + " vs " + teamMembers[j].Username + "\n")
+			time.Sleep(5 * time.Second)
+			for k := 0; k < len(tmpGames); k++ {
+				games = append(games, tmpGames[k])
+			}
+		}
+	}
+
+	for i := 0; i < len(games); i++ {
+		print(games[i].Winner)
+	}
+
+	return games
 }
