@@ -4,7 +4,6 @@ import (
 	"bufio"
 	"encoding/json"
 	"log"
-	"net"
 	"net/http"
 	"strconv"
 )
@@ -100,24 +99,6 @@ func GetRequest(c *http.Client, s string) *http.Response {
 		log.Fatalln(err)
 	}
 	return resp
-}
-
-func GetTeamConnection(w http.ResponseWriter, r *http.Request) {
-	teamidkey := r.URL.Query().Get("teamid")
-	conn, err := net.Dial("tcp", "lichess.org:9000")
-	request := "https://lichess.org/team/" + teamidkey +  "/users"
-	client := http.DefaultClient
-	response := GetRequest(client, request)
-	log.Print(response.Header)
-
-	if err != nil {
-		log.Print(err)
-	}
-
-	status, err := bufio.NewReader(conn).ReadString('\n')
-	log.Print(status)
-	http.Header.Add(w.Header(), "content-type", "application/json")
-	w.WriteHeader(http.StatusOK)
 }
 
 func GetTeamMembers(w http.ResponseWriter, r *http.Request) {
