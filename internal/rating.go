@@ -11,7 +11,7 @@ import (
 type TeamMember struct {
 	ID string `json:"id"`
 	Username string `json:"username"`
-	CreatedAt int  `json:"createdAt"`
+	InternalCreatedAt int  `json:"internalCreatedAt"`
 }
 
 //TeamMember - Struct for getting essential teammembers information
@@ -65,18 +65,18 @@ func FakeTeamMembers(w http.ResponseWriter, r *http.Request){
 	Teamids[10].Username = "Hyge"
 	Teamids[11].Username = "andreas_nl"
 
-	Teamids[0].CreatedAt = 1572566400
-	Teamids[1].CreatedAt = 1572566400
-	Teamids[2].CreatedAt = 1572566400
-	Teamids[3].CreatedAt = 1572566400
-	Teamids[4].CreatedAt = 1572566400
-	Teamids[5].CreatedAt = 1572566400
-	Teamids[6].CreatedAt = 1572566400
-	Teamids[7].CreatedAt = 1572566400
-	Teamids[8].CreatedAt = 1572566400
-	Teamids[9].CreatedAt = 1572566400
-	Teamids[10].CreatedAt = 1572566400
-	Teamids[11].CreatedAt = 1572566400
+	Teamids[0].InternalCreatedAt = 1572566400
+	Teamids[1].InternalCreatedAt = 1572566400
+	Teamids[2].InternalCreatedAt = 1572566400
+	Teamids[3].InternalCreatedAt = 1572566400
+	Teamids[4].InternalCreatedAt = 1572566400
+	Teamids[5].InternalCreatedAt = 1572566400
+	Teamids[6].InternalCreatedAt = 1572566400
+	Teamids[7].InternalCreatedAt = 1572566400
+	Teamids[8].InternalCreatedAt = 1572566400
+	Teamids[9].InternalCreatedAt = 1572566400
+	Teamids[10].InternalCreatedAt = 1572566400
+	Teamids[11].InternalCreatedAt = 1572566400
 
 
 
@@ -143,7 +143,7 @@ func GetTeamMembers(w http.ResponseWriter, r *http.Request) {
 			}
 
 			for i = 0; i < 12; i++{
-				print(teamMembers[i].ID + " " + teamMembers[i].Username + " " + strconv.Itoa(teamMembers[i].CreatedAt))
+				print(teamMembers[i].ID + " " + teamMembers[i].Username + " " + strconv.Itoa(teamMembers[i].InternalCreatedAt))
 			}
 
 			http.Header.Add(w.Header(), "content-type", "application/json")
@@ -158,25 +158,34 @@ func GetTeamMembers(w http.ResponseWriter, r *http.Request) {
 
 
 
-func GetGamesOfMember(w http.ResponseWriter, r *http.Request){
-	switch r.Method {
-		case http.MethodGet:
-			var games [] Game
-			member := r.URL.Query().Get("member")
-			vsMember := r.URL.Query().Get("vsMember")
-			request := "https://lichess.org/api/games/user/" + member + "?vs=" + vsMember +  "&perftype=blitz,classical,rapid,correspondence"
-			client := http.DefaultClient
-			response := GetRequest(client, request)
-			print(response.Body)
+func GetGamesOfMember(member TeamMember, vsMember TeamMember) []Game{
+		var games [] Game
+		request := "https://lichess.org/api/games/user/" + member.ID + "?vs=" + vsMember.ID +  "&perftype=blitz,classical,rapid,correspondence&since=" + strconv.Itoa(member.InternalCreatedAt)
+		client := http.DefaultClient
+		response := GetRequest(client, request)
 
-			reader := bufio.NewReader(response.Body)
-			var i = 0
+		reader := bufio.NewReader(response.Body)
+		var i = 0
 
+		line, err := reader.ReadBytes('\n')
+		if err != nil {
+			log.Fatal(err)
+		}
+		var tmp Game
+		err = json.Unmarshal(line, &tmp)
+		if err != nil {
+			log.Print("Unmarshall Error:")
+			log.Print(err)
+		}
+		games = append(games, tmp)
+		i++
 
+		for {
 			line, err := reader.ReadBytes('\n')
 			if err != nil {
-				log.Fatal(err)
+				break
 			}
+			print(line)
 			var tmp Game
 			err = json.Unmarshal(line, &tmp)
 			if err != nil {
@@ -185,32 +194,10 @@ func GetGamesOfMember(w http.ResponseWriter, r *http.Request){
 			}
 			games = append(games, tmp)
 			i++
+		}
 
-			for {
-				line, err := reader.ReadBytes('\n')
-				if err != nil {
-					break
-				}
-				print(line)
-				var tmp Game
-				err = json.Unmarshal(line, &tmp)
-				if err != nil {
-					log.Print("Unmarshall Error:")
-					log.Print(err)
-				}
-				games = append(games, tmp)
-				i++
-			}
-
-			for i = 0; i < 1; i++{
-				print(games[i].ID + ":\n\tWhite: " + games[i].Players.White.User.Name + "\n\tBlack: " + games[i].Players.Black.User.Name + "\n\tWinner: " + games[i].Winner)
-			}
-
-			http.Header.Add(w.Header(), "content-type", "application/json")
-			err = json.NewEncoder(w).Encode(games)
-			if err != nil {
-				http.Error(w, "Could not encode json", 400)
-				w.WriteHeader(http.StatusInternalServerError)
-			}
-	}
+		for i = 0; i < 1; i++{
+			print(games[i].ID + ":\n\tWhite: " + games[i].Players.White.User.Name + "\n\tBlack: " + games[i].Players.Black.User.Name + "\n\tWinner: " + games[i].Winner)
+		}
+		return games
 }
