@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"encoding/json"
 	"log"
+	"math"
 	"net/http"
 	"sort"
 	"strconv"
@@ -14,6 +15,7 @@ type TeamMember struct {
 	ID string `json:"id"`
 	Username string `json:"username"`
 	InternalCreatedAt int  `json:"internalCreatedAt"`
+	Elo float64 `json:"elo"`
 }
 
 //TeamMember - Struct for getting essential teammembers information
@@ -145,7 +147,7 @@ func GetTeamMembers(w http.ResponseWriter, r *http.Request) {
 			}
 
 			//TODO Remove
-			SortGames(GetGamesInTeam(teamMembers))
+			CalculateElo(SortGames(GetGamesInTeam(teamMembers)), teamMembers)
 
 			http.Header.Add(w.Header(), "content-type", "application/json")
 			err = json.NewEncoder(w).Encode(teamMembers)
@@ -165,8 +167,9 @@ func GetGamesOfMember(member TeamMember, vsMember TeamMember) []Game{
 			lastCreatedAt = member.InternalCreatedAt
 		}
 		//TODO set lastCreatedAt to zero after we have made lastCreatedAt on a member
-		lastCreatedAt = 1572607209000
-		print("Match: " + member.Username + "\t vs \t" + vsMember.Username + "\n")
+		//lastCreatedAt = 1572607209000 //11.01.2019
+		lastCreatedAt = 1546350046000 //01.01.2019
+		print( member.Username + "\t vs \t" + vsMember.Username + "\n")
 		request := "https://lichess.org/api/games/user/" + member.Username + "?vs=" + vsMember.Username +  "&perftype=blitz,classical,rapid,correspondence&since=" + strconv.Itoa(lastCreatedAt)
 		client := http.DefaultClient
 		response := GetRequest(client, request)
@@ -225,9 +228,12 @@ func GetGamesInTeam(teamMembers [] TeamMember) []Game{
 	var games [] Game
 	var tmpGames [] Game
 	print("Third Member:" + teamMembers[2].Username + "\n")
-
+	count := 0 // TODO REMOVE ALL INSTANCES OF count
 	for i := 0; i < len(teamMembers); i++ {
 		for j := i + 1; j < len(teamMembers); j++ {
+			count++
+			timeleft := (77 - count) * 5
+			print("Match nr." + strconv.Itoa(count) + "\tTime remaining: " + strconv.Itoa(timeleft) + " ")
 			tmpGames = GetGamesOfMember(teamMembers[i], teamMembers[j])
 			//print(tmpGames[i].Winner)
 			//print(strconv.Itoa(i) + "  " +  strconv.Itoa(j) + "\t")
@@ -253,4 +259,80 @@ func SortGames(games []Game) []Game{
 		print("Length of game " + strconv.Itoa(i) + ": " + strconv.Itoa(games[i].CreatedAt) + "\n")
 	}
 	return games
+}
+
+// Returns TeamMember slice, White then Black
+func GetMemberFromGame(game Game, teamMembers [] TeamMember) []TeamMember{
+	var ret [] TeamMember
+	var white TeamMember
+	var black TeamMember
+	for i := 0; i < len(teamMembers); i++ {
+		if game.Players.White.User.Name == teamMembers[i].Username {
+			white = teamMembers[i]
+		} else if game.Players.Black.User.Name == teamMembers[i].Username {
+			black = teamMembers[i]
+		}
+	}
+	ret = append(ret, white)
+	ret = append(ret, black)
+	return ret
+}
+
+func InsertElo(eloWhite float64, eloBlack float64, white TeamMember, black TeamMember, teamMembers [] TeamMember) []TeamMember{
+	for i := 0; i < len(teamMembers); i++ {
+		if white.Username == teamMembers[i].Username {
+			teamMembers[i].Elo = eloWhite
+		} else if black.Username == teamMembers[i].Username {
+			teamMembers[i].Elo = eloBlack
+		}
+	}
+	return teamMembers
+}
+
+func CalculateElo(games []Game, teamMembers []TeamMember) []TeamMember{
+	//TODO get elo from own database
+
+	//TODO
+	for i := 0; i < len(teamMembers); i++ {
+		teamMembers[i].Elo = 1500.0
+	}
+
+	newTeamMembers := teamMembers
+
+	for i := 0; i < len(games); i++ {
+
+
+		tmp := GetMemberFromGame(games[i], teamMembers)
+		white := tmp[0]
+		black := tmp[1]
+
+		var w float64
+		var b float64
+		K := 64.0
+
+		R1 := math.Pow(10, white.Elo / 400)
+		R2 := math.Pow(10, black.Elo / 400)
+
+		WhiteChance := R1 / (R1 + R2)
+		BlackChance := R2 / (R1 + R2)
+
+		if games[i].Winner == "white" {
+			w = white.Elo + (K * (1 - WhiteChance))
+			b = black.Elo + (K * (0 - BlackChance))
+		} else if games[i].Winner == "black" {
+			w = white.Elo + (K * (0 - WhiteChance))
+			b = black.Elo + (K * (1 - BlackChance))
+		} else { // TODO check if remi is another response
+			w = white.Elo + (K * (0.5 - WhiteChance))
+			b = black.Elo + (K * (0.5 - BlackChance))
+		}
+
+		newTeamMembers = InsertElo(w, b, white, black, newTeamMembers)
+	}
+
+	for i := 0; i < len(newTeamMembers); i++ {
+		print("Elo for member " + newTeamMembers[i].Username + ":\t" + strconv.FormatFloat(newTeamMembers[i].Elo, 'f', -1, 64) + "\n")
+	}
+
+	return newTeamMembers
 }
