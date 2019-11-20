@@ -5,6 +5,7 @@ import (
 	"net/http"
 )
 
+// Simple function to do a GET request
 func getRequest(c *http.Client, s string) *http.Response {
 	req, err := http.NewRequest("GET", s, nil)
 	if err != nil {

@@ -5,6 +5,7 @@ import (
 	"strconv"
 )
 
+// Sorts games by timestamp and returns
 func sortGames(games []Game) []Game {
 	sort.Slice(games, func(i, j int) bool { return games[i].CreatedAt < games[j].CreatedAt })
 	// TODO remove print

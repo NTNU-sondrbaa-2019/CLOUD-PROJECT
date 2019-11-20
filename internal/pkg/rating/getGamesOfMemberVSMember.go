@@ -9,6 +9,7 @@ import (
 	"time"
 )
 
+// Gets all matches between two members.
 func getGamesOfMemberVSMember(member TeamMember, vsMember TeamMember) []Game {
 	var games [] Game
 	lastCreatedAt := 0

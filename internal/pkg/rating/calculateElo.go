@@ -6,17 +6,19 @@ import (
 )
 
 func calculateElo(games []Game, teamMembers []TeamMember) []TeamMember {
-	//TODO get elo from own database
 
+	//TODO get elo from own database
 	for i := 0; i < len(teamMembers); i++ {
 		teamMembers[i].Elo = 1500.0
 	}
 
 	newTeamMembers := teamMembers
 
+
+	// Loops through all games and calculates elo
 	for i := 0; i < len(games); i++ {
 
-		tmp := getWhiteAndBlackFromGame(games[i], teamMembers)
+		tmp := getWhiteAndBlackFromGame(games[i], newTeamMembers)
 		white := tmp[0]
 		black := tmp[1]
 

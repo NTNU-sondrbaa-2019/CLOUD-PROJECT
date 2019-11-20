@@ -5,6 +5,7 @@ import (
 	"time"
 )
 
+// Loops through every team member vs team member permutation and calls `getGamesOfMemberVSMember`.
 func getGamesInTeam(teamMembers [] TeamMember) []Game {
 	var games [] Game
 	var tmpGames [] Game
@@ -15,9 +16,6 @@ func getGamesInTeam(teamMembers [] TeamMember) []Game {
 			timeleft := (77 - count) * 5
 			print("Match nr." + strconv.Itoa(count) + "\tTime remaining: " + strconv.Itoa(timeleft) + " ")
 			tmpGames = getGamesOfMemberVSMember(teamMembers[i], teamMembers[j])
-			//print(tmpGames[i].Winner)
-			//print(strconv.Itoa(i) + "  " +  strconv.Itoa(j) + "\t")
-			//print(teamMembers[i].Username + " vs " + teamMembers[j].Username + "\n")
 			time.Sleep(5 * time.Second)
 			for k := 0; k < len(tmpGames); k++ {
 				games = append(games, tmpGames[k])

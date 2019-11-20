@@ -1,6 +1,6 @@
 package rating
 
-// Returns TeamMember slice, White then Black
+// Functions loops through all team members to find the `teamMember` object of the `black` and `white` members of a game match.
 func getWhiteAndBlackFromGame(game Game, teamMembers [] TeamMember) []TeamMember {
 	var ret [] TeamMember
 	var white TeamMember
