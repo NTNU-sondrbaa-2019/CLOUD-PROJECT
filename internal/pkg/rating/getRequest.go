@@ -5,7 +5,7 @@ import (
 	"net/http"
 )
 
-func GetRequest(c *http.Client, s string) *http.Response {
+func getRequest(c *http.Client, s string) *http.Response {
 	req, err := http.NewRequest("GET", s, nil)
 	if err != nil {
 		log.Fatalln(err)

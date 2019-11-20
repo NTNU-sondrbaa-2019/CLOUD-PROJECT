@@ -7,17 +7,24 @@ import (
 	"net/http"
 )
 
-func GetTeamElo(teamIdKey string) []TeamMember{
+/*
+	Parameter `teamIdKey` is the id of a team on lichess.org
+
+	Does a GET request to lichess and gets all the members in a team. Calls `GetGamesInTeam` to get all games in a team.
+	Calls `sortGames` to sort these games. Calls `calculateElo` to calculate Elo.
+
+	returns `[]TeamMember` with all team members in a team with an internal ELO in team.
+*/
+func GetTeamElo(teamIdKey string) []TeamMember {
 	var teamMembers [] TeamMember
 	//parts := strings.Split(r.URL.Path, "/")
 	//teamid := len(parts)-1
-	request := "https://lichess.org/team/" + teamIdKey +  "/users"
+	request := "https://lichess.org/team/" + teamIdKey + "/users"
 	client := http.DefaultClient
-	response := GetRequest(client, request)
+	response := getRequest(client, request)
 
 	reader := bufio.NewReader(response.Body)
 	var i = 0
-
 
 	line, err := reader.ReadBytes('\n')
 	if err != nil {
@@ -45,6 +52,5 @@ func GetTeamElo(teamIdKey string) []TeamMember{
 		i++
 	}
 
-	//TODO Remove
-	return CalculateElo(SortGames(GetGamesInTeam(teamMembers)), teamMembers)
+	return calculateElo(sortGames(getGamesInTeam(teamMembers)), teamMembers)
 }

@@ -1,16 +1,16 @@
 package rating
 
+//TeamMember - Struct for getting essential teammembers information
 type TeamMember struct {
-	ID string `json:"id"`
-	Username string `json:"username"`
-	InternalCreatedAt int  `json:"internalCreatedAt"`
-	Elo float64 `json:"elo"`
+	ID                string  `json:"id"`
+	Username          string  `json:"username"`
+	InternalCreatedAt int     `json:"internalCreatedAt"`
+	Elo               float64 `json:"elo"`
 }
 
-//TeamMember - Struct for getting essential teammembers information
 type Game struct {
 	ID        string `json:"id"`
-	CreatedAt int  `json:"createdAt"`
+	CreatedAt int    `json:"createdAt"`
 	Players   struct {
 		White struct {
 			User struct {

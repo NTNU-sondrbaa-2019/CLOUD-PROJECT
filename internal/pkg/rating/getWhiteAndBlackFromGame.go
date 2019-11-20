@@ -1,7 +1,7 @@
 package rating
 
 // Returns TeamMember slice, White then Black
-func GetWhiteAndBlackFromGame(game Game, teamMembers [] TeamMember) []TeamMember{
+func getWhiteAndBlackFromGame(game Game, teamMembers [] TeamMember) []TeamMember {
 	var ret [] TeamMember
 	var white TeamMember
 	var black TeamMember

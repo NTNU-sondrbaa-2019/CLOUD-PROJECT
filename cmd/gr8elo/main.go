@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 	"github.com/NTNU-sondrbaa-2019/CLOUD-O1/pkg/CO1Cache"
-	"github.com/NTNU-sondrbaa-2019/CLOUD-PROJECT/internal/rating"
+	"github.com/NTNU-sondrbaa-2019/CLOUD-PROJECT/internal/pkg/rating"
 )
 
 import "github.com/robfig/cron/v3"
