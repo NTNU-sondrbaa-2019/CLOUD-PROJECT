@@ -17,14 +17,12 @@ type Game struct {
 				ID   string `json:"id"`
 				Name string `json:"name"`
 			} `json:"user"`
-			Rating int `json:"rating"`
 		} `json:"white"`
 		Black struct {
 			User struct {
 				ID   string `json:"id"`
 				Name string `json:"name"`
 			} `json:"user"`
-			Rating int `json:"rating"`
 		} `json:"black"`
 	} `json:"players"`
 	Winner string `json:"winner"`
