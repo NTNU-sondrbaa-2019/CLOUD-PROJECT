@@ -7,7 +7,8 @@ import (
 	"net/http"
 )
 
-/*
+/*	GetTeamElo
+
 	Parameter `teamIdKey` is the id of a team on lichess.org
 
 	Does a GET request to lichess and gets all the members in a team. Calls `GetGamesInTeam` to get all games in a team.
@@ -15,11 +16,11 @@ import (
 
 	returns `[]TeamMember` with all team members in a team with an internal ELO in team.
 */
-func GetTeamElo(teamIdKey string) []TeamMember {
+func GetTeamElo(teamIDKey string) []TeamMember {
 	var teamMembers [] TeamMember
 	//parts := strings.Split(r.URL.Path, "/")
 	//teamid := len(parts)-1
-	request := "https://lichess.org/team/" + teamIdKey + "/users"
+	request := "https://lichess.org/team/" + teamIDKey + "/users"
 	client := http.DefaultClient
 	response := getRequest(client, request)
 

@@ -26,8 +26,8 @@ func getGamesOfMemberVSMember(member TeamMember, vsMember TeamMember) []Game {
 	client := http.DefaultClient
 	response := getRequest(client, request)
 	if response.StatusCode == 429 {
-		log.Print("Rate limit on lichess.org reached. sleeping for " + strconv.Itoa(LICHESS_RATE_LIMIT_SECONDS) + " seconds...")
-		time.Sleep(LICHESS_RATE_LIMIT_SECONDS * time.Second) // Waiting over 1 min for lichess' rate limit
+		log.Print("Rate limit on lichess.org reached. sleeping for " + strconv.Itoa(LichessRateLimitSeconds) + " seconds...")
+		time.Sleep(LichessRateLimitSeconds * time.Second) // Waiting over 1 min for lichess' rate limit
 		response = getRequest(client, request)
 	}
 	reader := bufio.NewReader(response.Body)

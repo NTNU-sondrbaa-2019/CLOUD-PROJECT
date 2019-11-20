@@ -1,6 +1,6 @@
 package rating
 
-//TeamMember - Struct for getting essential teammembers information
+// TeamMember - Struct for getting essential teammembers information
 type TeamMember struct {
 	ID                string  `json:"id"`
 	Username          string  `json:"username"`
@@ -8,6 +8,7 @@ type TeamMember struct {
 	Elo               float64 `json:"elo"`
 }
 
+// Game - Struct for getting game/match information
 type Game struct {
 	ID        string `json:"id"`
 	CreatedAt int    `json:"createdAt"`

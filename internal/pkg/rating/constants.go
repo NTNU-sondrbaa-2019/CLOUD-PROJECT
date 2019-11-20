@@ -1,3 +1,4 @@
 package rating
 
-const LICHESS_RATE_LIMIT_SECONDS  = 61;
+// LichessRateLimitSeconds for sleep when we hit the rate limit of lichess.org
+const LichessRateLimitSeconds = 61;
