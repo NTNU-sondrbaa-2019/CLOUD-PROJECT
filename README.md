@@ -18,4 +18,4 @@ Users login using `Google Identity Platform` and we collect data from `lichess.o
 
 #### Resources
 
-To be declared
+https://lichess.org/api
