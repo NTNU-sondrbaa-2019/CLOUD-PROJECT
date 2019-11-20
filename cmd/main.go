@@ -1,15 +1,15 @@
 package main
 
 import (
+	"CLOUD-PROJECT/internal"
 	"log"
 	"net/http"
-	"regexp"
 )
 
-var validPath = regexp.MustCompile("^\\/(api\\/v1)\\/(\\S*)")
-
 func main() {
-	http.HandleFunc("/api/v1/", makeHandler(handlerTest))
+	// 2 Options, either all handle requests are made here with new handlers
+	// Or each endpoint can be handled via switch in a "mainHandler"
+	http.HandleFunc("/api/v1/", internal.MakeHandler(handlerTest))
 
 	log.Println("Listening on port 8080")
 	log.Fatal(http.ListenAndServe(":8080", nil))
