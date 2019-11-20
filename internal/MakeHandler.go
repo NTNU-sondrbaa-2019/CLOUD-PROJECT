@@ -1,22 +1,11 @@
-package main
+package internal
 
 import (
 	"fmt"
-	"log"
 	"net/http"
-	"regexp"
 )
 
-var validPath = regexp.MustCompile("^\\/(api\\/v1)\\/(\\S*)")
-
-func main() {
-	http.HandleFunc("/api/v1/", makeHandler(handlerTest))
-
-	log.Println("Listening on port 8080")
-	log.Fatal(http.ListenAndServe(":8080", nil))
-}
-
-func makeHandler(fn func(http.ResponseWriter, *http.Request, string)) http.HandlerFunc {
+func MakeHandler(fn func(http.ResponseWriter, *http.Request, string)) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		// m is the string after api/v1/ example "user/results/"
 		m := validPath.FindStringSubmatch(r.URL.Path) // Checks if it matches criteria
