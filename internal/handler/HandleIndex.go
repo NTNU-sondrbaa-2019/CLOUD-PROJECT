@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"strconv"
 	"time"
+	"github.com/NTNU-sondrbaa-2019/CLOUD-PROJECT/internal/gauth"
 )
 
 var templates = template.Must(template.ParseFiles("../../web/static/login.html","../../web/static/ucp.html"))
@@ -13,6 +14,8 @@ type data struct {
 	Title string // Title for page
 	Date string // For the current year
 	Username string // For username
+	GoogleFetchData string
+	GoogleClientID string
 }
 
 func HandleIndex(w http.ResponseWriter, r *http.Request, url string) {
@@ -23,7 +26,7 @@ func HandleIndex(w http.ResponseWriter, r *http.Request, url string) {
 		currentTime := time.Now()
 		if !logged {
 			// Page to load if logged in
-			page := &data{Title: "Log in", Date: strconv.Itoa(currentTime.Year())}
+			page := &data{Title: "Log in", Date: strconv.Itoa(currentTime.Year()), GoogleClientID: gauth.GoogleOauthConfig.ClientID}
 
 			renderIndex(w, "login", page)
 		} else {
