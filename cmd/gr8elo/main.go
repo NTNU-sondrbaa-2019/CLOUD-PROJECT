@@ -38,7 +38,7 @@ func main() {
 
 	if tmp != "" {
 		for i := 0; i < len(teams); i++ {
-			_, err := c.AddFunc("/5 * * * *", func() { // "0 2 * * *" every night 2am
+			_, err := c.AddFunc("/10 * * * *", func() { // "0 2 * * *" every night 2am
 				rating.GetTeamElo(teams[i])
 			})
 			if err != nil {
