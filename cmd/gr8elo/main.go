@@ -13,7 +13,6 @@ import (
 	"github.com/NTNU-sondrbaa-2019/CLOUD-PROJECT/internal/pkg/rating"
 	"github.com/robfig/cron/v3"
 	"net/http"
-	"os"
 	"strings"
 )
 
@@ -42,7 +41,7 @@ func main() {
 	tmp := os.Getenv("LICHESS_TEAMS")
 	teams := strings.Split(tmp, ",")
 
-	
+
 	if tmp != "" {
 		for i := 0; i < len(teams); i++ {
 			_, err := c.AddFunc("0 2 * * *", func() {
