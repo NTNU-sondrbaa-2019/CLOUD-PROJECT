@@ -7,10 +7,16 @@ import (
 	"os"
 
 	"github.com/NTNU-sondrbaa-2019/CLOUD-O1/pkg/CO1Cache"
+<<<<<<< HEAD
 
 	"github.com/NTNU-sondrbaa-2019/CLOUD-PROJECT/internal/gauth"
 	"github.com/NTNU-sondrbaa-2019/CLOUD-PROJECT/internal/root"
+=======
+	"github.com/NTNU-sondrbaa-2019/CLOUD-PROJECT/internal/rating"
+>>>>>>> 1429692dc26a9c8de6e4764cdb3d57f14a9b20ed
 )
+
+import "github.com/robfig/cron/v3"
 
 func main() {
 	// Initialize the local cache
@@ -22,6 +28,7 @@ func main() {
 		port = "8080"
 	}
 
+<<<<<<< HEAD
 	http.HandleFunc("/", root.NilHandler)
 	http.HandleFunc("/login", gauth.LoginHandler)
 	http.HandleFunc("/logout", gauth.LogoutHandler)
@@ -30,4 +37,29 @@ func main() {
 
 	fmt.Println("Listening on port " + port)
 	log.Fatal(http.ListenAndServe(":" + port, nil))
+=======
+
+
+	CO1Cache.Initialize()
+	CO1Cache.WriteJSON("test", test)
+
+	fmt.Println("Hello World!")
+
+	// Uncomment to run the lichess stuff.
+
+	c := cron.New()
+	teamIdKey := "storbukk-sjakklubb"
+	_, err := c.AddFunc("0 2 * * *", func() {
+		rating.GetTeamElo(teamIdKey)
+	})
+
+	if err != nil {
+		panic(err)
+	}
+
+	c.Start()
+>>>>>>> 1429692dc26a9c8de6e4764cdb3d57f14a9b20ed
 }
+
+
+
