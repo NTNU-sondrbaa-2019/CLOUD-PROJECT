@@ -53,7 +53,7 @@ func main() {
 	if port == "" {
 		port = handler.DEFAULT_PORT
 	}
-	
+
 	log.Println("Listening on port " + port)
 	log.Fatal(http.ListenAndServe(":" + port, nil))
 }
