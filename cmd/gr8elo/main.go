@@ -37,6 +37,9 @@ func main() {
 	tmp := os.Getenv("LICHESS_TEAMS")
 	teams := strings.Split(tmp, ",")
 
+	for i := 0; i < len(teams); i++ {
+		fmt.Println(teams[i])
+	}
 
 	if tmp != "" {
 		for i := 0; i < len(teams); i++ {
