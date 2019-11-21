@@ -24,6 +24,15 @@ func HandleIndex(w http.ResponseWriter, r *http.Request, url string) {
 	} else {
 		logged := false // Doesnt check currently if actually logged in
 		currentTime := time.Now()
+
+		// We are only interested in the error, because it can only be nil if the cookie exists or http.ErrNoCookie if the
+		// cookie does not exist
+		_, err := r.Cookie("sessionID")
+		// If the sessionID cookie exists, redirect to the logged in page
+		if err != http.ErrNoCookie {
+			logged = true
+		}
+
 		if !logged {
 			// Page to load if not logged in
 			page := &data{
