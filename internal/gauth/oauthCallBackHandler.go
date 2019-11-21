@@ -45,7 +45,7 @@ func OauthCallBackHandler(w http.ResponseWriter, r *http.Request, title string) 
         Value:      tempID,
         Expires:    time.Now().Add(24 * time.Hour),
     }
-    http.SetCookie(w, &sessionIDCookie)
+    r.AddCookie(&sessionIDCookie)
 
     // Make a tempUser with the info we got from google and our new sessionID
     tempUser := userInfo{
