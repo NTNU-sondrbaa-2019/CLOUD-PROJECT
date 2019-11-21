@@ -30,7 +30,7 @@ func generateStateOauthCookie(w http.ResponseWriter) string{
 func getUserDataFromGoogle(code string) (userInfoFromGoogle, error) {
     var tempUser userInfoFromGoogle
 
-    token, err := googleOauthConfig.Exchange(context.Background(), code)
+    token, err := GoogleOauthConfig.Exchange(context.Background(), code)
     if err != nil {
         log.Print("Code exchange failed: " + err.Error())
         return tempUser, errors.New("Code exchange failed")

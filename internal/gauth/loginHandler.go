@@ -1,6 +1,7 @@
 package gauth
 
 import (
+    "fmt"
     "golang.org/x/oauth2"
     "golang.org/x/oauth2/google"
     "log"
@@ -8,7 +9,7 @@ import (
     "os"
 )
 
-var googleOauthConfig = &oauth2.Config{
+var GoogleOauthConfig = &oauth2.Config{
     RedirectURL:    os.Getenv("POST_AUTH_REROUTE_URL"),
     ClientID:       os.Getenv("GOOGLE_OAUTH_CLIENT_ID"),
     ClientSecret:   os.Getenv("GOOGLE_OAUTH_CLIENT_SECRET"),
@@ -16,7 +17,8 @@ var googleOauthConfig = &oauth2.Config{
     Endpoint:       google.Endpoint,
 }
 
-func LoginHandler(w http.ResponseWriter, r *http.Request) {
+func LoginHandler(w http.ResponseWriter, r *http.Request, title string) {
+    fmt.Println("In Login Handler")
     // We are only interested in the error, because it can only be nil if the cookie exists or http.ErrNoCookie if the
     // cookie does not exist
     _, err := r.Cookie("sessionID")
@@ -30,6 +32,6 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 
     // Create oauthState cookie
     oauthState := generateStateOauthCookie(w)
-    authURL := googleOauthConfig.AuthCodeURL(oauthState)
+    authURL := GoogleOauthConfig.AuthCodeURL(oauthState)
     http.Redirect(w, r, authURL, http.StatusTemporaryRedirect)
 }
