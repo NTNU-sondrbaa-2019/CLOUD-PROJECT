@@ -9,7 +9,8 @@ import (
 	"time"
 )
 
-func GetGamesOfMemberVSMember(member TeamMember, vsMember TeamMember) []Game{
+// Gets all matches between two members.
+func getGamesOfMemberVSMember(member TeamMember, vsMember TeamMember) []Game {
 	var games [] Game
 	lastCreatedAt := 0
 	if member.InternalCreatedAt < vsMember.InternalCreatedAt {
@@ -17,21 +18,20 @@ func GetGamesOfMemberVSMember(member TeamMember, vsMember TeamMember) []Game{
 	} else {
 		lastCreatedAt = member.InternalCreatedAt
 	}
-	//TODO set lastCreatedAt to zero after we have made lastCreatedAt on a member
+	//TODO remove lastCreatedAt
 	//lastCreatedAt = 1572607209000 //11.01.2019
 	lastCreatedAt = 1546350046000 //01.01.2019
-	print( member.Username + "\t vs \t" + vsMember.Username + "\n")
-	request := "https://lichess.org/api/games/user/" + member.Username + "?vs=" + vsMember.Username +  "&perftype=blitz,classical,rapid,correspondence&since=" + strconv.Itoa(lastCreatedAt)
+	print(member.Username + "\t vs \t" + vsMember.Username + "\n")
+	request := "https://lichess.org/api/games/user/" + member.Username + "?vs=" + vsMember.Username + "&perftype=blitz,classical,rapid,correspondence&since=" + strconv.Itoa(lastCreatedAt)
 	client := http.DefaultClient
-	response := GetRequest(client, request)
+	response := getRequest(client, request)
 	if response.StatusCode == 429 {
-		log.Print("Rate limit on lichess.org reached. sleeping for 70 seconds...")
-		time.Sleep(70 * time.Second)
-		// TODO cronjob
-		response = GetRequest(client, request)
+		log.Print("Rate limit on lichess.org reached. sleeping for " + strconv.Itoa(LichessRateLimitSeconds) + " seconds...")
+		time.Sleep(LichessRateLimitSeconds * time.Second) // Waiting over 1 min for lichess' rate limit
+		response = getRequest(client, request)
 	}
 	reader := bufio.NewReader(response.Body)
-	var i= 0
+	var i = 0
 
 	line, err := reader.ReadBytes('\n')
 	if string(line) != "" {
