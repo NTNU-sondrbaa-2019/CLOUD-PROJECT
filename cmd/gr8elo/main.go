@@ -32,25 +32,20 @@ func main() {
 	// Uncomment to run the lichess stuff.
 
 	c := cron.New()
-	// TODO accept input somewhere for the teamIdKey
 
 	tmp := os.Getenv("LICHESS_TEAMS")
 	teams := strings.Split(tmp, ",")
 
-	for i := 0; i < len(teams); i++ {
-		fmt.Println(teams[i])
-	}
-
 	if tmp != "" {
 		for i := 0; i < len(teams); i++ {
-			_, err := c.AddFunc("0 2 * * *", func() {
+			_, err := c.AddFunc("/5 * * * *", func() { // "0 2 * * *" every night 2am
 				rating.GetTeamElo(teams[i])
 			})
 			if err != nil {
 				panic(err)
 			}
 		}
-	}else {
+	}else {		// If no teams, use storbukk-sjakklub
 		teamIdKey := "storbukk-sjakklubb"
 		// For testing purposes run every 10 minutes
 		_, err := c.AddFunc("*/10 * * * *", func() {
