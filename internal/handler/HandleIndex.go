@@ -7,7 +7,7 @@ import (
 	"time"
 )
 
-var templates = template.Must(template.ParseFiles("../../web/static/login.html","../../web/static/ucp.html"))
+var templates = template.Must(template.ParseFiles("web/static/login.html","web/static/ucp.html"))
 
 type data struct {
 	Title string // Title for page
