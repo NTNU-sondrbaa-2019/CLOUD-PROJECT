@@ -16,7 +16,7 @@ var googleOauthConfig = &oauth2.Config{
     Endpoint:       google.Endpoint,
 }
 
-func LoginHandler(w http.ResponseWriter, r *http.Request) {
+func LoginHandler(w http.ResponseWriter, r *http.Request, title string) {
     // We are only interested in the error, because it can only be nil if the cookie exists or http.ErrNoCookie if the
     // cookie does not exist
     _, err := r.Cookie("sessionID")

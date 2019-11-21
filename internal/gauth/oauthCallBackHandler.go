@@ -12,7 +12,7 @@ type userInfoFromGoogle struct {
     Email       string      `json:"email"`
 }
 
-func OauthCallBackHandler(w http.ResponseWriter, r *http.Request) {
+func OauthCallBackHandler(w http.ResponseWriter, r *http.Request, title string) {
     // Read state from cookie
     oauthState, _ := r.Cookie("oauthstate")
 
