@@ -15,7 +15,7 @@ type User struct {
 
 }
 
-func teamHandler(w http.ResponseWriter, r *http.Request, title string) {
+func TeamHandler(w http.ResponseWriter, r *http.Request, title string) {
 	// Confirms to console that this handler was called
 	fmt.Println("Team handler called.")
 
