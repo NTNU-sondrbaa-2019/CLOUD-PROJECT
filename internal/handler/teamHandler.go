@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"strings"
 )
 
 type Team struct {
@@ -17,14 +18,15 @@ type User struct {
 	Username string
 }
 
-func teamHandler(w http.ResponseWriter, r *http.Request, title string) {
+func TeamHandler(w http.ResponseWriter, r *http.Request, title string) {
 	// Confirms to console that this handler was called
 	fmt.Println("Team handler called.")
+	urlPart := strings.Split(r.URL.Path, "/")
 
 	switch r.Method {
 	case "GET":
 		localTeam := Team{
-			Name: "Name",
+			Name: urlPart[4],
 			CreatedAt: "Date",
 			Members: nil,
 		}

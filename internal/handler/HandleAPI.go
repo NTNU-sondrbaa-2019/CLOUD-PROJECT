@@ -9,7 +9,7 @@ import (
 // HandleAPI - All requests to API endpoints will be handled here, follow testHandler for example
 func HandleAPI(w http.ResponseWriter, r *http.Request, title string) {
 	http.HandleFunc("/api/v1/test/", MakeHandler(testHandler)) // Should be removed in final version
-	http.HandleFunc("/api/v1/team/", MakeHandler(teamHandler))
+
 	http.HandleFunc("/api/v1/gauth/login/", MakeHandler(gauth.LoginHandler))
 	http.HandleFunc("/api/v1/gauth/loggedin/", MakeHandler(gauth.LoggedInHandler))
 
