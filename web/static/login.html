@@ -1,10 +1,11 @@
+{{ define "login"}}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <title>{{Page.Title}}</title>
+    <title>{{.Title}}</title>
     <meta name="google-signin-scope" content="profile email">
     <meta name="google-signin-client_id" content="YOUR_CLIENT_ID.apps.googleusercontent.com">
 </head>
@@ -31,7 +32,7 @@
 <footer>
     <div class="container">
         <p>
-            Copyright &copy; 2019-{{Page.CurrentYear}} Sondre Benjamin Aasen, Adrian Emil Chambe-Eng, Marcus Hyge, Vebjørn Fonstad Leiros, Sindre Østrem
+            Copyright &copy; 2019-{{.Date}} Sondre Benjamin Aasen, Adrian Emil Chambe-Eng, Marcus Hyge, Vebjørn Fonstad Leiros, Sindre Østrem
         </p>
     </div>
 </footer>
@@ -43,3 +44,4 @@
 </div>
 </body>
 </html>
+{{end}}

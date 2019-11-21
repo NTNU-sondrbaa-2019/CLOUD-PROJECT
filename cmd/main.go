@@ -47,6 +47,7 @@ func main() {
 	//http.HandleFunc("/api/v1/", internal.MakeHandler(someHandler))
 
 	http.HandleFunc("/", handler.MakeHandler(handler.HandleIndex))
+	http.HandleFunc("/api/v1/", handler.MakeHandler(handler.HandleAPI))
 
 	port := os.Getenv("PORT")
 
