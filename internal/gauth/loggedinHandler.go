@@ -7,17 +7,11 @@ import (
 
 func LoggedInHandler(w http.ResponseWriter, r *http.Request, title string) {
     fmt.Fprintln(w, "Here you see your email and Lichess key. You are redirected here automatically if you are already logged in.")
-    /*
-    sessionIDCookie, err := r.Cookie("sessionID2")
-    if err == http.ErrNoCookie {
-        http.NotFound(w, r)
-        return
-    }
-    fmt.Fprintln(w, "You are logged in with session ID: " + sessionIDCookie.Value)
+    sessionID := GetCookieValueByName(r.Cookies(),"sessionID")
+    fmt.Fprintln(w, "You are logged in with session ID: " + sessionID)
     fmt.Fprintln(w, "Your information:")
 
-    dbPrintSpecificID(w, sessionIDCookie.Value)
-    */
+    dbPrintSpecificID(w, sessionID)
 
     fmt.Fprintln(w, "Every user:")
     dbPrintAll(w)

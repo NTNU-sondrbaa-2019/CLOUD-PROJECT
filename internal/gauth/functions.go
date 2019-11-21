@@ -50,3 +50,14 @@ func getUserDataFromGoogle(code string) (userInfoFromGoogle, error) {
 
     return tempUser, nil
 }
+
+func GetCookieValueByName(cookie []*http.Cookie, name string) string {
+    cookieLen := len(cookie)
+    result := ""
+    for i := 0; i < cookieLen; i++ {
+        if cookie[i].Name == name {
+            result = cookie[i].Value
+        }
+    }
+    return result
+}

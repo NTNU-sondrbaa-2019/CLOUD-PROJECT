@@ -3,7 +3,6 @@ package gauth
 import (
     "golang.org/x/oauth2"
     "golang.org/x/oauth2/google"
-    "log"
     "net/http"
     "os"
 )
@@ -17,9 +16,6 @@ var GoogleOauthConfig = &oauth2.Config{
 }
 
 func LoginHandler(w http.ResponseWriter, r *http.Request, title string) {
-    // If there is no sessionID cookie, go through authentication
-    log.Print("No sessionID cookie here, going straight to authentication")
-
     // Create oauthState cookie
     oauthState := generateStateOauthCookie(w)
     authURL := GoogleOauthConfig.AuthCodeURL(oauthState)

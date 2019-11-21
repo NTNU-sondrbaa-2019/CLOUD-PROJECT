@@ -25,11 +25,10 @@ func HandleIndex(w http.ResponseWriter, r *http.Request, url string) {
 		logged := false // Doesnt check currently if actually logged in
 		currentTime := time.Now()
 
-		// We are only interested in the error, because it can only be nil if the cookie exists or http.ErrNoCookie if the
-		// cookie does not exist
-		_, err := r.Cookie("sessionID2")
-		// If the sessionID cookie exists, redirect to the logged in page
-		if err != http.ErrNoCookie {
+		// Gets the value od the sessionID cokkie from the users browser
+		sessionID := gauth.GetCookieValueByName(r.Cookies(), "sessionID")
+		// If the sessionID is not empty, we are logged in
+		if sessionID != "" {
 			logged = true
 		}
 
