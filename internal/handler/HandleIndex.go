@@ -27,7 +27,7 @@ func HandleIndex(w http.ResponseWriter, r *http.Request, url string) {
 
 		// We are only interested in the error, because it can only be nil if the cookie exists or http.ErrNoCookie if the
 		// cookie does not exist
-		_, err := r.Cookie("sessionID")
+		_, err := r.Cookie("sessionID2")
 		// If the sessionID cookie exists, redirect to the logged in page
 		if err != http.ErrNoCookie {
 			logged = true
