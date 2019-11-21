@@ -13,6 +13,7 @@ func HandleAPI(w http.ResponseWriter, r *http.Request, title string) {
 		http.NotFound(w, r)
 }
 
+// TestHandler func can also be removed in final version . Currently here for you to know how to use
 func testHandler(w http.ResponseWriter, r *http.Request, title string) {
 	fmt.Println("Test Handler was called")
 }
