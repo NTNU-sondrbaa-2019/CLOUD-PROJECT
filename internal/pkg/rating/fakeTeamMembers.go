@@ -1,7 +1,7 @@
 package rating
 
 /*
-func FakeTeamMembers() []TeamMember{
+func fakeTeamMembers() []TeamMember{
 	var Teamids[] TeamMember
 	Teamids[0].ID = "iwindj"
 	Teamids[1].ID = "JoakimPB"
