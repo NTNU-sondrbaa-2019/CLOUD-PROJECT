@@ -8,7 +8,7 @@ import (
 	"github.com/NTNU-sondrbaa-2019/CLOUD-PROJECT/internal/gauth"
 )
 
-var templates = template.Must(template.ParseFiles("web/static/login.html","web/static/ucp.html"))
+var templates = template.Must(template.ParseFiles("web/static/login.html","web/static/ucp.html","web/static/error.html"))
 
 type data struct {
 	Title string // Title for page
@@ -28,17 +28,17 @@ func HandleIndex(w http.ResponseWriter, r *http.Request, url string) {
 			// Page to load if logged in
 			page := &data{Title: "Log in", CurrentYear: strconv.Itoa(currentTime.Year()), GoogleClientID: gauth.GoogleOauthConfig.ClientID}
 
-			renderIndex(w, "login", page)
+			RenderIndex(w, "login", page)
 		} else {
 			// Page to load if not logged in
 			page := &data{Title: "GR8ELO", CurrentYear: strconv.Itoa(currentTime.Year())}
 
-			renderIndex(w, "ucp", page)
+			RenderIndex(w, "ucp", page)
 		}
 	}
 }
 
-func renderIndex(writer http.ResponseWriter, s string, page interface{}) {
+func RenderIndex(writer http.ResponseWriter, s string, page interface{}) {
 	// Assigns data to datapoints in html file
 	err := templates.ExecuteTemplate(writer, s, page)
 

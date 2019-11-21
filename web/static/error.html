@@ -1,3 +1,4 @@
+{{define "error"}}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -5,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
           integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <title>{{Page.Title}}</title>
+    <title>{{.ErrorMsg}}</title>
     <meta name="google-signin-scope" content="profile email">
     <meta name="google-signin-client_id" content="YOUR_CLIENT_ID.apps.googleusercontent.com">
 </head>
@@ -17,8 +18,8 @@
             <p class="ml-3">We're sorry you're experiencing trouble with our service, feel free to <a
                         href="mailto:admin@deasilsoft.com">contact our sysadmin</a>.</p>
             <div class="alert alert-warning">
-                <h2>Error code: {{Error.Code}}</h2>
-                <pre>{{Error.Message}}</pre>
+                <h2>Error code: {{.ErrorCode}}</h2>
+                <pre>{{.ErrorMsg}}</pre>
             </div>
         </div>
     </div>
@@ -26,7 +27,7 @@
 <footer>
     <div class="container">
         <p>
-            Copyright &copy; 2019-{{Page.CurrentYear}} Sondre Benjamin Aasen, Adrian Emil Chambe-Eng, Marcus Hyge,
+            Copyright &copy; 2019-{{.CurrentYear}} Sondre Benjamin Aasen, Adrian Emil Chambe-Eng, Marcus Hyge,
             Vebjørn Fonstad Leiros, Sindre Østrem
         </p>
     </div>
@@ -44,3 +45,4 @@
 </div>
 </body>
 </html>
+{{end}}
