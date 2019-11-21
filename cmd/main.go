@@ -3,9 +3,11 @@ package main
 import (
 	"fmt"
 	"github.com/NTNU-sondrbaa-2019/CLOUD-O1/pkg/CO1Cache"
+	"github.com/NTNU-sondrbaa-2019/CLOUD-PROJECT/internal/handler"
 	"github.com/NTNU-sondrbaa-2019/CLOUD-PROJECT/internal/rating"
 	"log"
 	"net/http"
+	"os"
 )
 
 import "github.com/robfig/cron/v3"
@@ -44,8 +46,14 @@ func main() {
 	// Or each endpoint can be handled via switch in a "mainHandler"
 	//http.HandleFunc("/api/v1/", internal.MakeHandler(someHandler))
 
-	http.HandleFunc("", makeHandler())
+	http.HandleFunc("/", handler.MakeHandler(handler.HandleIndex))
 
-	log.Println("Listening on port 8080")
-	log.Fatal(http.ListenAndServe(":8080", nil))
+	port := os.Getenv("PORT")
+
+	if port == "" {
+		port = handler.DEFAULT_PORT
+	}
+	
+	log.Println("Listening on port " + port)
+	log.Fatal(http.ListenAndServe(":" + port, nil))
 }
