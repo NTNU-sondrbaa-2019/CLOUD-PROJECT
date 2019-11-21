@@ -16,6 +16,7 @@ type data struct {
 	Username string // For username
 	GoogleFetchData string
 	GoogleClientID string
+	GoogleRedirectURI string
 }
 
 func HandleIndex(w http.ResponseWriter, r *http.Request, url string) {
@@ -35,10 +36,11 @@ func HandleIndex(w http.ResponseWriter, r *http.Request, url string) {
 		if !logged {
 			// Page to load if not logged in
 			page := &data{
-				Title: "Log in",
-				Date: strconv.Itoa(currentTime.Year()),
-				GoogleFetchData: gauth.GoogleOauthConfig.Scopes[0],
-				GoogleClientID: gauth.GoogleOauthConfig.ClientID,
+				Title: 				"Log in",
+				Date: 				strconv.Itoa(currentTime.Year()),
+				GoogleFetchData: 	gauth.GoogleOauthConfig.Scopes[0],
+				GoogleClientID: 	gauth.GoogleOauthConfig.ClientID,
+				GoogleRedirectURI: 	gauth.GoogleOauthConfig.RedirectURL,
 			}
 
 			renderIndex(w, "login", page)
