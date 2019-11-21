@@ -30,6 +30,9 @@ func getGamesOfMemberVSMember(member TeamMember, vsMember TeamMember) []Game {
 		time.Sleep(LichessRateLimitSeconds * time.Second) // Waiting over 1 min for lichess' rate limit
 		response = getRequest(client, request)
 	}
+
+	// START of code needed to parse the ndjson
+
 	reader := bufio.NewReader(response.Body)
 	var i = 0
 
@@ -67,11 +70,13 @@ func getGamesOfMemberVSMember(member TeamMember, vsMember TeamMember) []Game {
 			ifPrint = true
 		}
 
-		if ifPrint {
+		if ifPrint { // TODO remove
 			for i = 0; i < 1; i++ {
 				print("Game :\n\tWhite: " + games[i].Players.White.User.Name + "\n\tBlack: " + games[i].Players.Black.User.Name + "\n\tWinner: " + games[i].Winner + "\n")
 			}
 		}
 	}
+
+	// END of code needed to parse the ndjson
 	return games
 }

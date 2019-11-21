@@ -24,6 +24,8 @@ func calculateElo(games []Game, teamMembers []TeamMember) []TeamMember {
 
 		var w float64
 		var b float64
+
+		// TODO START make this block a single function to calculate elo
 		K := 64.0
 
 		R1 := math.Pow(10, white.Elo/400)
@@ -42,6 +44,8 @@ func calculateElo(games []Game, teamMembers []TeamMember) []TeamMember {
 			w = white.Elo + (K * (0.5 - WhiteChance))
 			b = black.Elo + (K * (0.5 - BlackChance))
 		}
+
+		// TODO END
 
 		newTeamMembers = insertElo(w, b, white, black, newTeamMembers)
 	}

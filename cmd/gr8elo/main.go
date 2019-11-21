@@ -6,6 +6,8 @@ import (
 	"github.com/NTNU-sondrbaa-2019/CLOUD-PROJECT/internal/pkg/rating"
 	"github.com/robfig/cron/v3"
 	"net/http"
+	"os"
+	"strings"
 )
 
 func main() {
@@ -20,8 +22,6 @@ func main() {
 		"Sondre Benjamin Aasen",
 	}
 
-
-
 	CO1Cache.Initialize()
 	CO1Cache.WriteJSON("test", test)
 
@@ -30,16 +30,30 @@ func main() {
 	// Uncomment to run the lichess stuff.
 
 	// Go service must be running for the cron job to take place
-	c := cron.New()	
-	teamIdKey := "storbukk-sjakklubb"
-	//_, err := c.AddFunc("0 2 * * *", func() {
-	// For testing purposes run every 10 minutes
-	_, err := c.AddFunc("*/10 * * * *", func() {
-		rating.GetTeamElo(teamIdKey)
-	})
+	c := cron.New()
+	// TODO accept input somewhere for the teamIdKey
 
-	if err != nil {
-		panic(err)
+	tmp := os.Getenv("LICHESS_TEAMS")
+	teams := strings.Split(tmp, ",")
+
+	if tmp != "" {
+		for i := 0; i < len(teams); i++ {
+			_, err := c.AddFunc("0 2 * * *", func() {
+				rating.GetTeamElo(teams[i])
+			})
+			if err != nil {
+				panic(err)
+			}
+		}
+	}else {
+		teamIdKey := "storbukk-sjakklubb"
+		// For testing purposes run every 10 minutes
+		_, err := c.AddFunc("*/10 * * * *", func() {
+			rating.GetTeamElo(teamIdKey)
+		})
+		if err != nil {
+			panic(err)
+		}
 	}
 
 	c.Start()
