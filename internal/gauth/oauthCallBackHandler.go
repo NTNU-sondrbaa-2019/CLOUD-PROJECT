@@ -41,7 +41,7 @@ func OauthCallBackHandler(w http.ResponseWriter, r *http.Request, title string) 
 
     // Make a cookie with our user's id that expires in 24 hours
     sessionIDCookie := http.Cookie{
-        Name:       "sessionID",
+        Name:       "sessionID2",
         Value:      tempID,
         Expires:    time.Now().Add(24 * time.Hour),
     }
