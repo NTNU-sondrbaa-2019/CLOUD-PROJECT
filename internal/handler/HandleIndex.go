@@ -8,7 +8,7 @@ import (
 	"github.com/NTNU-sondrbaa-2019/CLOUD-PROJECT/internal/gauth"
 )
 
-var templates = template.Must(template.ParseFiles("web/static/login.html","web/static/ucp.html","web/static/error.html"))
+
 
 type data struct {
 	Title string // Title for page
