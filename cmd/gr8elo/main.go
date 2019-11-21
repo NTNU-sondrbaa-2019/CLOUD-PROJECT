@@ -1,7 +1,8 @@
 package main
 
 import (
-	"fmt"
+	"log"
+	"net/http"	"fmt"
 	"github.com/NTNU-sondrbaa-2019/CLOUD-O1/pkg/CO1Cache"
 	"github.com/NTNU-sondrbaa-2019/CLOUD-PROJECT/internal/pkg/rating"
 	"github.com/robfig/cron/v3"
@@ -9,6 +10,11 @@ import (
 )
 
 func main() {
+	// 2 Options, either all handle requests are made here with new handlers
+	// Or each endpoint can be handled via switch in a "mainHandler"
+	//http.HandleFunc("/api/v1/", internal.MakeHandler(someHandler))
+	log.Println("Listening on port 8080")
+	log.Fatal(http.ListenAndServe(":8080", nil))
 
 	type Test struct {
 		Name string `json:"name"`
