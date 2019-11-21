@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"github.com/NTNU-sondrbaa-2019/CLOUD-PROJECT/internal/gauth"
 	"html/template"
 	"net/http"
 	"strconv"
@@ -13,6 +14,8 @@ type data struct {
 	Title string // Title for page
 	Date string // For the current year
 	Username string // For username
+	GoogleFetchData string
+	GoogleClientID string
 }
 
 func HandleIndex(w http.ResponseWriter, r *http.Request, url string) {
@@ -22,12 +25,17 @@ func HandleIndex(w http.ResponseWriter, r *http.Request, url string) {
 		logged := false // Doesnt check currently if actually logged in
 		currentTime := time.Now()
 		if !logged {
-			// Page to load if logged in
-			page := &data{Title: "Log in", Date: strconv.Itoa(currentTime.Year())}
+			// Page to load if not logged in
+			page := &data{
+				Title: "Log in",
+				Date: strconv.Itoa(currentTime.Year()),
+				GoogleFetchData: gauth.GoogleOauthConfig.Scopes[0],
+				GoogleClientID: gauth.GoogleOauthConfig.ClientID,
+			}
 
 			renderIndex(w, "login", page)
 		} else {
-			// Page to load if not logged in
+			// Page to load if logged in
 			page := &data{Title: "GR8ELO", Date: strconv.Itoa(currentTime.Year())}
 
 			renderIndex(w, "ucp", page)
