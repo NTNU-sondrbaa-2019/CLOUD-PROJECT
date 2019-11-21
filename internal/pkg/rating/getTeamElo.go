@@ -29,7 +29,7 @@ func GetTeamElo(teamIDKey string) []TeamMember {
 
 	line, err := reader.ReadBytes('\n')
 	if err != nil {
-		log.Fatal(err)
+		log.Print(err)
 	}
 	var tmp TeamMember
 	err = json.Unmarshal(line, &tmp)

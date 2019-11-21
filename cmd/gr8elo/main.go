@@ -32,17 +32,25 @@ func main() {
 	// Uncomment to run the lichess stuff.
 
 	c := cron.New()
-
+	_ = os.Setenv("LICHESS_TEAMS", "storbukk-sjakklubb,testclub")
 	tmp := os.Getenv("LICHESS_TEAMS")
 	teams := strings.Split(tmp, ",")
 
+	for i := 0; i < len(teams); i++ {
+		fmt.Println(teams[i])
+	}
+
+
+	// TODO fix index out of bounds, cronjobs fails because there are more?!
 	if tmp != "" {
-		for i := 0; i < len(teams); i++ {
-			_, err := c.AddFunc("*/10 * * * *", func() { // "0 2 * * *" every night 2am
-				rating.GetTeamElo(teams[i])
+		for i := 0; i < len(teams); i++ { // "0 2 * * *" every night 2am
+			var team string
+			team = teams[i]
+			_, err := c.AddFunc("*/10 * * * *", func() {
+				rating.GetTeamElo(team)
 			})
 			if err != nil {
-				panic(err)
+				print(err)
 			}
 		}
 	}else {		// If no teams, use storbukk-sjakklub

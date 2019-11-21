@@ -8,6 +8,8 @@ type TeamMember struct {
 	Elo               float64 `json:"elo"`
 }
 
+
+// TODO check and fix struct for remi/draw
 // Game - Struct for getting game/match information
 type Game struct {
 	ID        string `json:"id"`
