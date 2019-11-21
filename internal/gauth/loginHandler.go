@@ -8,7 +8,7 @@ import (
     "os"
 )
 
-var googleOauthConfig = &oauth2.Config{
+var GoogleOauthConfig = &oauth2.Config{
     RedirectURL:    os.Getenv("POST_AUTH_REROUTE_URL"),
     ClientID:       os.Getenv("GOOGLE_OAUTH_CLIENT_ID"),
     ClientSecret:   os.Getenv("GOOGLE_OAUTH_CLIENT_SECRET"),
@@ -30,6 +30,6 @@ func LoginHandler(w http.ResponseWriter, r *http.Request, title string) {
 
     // Create oauthState cookie
     oauthState := generateStateOauthCookie(w)
-    authURL := googleOauthConfig.AuthCodeURL(oauthState)
+    authURL := GoogleOauthConfig.AuthCodeURL(oauthState)
     http.Redirect(w, r, authURL, http.StatusTemporaryRedirect)
 }
