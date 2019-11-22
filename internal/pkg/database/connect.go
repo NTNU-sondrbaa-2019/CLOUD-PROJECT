@@ -1,25 +1,15 @@
 package database
 
 import (
+	"database/sql"
 	"encoding/json"
 	"github.com/NTNU-sondrbaa-2019/CLOUD-O1/pkg/CO1Cache"
+	_ "github.com/go-sql-driver/mysql"
 	"log"
 	"os"
 )
 
-type DatabaseConnection struct {
-	Host     string `json:"host"`
-	Port     string `json:"port"`
-	Username string `json:"username"`
-	Password string `json:"password"`
-}
-
-var DEFAULT_CONNECTION = DatabaseConnection{
-	"gr8elo.cekete5hvzfh.us-east-1.rds.amazonaws.com",
-	"3306",
-	"admin",
-	"",
-}
+var connection *sql.DB
 
 func Connect() {
 
@@ -31,8 +21,8 @@ func Connect() {
 
 	} else {
 
-		var db DatabaseConnection
-		var temp DatabaseConnection
+		var db Connection
+		var temp Connection
 		err := json.Unmarshal(CO1Cache.Read("db-config"), &db)
 
 		temp.Host = os.Getenv("DB-HOST")
@@ -59,15 +49,26 @@ func Connect() {
 			db.Password = temp.Password
 		}
 
-		// TODO Sondre: Error handling of invalid HOST, PORT, USERNAME, PASSWORD
+		temp.Database = os.Getenv("DB-DATABASE")
 
-		if err != nil {
-
-			log.Fatalln("Couldn't read database connection data...")
-
+		if temp.Database != "" {
+			db.Database = temp.Database
 		}
 
-		// TODO Sondre: connect to database
-	}
+		// TODO Sondre: Error handling of invalid HOST, PORT, USERNAME, PASSWORD, DATABASE
 
+		if err != nil {
+			log.Fatalln("Couldn't read database connection data...")
+		}
+
+		connection, err = sql.Open("mysql", db.Username+":"+db.Password+"@"+db.Host+":"+db.Port+"/"+db.Database+"?parseTime=true")
+
+		if err != nil {
+			log.Fatalln("Couldn't connect to database: ", err)
+		}
+	}
+}
+
+func GetConnection() *sql.DB {
+	return connection
 }
