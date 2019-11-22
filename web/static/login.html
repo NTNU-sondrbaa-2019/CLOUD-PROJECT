@@ -11,20 +11,30 @@
               integrity="sha384-zrnmn8R8KkWl12rAZFt4yKjxplaDaT7/EUkKm7AovijfrQItFWR7O/JJn4DAa/gx"
               crossorigin="anonymous">
         <title>{{.Title}}</title>
+        <meta name="google-signin-scope" content="{{.GoogleFetchData}}">
+        <meta name="google-signin-client_id" content="{{.GoogleClientID}}">
         <script src="https://apis.google.com/js/platform.js" async defer></script>
     </head>
     <body>
+    <a href="/api/v1/login/">
     <div class="container mt-5">
-        <h1 class="display-3">Welcome to gr8elo.com</h1>
-        <h3>The platform for your local club's ELO</h3>
-        <a href="/login">
-            <div class="card mt-2">
-                <div class="card-body text-center" style="font-size: 420% !IMPORTANT">
-                    <i class="fab fa-google mr-2"></i>LOGIN WITH GOOGLE
-                </div>
-            </div>
-        </a>
+        <div class="g-signin2"
+             data-onsuccess="onSignIn"
+             data-theme="dark"
+             data-redirecturi="{{.GoogleRedirectURI}}"></div>
+        <script>
+            // TODO: Adrian må håndtere data håndtering - du kan bruke jQuery AJAX funksjoner for å sende nye POST/GET requests (søk på Google)
+            function onSignIn(googleUser) {
+                var profile = googleUser.getBasicProfile();
+                console.log("ID: " + profile.getId());
+                console.log('Full Name: ' + profile.getName());
+                console.log("Email: " + profile.getEmail());
+                var id_token = googleUser.getAuthResponse().id_token;
+                console.log("ID Token: " + id_token);
+            }
+        </script>
     </div>
+    </a>
     <footer>
         <div class="container text-center">
             <p>

@@ -69,5 +69,4 @@ func Connect() {
 
 		// TODO Sondre: connect to database
 	}
-
 }

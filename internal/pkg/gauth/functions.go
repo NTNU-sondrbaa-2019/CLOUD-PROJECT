@@ -18,7 +18,8 @@ func generateStateOauthCookie(w http.ResponseWriter) string{
     b := make([]byte, 16)
     rand.Read(b)
     state := base64.URLEncoding.EncodeToString(b)
-    authCookie := http.Cookie{Name: "oauthstate", Value: state, Expires: expiration}
+
+    authCookie := http.Cookie{Name: "oauthstate", Path: "/", Value: state, Expires: expiration}
 
     http.SetCookie(w, &authCookie)
 
@@ -49,4 +50,15 @@ func getUserDataFromGoogle(code string) (userInfoFromGoogle, error) {
     }
 
     return tempUser, nil
+}
+
+func GetCookieValueByName(cookie []*http.Cookie, name string) string {
+    cookieLen := len(cookie)
+    result := ""
+    for i := 0; i < cookieLen; i++ {
+        if cookie[i].Name == name {
+            result = cookie[i].Value
+        }
+    }
+    return result
 }
