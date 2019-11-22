@@ -13,62 +13,46 @@ var connection *sqlx.DB
 
 func Connect() {
 
-	// TODO Fix logic
+	var db Connection
+	var err error
 
-	if !CO1Cache.Verify("db-config") {
+	db.Host = os.Getenv("DB-HOST")
+	db.Port = os.Getenv("DB-PORT")
+	db.Username = os.Getenv("DB-USERNAME")
+	db.Password = os.Getenv("DB-PASSWORD")
+	db.Database = os.Getenv("DB-DATABASE")
 
-		log.Println("Writing default database configuration...")
-		CO1Cache.WriteJSON("db-config", DEFAULT_CONNECTION)
-		log.Fatalln("To test the AWS database from localhost, please insert password into the generated ./cache/db-config.json file!")
+	dsn := db.Username + ":" + db.Password + "@tcp(" + db.Host + ":" + db.Port + ")/" + db.Database + "?parseTime=true"
+	connection, err = sqlx.Open("mysql", dsn)
 
-	} else {
+	if err != nil || connection.Ping() != nil {
 
-		var db Connection
-		var temp Connection
-		err := json.Unmarshal(CO1Cache.Read("db-config"), &db)
+		log.Println("Couldn't connect to database using environment variables: ", err)
 
-		temp.Host = os.Getenv("DB-HOST")
+		if !CO1Cache.Verify("db-config") {
 
-		if temp.Host != "" {
-			db.Host = temp.Host
+			log.Println("Writing default database configuration...")
+			CO1Cache.WriteJSON("db-config", DEFAULT_CONNECTION)
+			log.Fatalln("To test the AWS database from localhost, please insert password into the generated ./cache/db-config.json file!")
+
+		} else {
+
+			err = json.Unmarshal(CO1Cache.Read("db-config"), &db)
+
+			dsn := db.Username + ":" + db.Password + "@tcp(" + db.Host + ":" + db.Port + ")/" + db.Database + "?parseTime=true"
+			connection, err = sqlx.Open("mysql", dsn)
+
+			if err != nil {
+				log.Fatalln("Couldn't connect to database using .cache/db-config.json configuration: ", err)
+			}
+
 		}
 
-		temp.Port = os.Getenv("DB-PORT")
-
-		if temp.Port != "" {
-			db.Port = temp.Port
-		}
-
-		temp.Username = os.Getenv("DB-USERNAME")
-
-		if temp.Username != "" {
-			db.Username = temp.Username
-		}
-
-		temp.Password = os.Getenv("DB-PASSWORD")
-
-		if temp.Password != "" {
-			db.Password = temp.Password
-		}
-
-		temp.Database = os.Getenv("DB-DATABASE")
-
-		if temp.Database != "" {
-			db.Database = temp.Database
-		}
-
-		// TODO Sondre: Error handling of invalid HOST, PORT, USERNAME, PASSWORD, DATABASE
-
-		if err != nil {
-			log.Fatalln("Couldn't read database connection data...")
-		}
-
-		connection, err = sqlx.Open("mysql", db.Username+":"+db.Password+"@tcp("+db.Host+":"+db.Port+")/"+db.Database+"?parseTime=true")
-
-		if err != nil {
-			log.Fatalln("Couldn't connect to database: ", err)
-		}
 	}
+
+	defer connection.Close()
+
+	log.Println("Successfully connected to database!")
 }
 
 func GetConnection() *sqlx.DB {
