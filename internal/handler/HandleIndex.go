@@ -5,14 +5,17 @@ import (
 	"net/http"
 	"strconv"
 	"time"
+	"github.com/NTNU-sondrbaa-2019/CLOUD-PROJECT/internal/gauth"
 )
 
-var templates = template.Must(template.ParseFiles("web/static/login.html","web/static/ucp.html"))
+
 
 type data struct {
 	Title string // Title for page
-	Date string // For the current year
+	CurrentYear string // For the current year
 	Username string // For username
+	GoogleFetchData string
+	GoogleClientID string
 }
 
 func HandleIndex(w http.ResponseWriter, r *http.Request, url string) {
@@ -23,19 +26,19 @@ func HandleIndex(w http.ResponseWriter, r *http.Request, url string) {
 		currentTime := time.Now()
 		if !logged {
 			// Page to load if logged in
-			page := &data{Title: "Log in", Date: strconv.Itoa(currentTime.Year())}
+			page := &data{Title: "Log in", CurrentYear: strconv.Itoa(currentTime.Year()), GoogleClientID: gauth.GoogleOauthConfig.ClientID}
 
-			renderIndex(w, "login", page)
+			RenderIndex(w, "login", page)
 		} else {
 			// Page to load if not logged in
-			page := &data{Title: "GR8ELO", Date: strconv.Itoa(currentTime.Year())}
+			page := &data{Title: "GR8ELO", CurrentYear: strconv.Itoa(currentTime.Year())}
 
-			renderIndex(w, "ucp", page)
+			RenderIndex(w, "ucp", page)
 		}
 	}
 }
 
-func renderIndex(writer http.ResponseWriter, s string, page interface{}) {
+func RenderIndex(writer http.ResponseWriter, s string, page interface{}) {
 	// Assigns data to datapoints in html file
 	err := templates.ExecuteTemplate(writer, s, page)
 
