@@ -48,10 +48,10 @@ func main() {
 	//http.HandleFunc("/api/v1/", internal.MakeHandler(someHandler))
 
 	http.HandleFunc("/", handler.MakeHandler(handler.HandleIndex))
-	http.HandleFunc("/api/v1/login/", handler.MakeHandler(gauth.LoginHandler))
-	http.HandleFunc("/api/v1/loggedin/", handler.MakeHandler(gauth.LoggedInHandler))
-	http.HandleFunc("/api/v1/logout/", handler.MakeHandler(gauth.LogoutHandler))
-	http.HandleFunc("/api/v1/oauth2callback/", handler.MakeHandler(gauth.OauthCallBackHandler))
+	http.HandleFunc("/login/", handler.MakeHandler(gauth.LoginHandler))
+	http.HandleFunc("/loggedin/", handler.MakeHandler(gauth.LoggedInHandler))
+	http.HandleFunc("/logout/", handler.MakeHandler(gauth.LogoutHandler))
+	http.HandleFunc("/oauth2callback/", handler.MakeHandler(gauth.OauthCallBackHandler))
 
 	http.HandleFunc("/api/v1/team/", handler.MakeHandler(handler.TeamHandler))
 

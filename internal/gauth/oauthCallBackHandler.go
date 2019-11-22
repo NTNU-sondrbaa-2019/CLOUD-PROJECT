@@ -13,8 +13,6 @@ type userInfoFromGoogle struct {
 }
 
 func OauthCallBackHandler(w http.ResponseWriter, r *http.Request, title string) {
-    log.Println("------------------------------In OauthCallbackHandler")
-
     // Read state from cookie
     oauthState, _ := r.Cookie("oauthstate")
 
@@ -58,5 +56,5 @@ func OauthCallBackHandler(w http.ResponseWriter, r *http.Request, title string) 
     dbSave(tempUser)
 
     // Now that the user is logged in, redirect to the logged in page
-    http.Redirect(w, r, "/api/v1/loggedin/", http.StatusPermanentRedirect)
+    http.Redirect(w, r, "/loggedin/", http.StatusPermanentRedirect)
 }
