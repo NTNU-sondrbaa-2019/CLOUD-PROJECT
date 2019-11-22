@@ -16,15 +16,14 @@ func OauthCallBackHandler(w http.ResponseWriter, r *http.Request, title string) 
     log.Println("------------------------------In OauthCallbackHandler")
 
     // Read state from cookie
-    // oauthState, _ := r.Cookie("oauthstate")
+    oauthState, _ := r.Cookie("oauthstate")
 
-    /* Compare state of callback to our local state
+    // Compare state of callback to our local state
     if r.FormValue("state") != oauthState.Value {
         log.Print("Invalid google oauth state")
         http.Redirect(w, r, "/", http.StatusTemporaryRedirect)
         return
     }
-    */
 
     // Get our user's data from google
     tempUserFromGoogle, err := getUserDataFromGoogle(r.FormValue("code"))
