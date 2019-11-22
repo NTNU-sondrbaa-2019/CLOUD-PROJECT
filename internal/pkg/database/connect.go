@@ -50,8 +50,6 @@ func Connect() {
 
 	}
 
-	defer connection.Close()
-
 	log.Println("Successfully connected to database!")
 }
 
