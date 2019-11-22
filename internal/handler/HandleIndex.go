@@ -1,7 +1,7 @@
 package handler
 
 import (
-	"html/template"
+	"github.com/NTNU-sondrbaa-2019/CLOUD-PROJECT/internal/view"
 	"net/http"
 	"strconv"
 	"time"
@@ -28,23 +28,13 @@ func HandleIndex(w http.ResponseWriter, r *http.Request, url string) {
 			// Page to load if logged in
 			page := &data{Title: "Log in", CurrentYear: strconv.Itoa(currentTime.Year()), GoogleClientID: gauth.GoogleOauthConfig.ClientID}
 
-			RenderIndex(w, "login", page)
+			view.Render(w, "login", page)
 		} else {
 			// Page to load if not logged in
 			page := &data{Title: "GR8ELO", CurrentYear: strconv.Itoa(currentTime.Year())}
 
-			RenderIndex(w, "ucp", page)
+			view.Render(w, "ucp", page)
 		}
-	}
-}
-
-func RenderIndex(writer http.ResponseWriter, s string, page interface{}) {
-	// Assigns data to datapoints in html file
-	err := templates.ExecuteTemplate(writer, s, page)
-
-	if err != nil {
-		http.Error(writer, err.Error(), http.StatusInternalServerError)
-		return
 	}
 }
 

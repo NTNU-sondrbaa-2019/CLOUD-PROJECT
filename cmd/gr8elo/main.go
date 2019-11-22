@@ -3,8 +3,10 @@ package main
 import (
 	"fmt"
 	"github.com/NTNU-sondrbaa-2019/CLOUD-O1/pkg/CO1Cache"
+	"github.com/NTNU-sondrbaa-2019/CLOUD-PROJECT/internal/gauth"
 	"github.com/NTNU-sondrbaa-2019/CLOUD-PROJECT/internal/handler"
 	"github.com/NTNU-sondrbaa-2019/CLOUD-PROJECT/internal/pkg/rating"
+	"github.com/NTNU-sondrbaa-2019/CLOUD-PROJECT/internal/team"
 	"log"
 	"net/http"
 	"os"
@@ -48,7 +50,9 @@ func main() {
 
 	http.HandleFunc("/", handler.MakeHandler(handler.HandleIndex))
 	http.HandleFunc("/api/v1/", handler.MakeHandler(handler.HandleAPI))
-	http.HandleFunc("/api/v1/team/", handler.MakeHandler(handler.TeamHandler))
+	http.HandleFunc("/api/v1/team/", handler.MakeHandler(team.TeamHandler))
+	http.HandleFunc("/api/v1/gauth/login/", handler.MakeHandler(gauth.LoginHandler))
+	http.HandleFunc("/api/v1/gauth/loggedin/", handler.MakeHandler(gauth.LoggedInHandler))
 
 	port := os.Getenv("PORT")
 
