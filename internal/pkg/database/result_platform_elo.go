@@ -55,7 +55,7 @@ func SelectResultPlatformElos(where string) (*[]RESULT_PLATFORM_ELO, error) {
 
 func InsertResultPlatformElo(result_platform_elo RESULT_PLATFORM_ELO) (*int64, error) {
 
-	sth, err := connection.Prepare("INSERT INTO USER VALUES (?, ?, ?)")
+	sth, err := connection.Prepare("INSERT INTO RESULT_PLATFORM_ELO VALUES (?, ?, ?)")
 
 	if err != nil {
 		return nil, err
