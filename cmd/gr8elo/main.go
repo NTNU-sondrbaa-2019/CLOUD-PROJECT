@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"github.com/NTNU-sondrbaa-2019/CLOUD-O1/pkg/CO1Cache"
 	"github.com/NTNU-sondrbaa-2019/CLOUD-PROJECT/internal/gauth"
 	"github.com/NTNU-sondrbaa-2019/CLOUD-PROJECT/internal/handler"
@@ -28,8 +27,6 @@ func main() {
 
 	CO1Cache.Initialize()
 	CO1Cache.WriteJSON("test", test)
-
-	fmt.Println("Hello World!")
 
 	// Uncomment to run the lichess stuff.
 

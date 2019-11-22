@@ -14,5 +14,5 @@ func ErrorPage(w http.ResponseWriter,errorMsg string, code int) {
 	}
 	error := &err{ErrorMsg: errorMsg, ErrorCode: code, CurrentYear: strconv.Itoa(time.Now().Year())}
 
-	view.Render(w, "error", error)
+	Render(w, "error", error)
 }

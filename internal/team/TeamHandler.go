@@ -36,7 +36,7 @@ func TeamHandler(w http.ResponseWriter, r *http.Request, title string) {
 			case "seasons":
 				view.ErrorPage(w, "Not implemented", http.StatusNotImplemented)
 			default:
-				view.ErrorPage(w, "Not Found\n\ndsafsa", http.StatusNotFound)
+				view.ErrorPage(w, "Not Found", http.StatusNotFound)
 			}
 		} else {
 			// Search for team name urlPart[4]
