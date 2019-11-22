@@ -6,8 +6,11 @@ type RESULT_PLATFORM_ELO struct {
 	VerificationKey string `json:"verification_key" db:"verification_key"`
 }
 
-func SelectResultPlatformElo(result_id int64, platform_elo_id int64) (*RESULT_PLATFORM_ELO, error) {
-	sth, err := connection.Preparex("SELECT * FROM RESULT_PLATFORM_ELO WHERE result_id = ? AND platform_elo_id = ?")
+func SelectResultPlatformEloByResultID(result_id int64) (*[]RESULT_PLATFORM_ELO, error) {
+
+	var result_platform_elos []RESULT_PLATFORM_ELO
+
+	sth, err := connection.Preparex("SELECT * FROM RESULT_PLATFORM_ELO WHERE result_id = ?")
 
 	if err != nil {
 		return nil, err
@@ -15,21 +18,7 @@ func SelectResultPlatformElo(result_id int64, platform_elo_id int64) (*RESULT_PL
 
 	defer sth.Close()
 
-	var result_platform_elo RESULT_PLATFORM_ELO
-	err = sth.QueryRowx(result_id, platform_elo_id).StructScan(&result_platform_elo)
-
-	if err != nil {
-		return nil, err
-	}
-
-	return &result_platform_elo, nil
-}
-
-func SelectResultPlatformElos(where string) (*[]RESULT_PLATFORM_ELO, error) {
-
-	var result_platform_elos []RESULT_PLATFORM_ELO
-
-	rows, err := connection.Queryx("SELECT * FROM RESULT_PLATFORM_ELO " + where)
+	rows, err := sth.Queryx(result_id)
 
 	if err != nil {
 		return nil, err
@@ -50,7 +39,43 @@ func SelectResultPlatformElos(where string) (*[]RESULT_PLATFORM_ELO, error) {
 
 	}
 
-	return &result_platform_elos, rows.Err()
+	return &result_platform_elos, nil
+}
+
+func SelectResultPlatformEloByPlatformID(platform_id int64) (*[]RESULT_PLATFORM_ELO, error) {
+
+	var result_platform_elos []RESULT_PLATFORM_ELO
+
+	sth, err := connection.Preparex("SELECT * FROM RESULT_PLATFORM_ELO WHERE platform_elo_id = ?")
+
+	if err != nil {
+		return nil, err
+	}
+
+	defer sth.Close()
+
+	rows, err := sth.Queryx(platform_id)
+
+	if err != nil {
+		return nil, err
+	}
+
+	defer rows.Close()
+
+	for rows.Next() {
+
+		var result_platform_elo RESULT_PLATFORM_ELO
+		err = rows.StructScan(&result_platform_elo)
+
+		if err != nil {
+			return nil, err
+		}
+
+		result_platform_elos = append(result_platform_elos, result_platform_elo)
+
+	}
+
+	return &result_platform_elos, nil
 }
 
 func InsertResultPlatformElo(result_platform_elo RESULT_PLATFORM_ELO) (*int64, error) {
