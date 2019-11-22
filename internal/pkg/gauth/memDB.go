@@ -7,6 +7,7 @@ import (
 
 type userInfo struct {
     Email           string      `json:"email"`
+    Name            string      `json:"name"`
     LichessKey      string      `json:"lichesskey"`
     LastSessionID   string      `json:"lastsessionid"`
 }

@@ -10,6 +10,7 @@ import (
 
 type userInfoFromGoogle struct {
     Email       string      `json:"email"`
+    Name        string      `json:"name"`
 }
 
 
@@ -46,6 +47,7 @@ func OauthCallBackHandler(w http.ResponseWriter, r *http.Request) HTTPErrors.Err
     // Make a tempUser with the info we got from google and our new sessionID
     tempUser := userInfo{
         Email:      tempUserFromGoogle.Email,
+        Name:       tempUserFromGoogle.Name,
         LichessKey: "",
         LastSessionID: tempID,
     }
