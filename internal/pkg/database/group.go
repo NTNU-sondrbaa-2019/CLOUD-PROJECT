@@ -105,7 +105,7 @@ func InsertGroup(group GROUP) (*int64, error) {
 
 	defer sth.Close()
 
-	result, err := sth.Exec(group.LeagueID, group.Name, group.LeagueSeasonName, group.Name, group.Created)
+	result, err := sth.Exec(group.LeagueID, group.LeagueSeasonName, group.Name, group.Created)
 
 	if err != nil {
 		return nil, err

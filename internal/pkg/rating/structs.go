@@ -14,6 +14,7 @@ type TeamMember struct {
 type Game struct {
 	ID        string `json:"id"`
 	CreatedAt int    `json:"createdAt"`
+	Status string    `json:"status"`
 	Players   struct {
 		White struct {
 			User struct {

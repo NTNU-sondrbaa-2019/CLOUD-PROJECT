@@ -1,6 +1,7 @@
 package rating
 
 import (
+	"github.com/NTNU-sondrbaa-2019/CLOUD-PROJECT/internal/pkg/database"
 	"math"
 	"strconv"
 )
@@ -14,7 +15,7 @@ func calculateElo(games []Game, teamMembers []TeamMember) []TeamMember {
 
 	newTeamMembers := teamMembers
 
-
+	var results [] database.RESULT
 	// Loops through all games and calculates elo
 	for i := 0; i < len(games); i++ {
 
@@ -48,6 +49,24 @@ func calculateElo(games []Game, teamMembers []TeamMember) []TeamMember {
 		// TODO END
 
 		newTeamMembers = insertElo(w, b, white, black, newTeamMembers)
+
+		// TODO figure out how to create a database.RESULT object
+		var result1 database.RESULT
+		var result2 database.RESULT
+		result1.GroupID = // DATABASE GROUP ID WTF DUDE
+		result1.ELOBefore = white.Elo
+		result2.ELOBefore = black.Elo
+
+
+		result1.ELOAfter = w
+		result1.Outcome = "" // win lose draw
+		result1.Played = // time, unix convert
+		result2.GroupID = // DATABASE GROUP ID WTF DUDE
+		result1.ELOAfter = b
+		result1.Outcome = ""
+		result1.Played = // time, unix convert
+		// TODO append to slice, for loop slice and insert into db
+
 	}
 
 	for i := 0; i < len(newTeamMembers); i++ {
