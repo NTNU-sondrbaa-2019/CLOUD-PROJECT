@@ -1,48 +1,47 @@
 {{define "error"}}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
-          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <title>{{.ErrorMsg}}</title>
-    <meta name="google-signin-scope" content="profile email">
-    <meta name="google-signin-client_id" content="YOUR_CLIENT_ID.apps.googleusercontent.com">
-</head>
-<body>
-<div class="container mt-5">
-    <div class="card">
-        <div class="card-body">
-            <h1 class="display-1" style="font-size: 1337% !IMPORTANT">Error!</h1>
-            <p class="ml-3">We're sorry you're experiencing trouble with our service, feel free to <a
-                        href="mailto:admin@deasilsoft.com">contact our sysadmin</a>.</p>
-            <div class="alert alert-warning">
-                <h2>Error code: {{.ErrorCode}}</h2>
-                <pre>{{.ErrorMsg}}</pre>
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+              integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+              crossorigin="anonymous">
+        <title>{{.ErrorMsg}}</title>
+    </head>
+    <body>
+    <div class="container mt-5">
+        <div class="card">
+            <div class="card-body">
+                <h1 class="display-1" style="font-size: 1337% !IMPORTANT">Error!</h1>
+                <p class="ml-3">We're sorry you're experiencing trouble with our service, feel free to <a
+                            href="mailto:admin@deasilsoft.com">contact our sysadmin</a>.</p>
+                <div class="alert alert-warning">
+                    <h2>Error code: {{.ErrorCode}}</h2>
+                    <pre>{{.ErrorMsg}}</pre>
+                </div>
             </div>
         </div>
     </div>
-</div>
-<footer>
-    <div class="container">
-        <p>
-            Copyright &copy; 2019-{{.CurrentYear}} Sondre Benjamin Aasen, Adrian Emil Chambe-Eng, Marcus Hyge,
-            Vebjørn Fonstad Leiros, Sindre Østrem
-        </p>
+    <footer>
+        <div class="container text-center">
+            <p>
+                Copyright &copy; 2019-{{.CurrentYear}} Sondre Benjamin Aasen, Adrian Emil Chambe-Eng, Marcus Hyge,
+                Vebjørn Fonstad Leiros, Sindre Østrem
+            </p>
+        </div>
+    </footer>
+    <div id="scripts">
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+                integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+                crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+                integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+                crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+                integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+                crossorigin="anonymous"></script>
     </div>
-</footer>
-<div id="scripts">
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
-            integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
-            crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
-            integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
-            crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
-            integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
-            crossorigin="anonymous"></script>
-</div>
-</body>
-</html>
+    </body>
+    </html>
 {{end}}

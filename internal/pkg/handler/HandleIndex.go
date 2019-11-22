@@ -1,11 +1,12 @@
 package handler
 
 import (
-	"github.com/NTNU-sondrbaa-2019/CLOUD-PROJECT/internal/view"
+	"github.com/NTNU-sondrbaa-2019/CLOUD-PROJECT/internal/pkg/gauth"
+	view2 "github.com/NTNU-sondrbaa-2019/CLOUD-PROJECT/internal/pkg/view"
+	"github.com/NTNU-sondrbaa-2019/CLOUD-PROJECT/internal/pkg/view"
 	"net/http"
 	"strconv"
 	"time"
-	"github.com/NTNU-sondrbaa-2019/CLOUD-PROJECT/internal/gauth"
 )
 
 
@@ -20,7 +21,7 @@ type data struct {
 
 func HandleIndex(w http.ResponseWriter, r *http.Request, url string) {
 	if url != "/" {
-		view.ErrorPage(w, "Not Found", http.StatusNotFound)
+		view2.ErrorPage(w, "Not Found", http.StatusNotFound)
 	} else {
 		logged := false // Doesnt check currently if actually logged in
 		currentTime := time.Now()
