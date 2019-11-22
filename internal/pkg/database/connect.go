@@ -1,17 +1,19 @@
 package database
 
 import (
-	"database/sql"
 	"encoding/json"
 	"github.com/NTNU-sondrbaa-2019/CLOUD-O1/pkg/CO1Cache"
 	_ "github.com/go-sql-driver/mysql"
+	"github.com/jmoiron/sqlx"
 	"log"
 	"os"
 )
 
-var connection *sql.DB
+var connection *sqlx.DB
 
 func Connect() {
+
+	// TODO Fix logic
 
 	if !CO1Cache.Verify("db-config") {
 
@@ -61,7 +63,7 @@ func Connect() {
 			log.Fatalln("Couldn't read database connection data...")
 		}
 
-		connection, err = sql.Open("mysql", db.Username+":"+db.Password+"@"+db.Host+":"+db.Port+"/"+db.Database+"?parseTime=true")
+		connection, err = sqlx.Open("mysql", db.Username+":"+db.Password+"@tcp("+db.Host+":"+db.Port+")/"+db.Database+"?parseTime=true")
 
 		if err != nil {
 			log.Fatalln("Couldn't connect to database: ", err)
@@ -69,6 +71,6 @@ func Connect() {
 	}
 }
 
-func GetConnection() *sql.DB {
+func GetConnection() *sqlx.DB {
 	return connection
 }

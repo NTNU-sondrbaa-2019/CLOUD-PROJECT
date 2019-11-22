@@ -12,8 +12,8 @@ type USER struct {
 	LastOnline time.Time `json:"last_online" db:"last_online"`
 }
 
-func SelectUser(id int64) (*USER, error) {
-	sth, err := connection.Prepare("SELECT * FROM USER WHERE id = ?")
+func SelectUserByID(id int64) (*USER, error) {
+	sth, err := connection.Preparex("SELECT * FROM USER WHERE id = ?")
 
 	if err != nil {
 		return nil, err
@@ -21,19 +21,40 @@ func SelectUser(id int64) (*USER, error) {
 
 	defer sth.Close()
 
-	var user *USER
-
-	err = sth.QueryRow(id).Scan(&user)
+	var user USER
+	err = sth.QueryRowx(id).StructScan(&user)
 
 	if err != nil {
 		return nil, err
 	}
 
-	return user, nil
+	return &user, nil
+}
+
+func SelectUserByEmail(email string) (*USER, error) {
+	sth, err := connection.Preparex("SELECT * FROM USER WHERE email = ?")
+
+	if err != nil {
+		return nil, err
+	}
+
+	defer sth.Close()
+
+	var user USER
+	err = sth.QueryRowx(email).StructScan(&user)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return &user, nil
 }
 
 func SelectUsers(where string) (*[]USER, error) {
-	rows, err := connection.Query("SELECT * FROM USER " + where)
+
+	var users []USER
+
+	rows, err := connection.Queryx("SELECT * FROM USER " + where)
 
 	if err != nil {
 		return nil, err
@@ -43,16 +64,18 @@ func SelectUsers(where string) (*[]USER, error) {
 
 	for rows.Next() {
 
-		var user *USER
-		err = rows.Scan(&user)
+		var user USER
+		err = rows.StructScan(&user)
 
 		if err != nil {
 			return nil, err
 		}
 
+		users = append(users, user)
+
 	}
 
-	return nil, rows.Err()
+	return &users, rows.Err()
 }
 
 func InsertUser(user USER) (*int64, error) {
@@ -82,18 +105,58 @@ func InsertUser(user USER) (*int64, error) {
 
 func ModifyUser(id int64, user USER) error {
 
-	sth, err := connection.Prepare("UPDATE USER SET name = ?, email = ?, registered = ?, last_online = ? WHERE id = ?")
+	if len(user.Name) > 0 {
 
-	if err != nil {
-		return err
+		sth, err := connection.Prepare("UPDATE USER SET name = ? WHERE id = ?")
+
+		if err != nil {
+			return err
+		}
+
+		defer sth.Close()
+
+		_, err = sth.Exec(user.Name, id)
+
+		if err != nil {
+			return err
+		}
+
 	}
 
-	defer sth.Close()
+	if len(user.Email) > 0 {
 
-	_, err = sth.Exec(user.Name, user.Email, user.Registered, user.LastOnline, id)
+		sth, err := connection.Prepare("UPDATE USER SET email = ? WHERE id = ?")
 
-	if err != nil {
-		return err
+		if err != nil {
+			return err
+		}
+
+		defer sth.Close()
+
+		_, err = sth.Exec(user.Email, id)
+
+		if err != nil {
+			return err
+		}
+
+	}
+
+	if !user.LastOnline.IsZero() {
+
+		sth, err := connection.Prepare("UPDATE USER SET last_online = ? WHERE id = ?")
+
+		if err != nil {
+			return err
+		}
+
+		defer sth.Close()
+
+		_, err = sth.Exec(user.LastOnline, id)
+
+		if err != nil {
+			return err
+		}
+
 	}
 
 	return nil
