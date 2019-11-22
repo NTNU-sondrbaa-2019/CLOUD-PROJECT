@@ -26,12 +26,19 @@ func HandleIndex(w http.ResponseWriter, r *http.Request, url string) {
 		currentTime := time.Now()
 		if !logged {
 			// Page to load if logged in
-			page := &data{Title: "Log in", CurrentYear: strconv.Itoa(currentTime.Year()), GoogleClientID: gauth.GoogleOauthConfig.ClientID}
+			page := &data{
+				Title: "Log in",
+				CurrentYear: strconv.Itoa(currentTime.Year()),
+				GoogleClientID: gauth.GoogleOauthConfig.ClientID,
+			}
 
 			view.Render(w, "login", page)
 		} else {
 			// Page to load if not logged in
-			page := &data{Title: "GR8ELO", CurrentYear: strconv.Itoa(currentTime.Year())}
+			page := &data{
+				Title: "GR8ELO",
+				CurrentYear: strconv.Itoa(currentTime.Year()),
+			}
 
 			view.Render(w, "ucp", page)
 		}
