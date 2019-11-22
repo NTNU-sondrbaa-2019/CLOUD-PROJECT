@@ -1,13 +1,12 @@
-package handler
+package team
 
 import (
 	"encoding/json"
 	"fmt"
+	view2 "github.com/NTNU-sondrbaa-2019/CLOUD-PROJECT/internal/pkg/view"
 	"log"
 	"net/http"
-	"strconv"
 	"strings"
-	"time"
 )
 
 type Team struct {
@@ -18,10 +17,6 @@ type Team struct {
 
 type User struct {
 	Username string
-}
-
-type Page struct{
-
 }
 
 func TeamHandler(w http.ResponseWriter, r *http.Request, title string) {
@@ -37,11 +32,11 @@ func TeamHandler(w http.ResponseWriter, r *http.Request, title string) {
 			case "users":
 				UsersTeamHandler(w,r,title)
 			case "results":
-				ErrorPage(w, "Not implemented", http.StatusNotImplemented)
+				view2.ErrorPage(w, "Not implemented", http.StatusNotImplemented)
 			case "seasons":
-				ErrorPage(w, "Not implemented", http.StatusNotImplemented)
+				view2.ErrorPage(w, "Not implemented", http.StatusNotImplemented)
 			default:
-				ErrorPage(w, "Not Found", http.StatusNotFound)
+				view2.ErrorPage(w, "Not Found", http.StatusNotFound)
 			}
 		} else {
 			// Search for team name urlPart[4]
@@ -61,21 +56,10 @@ func TeamHandler(w http.ResponseWriter, r *http.Request, title string) {
 			w.Write(enc)
 		}
 	default:
-		// Not supported...
+		view2.ErrorPage(w, "Not implemented", http.StatusNotImplemented)
 	}
 }
 
 func UsersTeamHandler(w http.ResponseWriter, r *http.Request, title string) {
-	ErrorPage(w, "Not implemented", http.StatusNotImplemented)
-}
-
-func ErrorPage(w http.ResponseWriter,errorMsg string, code int) {
-	type err struct {
-		ErrorMsg string
-		ErrorCode int
-		CurrentYear string
-	}
-	error := &err{ErrorMsg: errorMsg, ErrorCode: code, CurrentYear: strconv.Itoa(time.Now().Year())}
-
-	RenderIndex(w, "error", error)
+	view2.ErrorPage(w, "Not implemented", http.StatusNotImplemented)
 }

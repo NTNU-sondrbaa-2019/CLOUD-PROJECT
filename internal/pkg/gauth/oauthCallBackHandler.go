@@ -12,7 +12,9 @@ type userInfoFromGoogle struct {
     Email       string      `json:"email"`
 }
 
-func OauthCallBackHandler(w http.ResponseWriter, r *http.Request) {
+
+func OauthCallBackHandler(w http.ResponseWriter, r *http.Request, title string) {
+
     // Read state from cookie
     oauthState, _ := r.Cookie("oauthstate")
 
@@ -39,6 +41,7 @@ func OauthCallBackHandler(w http.ResponseWriter, r *http.Request) {
     // Make a cookie with our user's id that expires in 24 hours
     sessionIDCookie := http.Cookie{
         Name:       "sessionID",
+        Path:       "/",
         Value:      tempID,
         Expires:    time.Now().Add(24 * time.Hour),
     }
@@ -55,5 +58,6 @@ func OauthCallBackHandler(w http.ResponseWriter, r *http.Request) {
     dbSave(tempUser)
 
     // Now that the user is logged in, redirect to the logged in page
-    http.Redirect(w, r, "/loggedin", http.StatusPermanentRedirect)
+    http.Redirect(w, r, "/loggedin/", http.StatusPermanentRedirect)
+
 }
