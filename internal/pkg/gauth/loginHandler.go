@@ -1,10 +1,8 @@
 package gauth
 
-import (
-    "fmt"
+ import (
     "golang.org/x/oauth2"
     "golang.org/x/oauth2/google"
-    "log"
     "net/http"
     "os"
 )

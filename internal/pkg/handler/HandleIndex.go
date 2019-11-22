@@ -2,7 +2,6 @@ package handler
 
 import (
 	"github.com/NTNU-sondrbaa-2019/CLOUD-PROJECT/internal/pkg/gauth"
-	"html/template"
 	"github.com/NTNU-sondrbaa-2019/CLOUD-PROJECT/internal/pkg/view"
 	"net/http"
 	"strconv"
