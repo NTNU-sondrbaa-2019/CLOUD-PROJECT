@@ -3,8 +3,8 @@ package main
 import (
 	"fmt"
 	"github.com/NTNU-sondrbaa-2019/CLOUD-O1/pkg/CO1Cache"
-	"github.com/NTNU-sondrbaa-2019/CLOUD-PROJECT/internal/gauth"
-	"github.com/NTNU-sondrbaa-2019/CLOUD-PROJECT/internal/handler"
+	"github.com/NTNU-sondrbaa-2019/CLOUD-PROJECT/internal/pkg/gauth"
+	"github.com/NTNU-sondrbaa-2019/CLOUD-PROJECT/internal/pkg/handler"
 	"github.com/NTNU-sondrbaa-2019/CLOUD-PROJECT/internal/pkg/rating"
 	"log"
 	"net/http"
