@@ -2,12 +2,12 @@ package main
 
 import (
 	"github.com/NTNU-sondrbaa-2019/CLOUD-O1/pkg/CO1Cache"
+	"github.com/NTNU-sondrbaa-2019/CLOUD-PROJECT/internal/pkg/database"
 	"github.com/NTNU-sondrbaa-2019/CLOUD-PROJECT/internal/pkg/gauth"
 	"github.com/NTNU-sondrbaa-2019/CLOUD-PROJECT/internal/pkg/handler"
 	"github.com/NTNU-sondrbaa-2019/CLOUD-PROJECT/internal/pkg/rating"
-	"github.com/NTNU-sondrbaa-2019/CLOUD-PROJECT/internal/team"
-	"github.com/NTNU-sondrbaa-2019/CLOUD-PROJECT/internal/user"
-	"github.com/NTNU-sondrbaa-2019/CLOUD-PROJECT/internal/pkg/database"
+	"github.com/NTNU-sondrbaa-2019/CLOUD-PROJECT/internal/pkg/team"
+	"github.com/NTNU-sondrbaa-2019/CLOUD-PROJECT/internal/pkg/user"
 	"github.com/robfig/cron/v3"
 	"log"
 	"net/http"

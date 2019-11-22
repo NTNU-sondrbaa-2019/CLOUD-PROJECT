@@ -2,14 +2,18 @@ package user
 
 import (
     "encoding/json"
-    view2 "github.com/NTNU-sondrbaa-2019/CLOUD-PROJECT/internal/pkg/view"
+    "github.com/NTNU-sondrbaa-2019/CLOUD-PROJECT/internal/pkg/view"
     "log"
     "net/http"
     "strings"
 )
 
 type User struct {
-	Username string
+	Name string
+	Email string
+	Registered string
+	LastOnline string
+	ID int
 }
 
 func UserHandler(w http.ResponseWriter, r *http.Request, title string) {
@@ -21,16 +25,16 @@ func UserHandler(w http.ResponseWriter, r *http.Request, title string) {
 		if len(urlPart) > 5 {
 			switch urlPart[5] {
 			case "results":
-				view2.ErrorPage(w, "Not implemented", http.StatusNotImplemented)
+				view.ErrorPage(w, "Not implemented", http.StatusNotImplemented)
 			case "teams":
-				view2.ErrorPage(w, "Not implemented", http.StatusNotImplemented)
+				view.ErrorPage(w, "Not implemented", http.StatusNotImplemented)
 			default:
-				view2.ErrorPage(w, "Not Found", http.StatusNotFound)
+				view.ErrorPage(w, "Not Found", http.StatusNotFound)
 			}
 		} else {
 			// Search for team name urlPart[4]
 			user := User{
-				Username: "Name",
+				Name: "Name",
 			}
 
 			// Encode new structure to JSON format
@@ -45,6 +49,6 @@ func UserHandler(w http.ResponseWriter, r *http.Request, title string) {
 			w.Write(enc)
 		}
 	default:
-		view2.ErrorPage(w, "Not Implemented", http.StatusNotImplemented)
+		view.ErrorPage(w, "Not Implemented", http.StatusNotImplemented)
 	}
 }
