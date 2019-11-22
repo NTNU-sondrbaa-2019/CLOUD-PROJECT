@@ -2,6 +2,8 @@ package handler
 
 import (
 	"github.com/NTNU-sondrbaa-2019/CLOUD-PROJECT/internal/pkg/gauth"
+	view2 "github.com/NTNU-sondrbaa-2019/CLOUD-PROJECT/internal/pkg/view"
+	"github.com/NTNU-sondrbaa-2019/CLOUD-PROJECT/internal/pkg/view"
 	"net/http"
 	"strconv"
 	"time"
@@ -19,31 +21,28 @@ type data struct {
 
 func HandleIndex(w http.ResponseWriter, r *http.Request, url string) {
 	if url != "/" {
-		http.NotFound(w, r)
+		view2.ErrorPage(w, "Not Found", http.StatusNotFound)
 	} else {
 		logged := false // Doesnt check currently if actually logged in
 		currentTime := time.Now()
 		if !logged {
 			// Page to load if logged in
-			page := &data{Title: "Log in", CurrentYear: strconv.Itoa(currentTime.Year()), GoogleClientID: gauth.GoogleOauthConfig.ClientID}
+			page := &data{
+				Title: "Log in",
+				CurrentYear: strconv.Itoa(currentTime.Year()),
+				GoogleClientID: gauth.GoogleOauthConfig.ClientID,
+			}
 
-			RenderIndex(w, "login", page)
+			view.Render(w, "login", page)
 		} else {
 			// Page to load if not logged in
-			page := &data{Title: "GR8ELO", CurrentYear: strconv.Itoa(currentTime.Year())}
+			page := &data{
+				Title: "GR8ELO",
+				CurrentYear: strconv.Itoa(currentTime.Year()),
+			}
 
-			RenderIndex(w, "ucp", page)
+			view.Render(w, "ucp", page)
 		}
-	}
-}
-
-func RenderIndex(writer http.ResponseWriter, s string, page interface{}) {
-	// Assigns data to datapoints in html file
-	err := templates.ExecuteTemplate(writer, s, page)
-
-	if err != nil {
-		http.Error(writer, err.Error(), http.StatusInternalServerError)
-		return
 	}
 }
 

@@ -2,9 +2,12 @@ package main
 
 import (
 	"github.com/NTNU-sondrbaa-2019/CLOUD-O1/pkg/CO1Cache"
-	"github.com/NTNU-sondrbaa-2019/CLOUD-PROJECT/internal/pkg/database"
+	"github.com/NTNU-sondrbaa-2019/CLOUD-PROJECT/internal/pkg/gauth"
 	"github.com/NTNU-sondrbaa-2019/CLOUD-PROJECT/internal/pkg/handler"
 	"github.com/NTNU-sondrbaa-2019/CLOUD-PROJECT/internal/pkg/rating"
+	"github.com/NTNU-sondrbaa-2019/CLOUD-PROJECT/internal/team"
+	"github.com/NTNU-sondrbaa-2019/CLOUD-PROJECT/internal/user"
+	"github.com/NTNU-sondrbaa-2019/CLOUD-PROJECT/internal/pkg/database"
 	"github.com/robfig/cron/v3"
 	"log"
 	"net/http"
@@ -56,7 +59,10 @@ func main() {
 
 	http.HandleFunc("/", handler.MakeHandler(handler.HandleIndex))
 	http.HandleFunc("/api/v1/", handler.MakeHandler(handler.HandleAPI))
-	http.HandleFunc("/api/v1/team/", handler.MakeHandler(handler.TeamHandler))
+	http.HandleFunc("/api/v1/team/", handler.MakeHandler(team.TeamHandler))
+	http.HandleFunc("/api/v1/user/", handler.MakeHandler(user.UserHandler))
+	http.HandleFunc("/api/v1/gauth/login/", handler.MakeHandler(gauth.LoginHandler))
+	http.HandleFunc("/api/v1/gauth/loggedin/", handler.MakeHandler(gauth.LoggedInHandler))
 
 	port := os.Getenv("PORT")
 
