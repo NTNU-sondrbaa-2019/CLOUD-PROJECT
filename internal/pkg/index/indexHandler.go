@@ -1,4 +1,4 @@
-package handler
+package index
 
 import (
 	"github.com/NTNU-sondrbaa-2019/CLOUD-PROJECT/internal/pkg/gauth"
