@@ -55,7 +55,7 @@ func SelectPlatformUserByPlatformID(platform_id int64) (*[]PLATFORM_USER, error)
 
 	defer sth.Close()
 
-	rows, err := sth.Queryx(group_id)
+	rows, err := sth.Queryx(platform_id)
 
 	if err != nil {
 		return nil, err
