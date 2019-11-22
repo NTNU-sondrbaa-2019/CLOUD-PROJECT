@@ -1,7 +1,8 @@
 package gauth
 
  import (
-    "golang.org/x/oauth2"
+     "github.com/NTNU-sondrbaa-2019/CLOUD-PROJECT/internal/pkg/HTTPErrors"
+     "golang.org/x/oauth2"
     "golang.org/x/oauth2/google"
     "net/http"
     "os"
@@ -15,9 +16,11 @@ var GoogleOauthConfig = &oauth2.Config{
     Endpoint:       google.Endpoint,
 }
 
-func LoginHandler(w http.ResponseWriter, r *http.Request, title string) {
+func LoginHandler(w http.ResponseWriter, r *http.Request) HTTPErrors.Error {
     // Create oauthState cookie
     oauthState := generateStateOauthCookie(w)
     authURL := GoogleOauthConfig.AuthCodeURL(oauthState)
     http.Redirect(w, r, authURL, http.StatusTemporaryRedirect)
+
+    return HTTPErrors.NewError("", 0)
 }

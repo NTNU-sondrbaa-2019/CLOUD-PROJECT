@@ -1,8 +1,8 @@
-package user
+package api
 
 import (
     "encoding/json"
-    "github.com/NTNU-sondrbaa-2019/CLOUD-PROJECT/internal/pkg/view"
+	"github.com/NTNU-sondrbaa-2019/CLOUD-PROJECT/internal/pkg/HTTPErrors"
     "log"
     "net/http"
     "strings"
@@ -16,7 +16,7 @@ type User struct {
 	ID int
 }
 
-func UserHandler(w http.ResponseWriter, r *http.Request, title string) {
+func UserHandler(w http.ResponseWriter, r *http.Request) HTTPErrors.Error {
 
 	urlPart := strings.Split(r.URL.Path, "/")
 	switch r.Method {
@@ -25,11 +25,11 @@ func UserHandler(w http.ResponseWriter, r *http.Request, title string) {
 		if len(urlPart) > 5 {
 			switch urlPart[5] {
 			case "results":
-				view.ErrorPage(w, "Not implemented", http.StatusNotImplemented)
+				return HTTPErrors.NewError("Not Implemented", http.StatusNotImplemented)
 			case "teams":
-				view.ErrorPage(w, "Not implemented", http.StatusNotImplemented)
+				return HTTPErrors.NewError("Not Implemented", http.StatusNotImplemented)
 			default:
-				view.ErrorPage(w, "Not Found", http.StatusNotFound)
+				return HTTPErrors.NewError("Not Implemented", http.StatusNotImplemented)
 			}
 		} else {
 			// Search for team name urlPart[4]
@@ -49,6 +49,8 @@ func UserHandler(w http.ResponseWriter, r *http.Request, title string) {
 			w.Write(enc)
 		}
 	default:
-		view.ErrorPage(w, "Not Implemented", http.StatusNotImplemented)
+		return HTTPErrors.NewError("Invalid method", http.StatusBadRequest)
 	}
+
+	return HTTPErrors.NewError("", 0)
 }
