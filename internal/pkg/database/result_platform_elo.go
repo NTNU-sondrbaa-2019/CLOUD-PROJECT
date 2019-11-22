@@ -2,7 +2,7 @@ package database
 
 type RESULT_PLATFORM_ELO struct {
 	ResultID        int64  `json:"result_id" db:"result_id"`
-	PlatformEloID   string `json:"platform_elo_id" db:"platform_elo_id"`
+	PlatformEloID   int64  `json:"platform_elo_id" db:"platform_elo_id"`
 	VerificationKey string `json:"verification_key" db:"verification_key"`
 }
 
