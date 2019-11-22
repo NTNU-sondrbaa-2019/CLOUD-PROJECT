@@ -20,7 +20,7 @@ type data struct {
 
 func HandleIndex(w http.ResponseWriter, r *http.Request, url string) {
 	if url != "/" {
-		http.NotFound(w, r)
+		view.ErrorPage(w, "Not Found", http.StatusNotFound)
 	} else {
 		logged := false // Doesnt check currently if actually logged in
 		currentTime := time.Now()
