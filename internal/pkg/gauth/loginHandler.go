@@ -12,7 +12,7 @@ var GoogleOauthConfig = &oauth2.Config{
     RedirectURL:    os.Getenv("POST-AUTH-REDIRECT-URL"),
     ClientID:       os.Getenv("GOOGLE-OAUTH-CLIENT-ID"),
     ClientSecret:   os.Getenv("GOOGLE-OAUTH-CLIENT-SECRET"),
-    Scopes:         []string{"https://www.googleapis.com/auth/userinfo.email"},
+    Scopes:         []string{"profile"},
     Endpoint:       google.Endpoint,
 }
 
