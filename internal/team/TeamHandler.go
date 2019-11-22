@@ -56,7 +56,7 @@ func TeamHandler(w http.ResponseWriter, r *http.Request, title string) {
 			w.Write(enc)
 		}
 	default:
-		// Not supported...
+		view.ErrorPage(w, "Not implemented", http.StatusNotImplemented)
 	}
 }
 
