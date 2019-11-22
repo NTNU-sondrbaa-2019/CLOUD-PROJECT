@@ -1,46 +1,56 @@
 package main
 
 import (
-	"fmt"
 	"github.com/NTNU-sondrbaa-2019/CLOUD-O1/pkg/CO1Cache"
+	"github.com/NTNU-sondrbaa-2019/CLOUD-PROJECT/internal/pkg/database"
 	"github.com/NTNU-sondrbaa-2019/CLOUD-PROJECT/internal/pkg/gauth"
 	"github.com/NTNU-sondrbaa-2019/CLOUD-PROJECT/internal/pkg/handler"
 	"github.com/NTNU-sondrbaa-2019/CLOUD-PROJECT/internal/pkg/rating"
+	"github.com/NTNU-sondrbaa-2019/CLOUD-PROJECT/internal/pkg/team"
+	"github.com/NTNU-sondrbaa-2019/CLOUD-PROJECT/internal/pkg/user"
+	"github.com/robfig/cron/v3"
 	"log"
 	"net/http"
 	"os"
+	"strings"
 )
 
-import "github.com/robfig/cron/v3"
-
 func main() {
-	type Test struct {
-		Name   string `json:"name"`
-		Author string `json:"author"`
-	}
 
-	test := Test{
-		"This is a test JSON",
-		"Sondre Benjamin Aasen",
-	}
-
+	// initialize cache
+	log.Println("Initializing cache...")
 	CO1Cache.Initialize()
-	CO1Cache.WriteJSON("test", test)
 
-	fmt.Println("Hello World!")
+	// write database config to cache
+	log.Println("Initializing database...")
+	database.Connect()
 
-	// Uncomment to run the lichess stuff.
-
+	// Setting up cronjobs
+	log.Println("Initializing automatic ELO fetching...")
 	c := cron.New()
-	teamIdKey := "storbukk-sjakklubb"
+
+	// Get lichess.org teams to automatically fetch data about from environment
+	lichess_teamids := os.Getenv("LICHESS-TEAMS")
+
+	// Get default if nothing in environment
+	if lichess_teamids == "" {
+		lichess_teamids = rating.LICHESS_DEFAULT_TEAMS
+	}
+
+	// Add cronjob
 	_, err := c.AddFunc("0 2 * * *", func() {
-		rating.GetTeamElo(teamIdKey)
+		for _, lichess_teamid := range strings.Split(lichess_teamids, ",") {
+			rating.GetTeamElo(lichess_teamid)
+		}
 	})
 
 	if err != nil {
-		panic(err)
+
+		log.Println(err)
+
 	}
 
+	// Start cronjobs
 	c.Start()
 
 	// 2 Options, either all handle requests are made here with new handlers
@@ -52,9 +62,9 @@ func main() {
 	http.HandleFunc("/loggedin/", handler.MakeHandler(gauth.LoggedInHandler))
 	http.HandleFunc("/logout/", handler.MakeHandler(gauth.LogoutHandler))
 	http.HandleFunc("/oauth2callback/", handler.MakeHandler(gauth.OauthCallBackHandler))
-
-	http.HandleFunc("/api/v1/team/", handler.MakeHandler(handler.TeamHandler))
-
+	http.HandleFunc("/api/v1/", handler.MakeHandler(handler.HandleAPI))
+	http.HandleFunc("/api/v1/team/", handler.MakeHandler(team.TeamHandler))
+	http.HandleFunc("/api/v1/user/", handler.MakeHandler(user.UserHandler))
 
 	port := os.Getenv("PORT")
 
@@ -63,5 +73,5 @@ func main() {
 	}
 
 	log.Println("Listening on port " + port)
-	log.Fatal(http.ListenAndServe(":" + port, nil))
+	log.Fatal(http.ListenAndServe(":"+port, nil))
 }

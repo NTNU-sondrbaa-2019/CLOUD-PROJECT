@@ -3,12 +3,11 @@ package handler
 import (
 	"github.com/NTNU-sondrbaa-2019/CLOUD-PROJECT/internal/pkg/gauth"
 	"html/template"
+	"github.com/NTNU-sondrbaa-2019/CLOUD-PROJECT/internal/pkg/view"
 	"net/http"
 	"strconv"
 	"time"
 )
-
-var templates = template.Must(template.ParseFiles("web/static/login.html","web/static/ucp.html"))
 
 type data struct {
 	Title string // Title for page
@@ -21,7 +20,7 @@ type data struct {
 
 func HandleIndex(w http.ResponseWriter, r *http.Request, url string) {
 	if url != "/" {
-		http.NotFound(w, r)
+    view.ErrorPage(w, "Not Found", http.StatusNotFound)
 	} else {
 		logged := false // Doesnt check currently if actually logged in
 		currentTime := time.Now()
@@ -43,23 +42,13 @@ func HandleIndex(w http.ResponseWriter, r *http.Request, url string) {
 				GoogleRedirectURI: gauth.GoogleOauthConfig.RedirectURL,
 			}
 
-			renderIndex(w, "login", page)
+			view.Render(w, "login", page)
 		} else {
 			// Page to load if logged in
 			page := &data{Title: "GR8ELO", Date: strconv.Itoa(currentTime.Year())}
 
-			renderIndex(w, "ucp", page)
+			view.Render(w, "ucp", page)
 		}
-	}
-}
-
-func renderIndex(writer http.ResponseWriter, s string, page interface{}) {
-	// Assigns data to datapoints in html file
-	err := templates.ExecuteTemplate(writer, s, page)
-
-	if err != nil {
-		http.Error(writer, err.Error(), http.StatusInternalServerError)
-		return
 	}
 }
 

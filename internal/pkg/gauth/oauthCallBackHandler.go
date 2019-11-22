@@ -12,7 +12,9 @@ type userInfoFromGoogle struct {
     Email       string      `json:"email"`
 }
 
+
 func OauthCallBackHandler(w http.ResponseWriter, r *http.Request, title string) {
+
     // Read state from cookie
     oauthState, _ := r.Cookie("oauthstate")
 
@@ -57,4 +59,5 @@ func OauthCallBackHandler(w http.ResponseWriter, r *http.Request, title string) 
 
     // Now that the user is logged in, redirect to the logged in page
     http.Redirect(w, r, "/loggedin/", http.StatusPermanentRedirect)
+
 }
