@@ -3,7 +3,7 @@ package gauth
 import (
     "crypto/rand"
     "encoding/base64"
-    "log"
+    "github.com/NTNU-sondrbaa-2019/CLOUD-PROJECT/internal/pkg/HTTPErrors"
     "net/http"
     "time"
 )
@@ -13,24 +13,20 @@ type userInfoFromGoogle struct {
 }
 
 
-func OauthCallBackHandler(w http.ResponseWriter, r *http.Request, title string) {
+func OauthCallBackHandler(w http.ResponseWriter, r *http.Request) HTTPErrors.Error{
 
     // Read state from cookie
     oauthState, _ := r.Cookie("oauthstate")
 
     // Compare state of callback to our local state
     if r.FormValue("state") != oauthState.Value {
-        log.Print("Invalid google oauth state")
-        http.Redirect(w, r, "/", http.StatusTemporaryRedirect)
-        return
+        return HTTPErrors.NewError("Invalid state from google", http.StatusInternalServerError)
     }
 
     // Get our user's data from google
     tempUserFromGoogle, err := getUserDataFromGoogle(r.FormValue("code"))
     if err != nil {
-        log.Println(err.Error())
-        http.Redirect(w, r, "/", http.StatusTemporaryRedirect)
-        return
+        return HTTPErrors.NewError("Could not get user data from google", http.StatusInternalServerError)
     }
 
     //Make a random 16 characters long ID for this user
@@ -60,4 +56,5 @@ func OauthCallBackHandler(w http.ResponseWriter, r *http.Request, title string) 
     // Now that the user is logged in, redirect to the logged in page
     http.Redirect(w, r, "/loggedin/", http.StatusPermanentRedirect)
 
+    return HTTPErrors.NewError("", 0)
 }
