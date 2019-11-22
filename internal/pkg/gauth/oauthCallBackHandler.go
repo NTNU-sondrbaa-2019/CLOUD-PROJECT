@@ -4,6 +4,7 @@ import (
     "crypto/rand"
     "encoding/base64"
     "github.com/NTNU-sondrbaa-2019/CLOUD-PROJECT/internal/pkg/HTTPErrors"
+    "github.com/NTNU-sondrbaa-2019/CLOUD-PROJECT/internal/pkg/database"
     "net/http"
     "time"
 )
@@ -45,7 +46,7 @@ func OauthCallBackHandler(w http.ResponseWriter, r *http.Request) HTTPErrors.Err
     http.SetCookie(w, &sessionIDCookie)
 
     // Make a tempUser with the info we got from google and our new sessionID
-    tempUser := userInfo{
+    tempWebUser := userInfo{
         Email:      tempUserFromGoogle.Email,
         Name:       tempUserFromGoogle.Name,
         LichessKey: "",
@@ -53,7 +54,29 @@ func OauthCallBackHandler(w http.ResponseWriter, r *http.Request) HTTPErrors.Err
     }
 
     // Save our user's info to the struct in memory
-    dbSave(tempUser)
+    dbSave(tempWebUser)
+
+    tempUser := database.USER{
+        Name:       tempUserFromGoogle.Name,
+        Email:      tempUserFromGoogle.Email,
+        Registered: time.Now(),
+        LastOnline: time.Now(),
+    }
+
+    _, err =  database.InsertUser(tempUser)
+    // If err is not nil, then the user with this email already exists
+    // So we get that user and update the lastonline time to time.Now()
+    if err != nil {
+        modUser, err := database.SelectUserByEmail(tempUser.Email)
+        if err != nil {
+            return HTTPErrors.NewError("Could not select existing user from database", http.StatusInternalServerError)
+        }
+
+        err = database.ModifyUser(modUser.ID, tempUser)
+        if err != nil {
+            return HTTPErrors.NewError("Could not modify existing user in database", http.StatusInternalServerError)
+        }
+    }
 
     // Now that the user is logged in, redirect to the logged in page
     http.Redirect(w, r, "/loggedin/", http.StatusPermanentRedirect)

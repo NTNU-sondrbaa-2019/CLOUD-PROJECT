@@ -3,6 +3,7 @@ package gauth
 import (
     "fmt"
     "github.com/NTNU-sondrbaa-2019/CLOUD-PROJECT/internal/pkg/HTTPErrors"
+    "github.com/NTNU-sondrbaa-2019/CLOUD-PROJECT/internal/pkg/database"
     "net/http"
 )
 
@@ -14,7 +15,12 @@ func LoggedInHandler(w http.ResponseWriter, r *http.Request) HTTPErrors.Error {
 
     dbPrintSpecificID(w, sessionID)
 
+    allUsers, err := database.SelectUsers("")
+    if err != nil {
+        return HTTPErrors.NewError("Could not select all users from database", http.StatusInternalServerError)
+    }
+
     fmt.Fprintln(w, "Every user:")
-    dbPrintAll(w)
+    fmt.Fprint(w, allUsers)
     return HTTPErrors.NewError("", 0)
 }
