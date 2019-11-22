@@ -1,9 +1,9 @@
-package team
+package api
 
 import (
 	"encoding/json"
 	"fmt"
-	view2 "github.com/NTNU-sondrbaa-2019/CLOUD-PROJECT/internal/pkg/view"
+	"github.com/NTNU-sondrbaa-2019/CLOUD-PROJECT/internal/pkg/HTTPErrors"
 	"log"
 	"net/http"
 	"strings"
@@ -15,11 +15,7 @@ type Team struct {
 	Members 	[]User
 }
 
-type User struct {
-	Username string
-}
-
-func TeamHandler(w http.ResponseWriter, r *http.Request, title string) {
+func TeamHandler(w http.ResponseWriter, r *http.Request) HTTPErrors.Error {
 	// Confirms to console that this handler was called
 	fmt.Println("Team handler called.")
 	urlPart := strings.Split(r.URL.Path, "/")
@@ -30,13 +26,14 @@ func TeamHandler(w http.ResponseWriter, r *http.Request, title string) {
 		if len(urlPart) > 5 {
 			switch urlPart[5] {
 			case "users":
-				UsersTeamHandler(w,r,title)
+				err := UsersTeamHandler(w,r)
+				return err
 			case "results":
-				view2.ErrorPage(w, "Not implemented", http.StatusNotImplemented)
+				return HTTPErrors.NewError("Not Implemented", http.StatusNotImplemented)
 			case "seasons":
-				view2.ErrorPage(w, "Not implemented", http.StatusNotImplemented)
+				return HTTPErrors.NewError("Not Implemented", http.StatusNotImplemented)
 			default:
-				view2.ErrorPage(w, "Not Found", http.StatusNotFound)
+				return HTTPErrors.NewError("Not Implemented", http.StatusNotImplemented)
 			}
 		} else {
 			// Search for team name urlPart[4]
@@ -56,10 +53,12 @@ func TeamHandler(w http.ResponseWriter, r *http.Request, title string) {
 			w.Write(enc)
 		}
 	default:
-		view2.ErrorPage(w, "Not implemented", http.StatusNotImplemented)
+		return HTTPErrors.NewError("Invalid method", http.StatusBadRequest)
 	}
+
+	return HTTPErrors.NewError("", 0)
 }
 
-func UsersTeamHandler(w http.ResponseWriter, r *http.Request, title string) {
-	view2.ErrorPage(w, "Not implemented", http.StatusNotImplemented)
+func UsersTeamHandler(w http.ResponseWriter, r *http.Request) HTTPErrors.Error {
+	return HTTPErrors.NewError("Not Implemented", http.StatusNotImplemented)
 }
