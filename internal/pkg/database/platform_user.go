@@ -99,6 +99,24 @@ func ModifyPlatformUser(user_id int64, platform_id int64, platform_user PLATFORM
 
 	}
 
+	if len(platform_user.VerificationKey) > 0 {
+
+		sth, err := connection.Prepare("UPDATE PLATFORM_USER SET verification_key = ? WHERE user_id = ? AND platform_id = ?")
+
+		if err != nil {
+			return err
+		}
+
+		defer sth.Close()
+
+		_, err = sth.Exec(platform_user.VerificationKey, user_id, platform_id)
+
+		if err != nil {
+			return err
+		}
+
+	}
+
 	return nil
 }
 
