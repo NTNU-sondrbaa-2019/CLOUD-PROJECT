@@ -1,11 +1,10 @@
 package handler
 
 import (
-	"html/template"
+	"github.com/NTNU-sondrbaa-2019/CLOUD-PROJECT/internal/pkg/gauth"
 	"net/http"
 	"strconv"
 	"time"
-	"github.com/NTNU-sondrbaa-2019/CLOUD-PROJECT/internal/gauth"
 )
 
 

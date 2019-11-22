@@ -2,7 +2,7 @@ package handler
 
 import (
 	"fmt"
-	"github.com/NTNU-sondrbaa-2019/CLOUD-PROJECT/internal/gauth"
+	"github.com/NTNU-sondrbaa-2019/CLOUD-PROJECT/internal/pkg/gauth"
 	"net/http"
 )
 
