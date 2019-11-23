@@ -90,4 +90,4 @@ TODO Vebjørn
 
 ### Work Hours
 
-TODO Add total number of hours of work (NOT INDIVIDUAL)
+Total Worktime: 200 hours
