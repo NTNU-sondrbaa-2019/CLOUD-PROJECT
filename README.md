@@ -2,11 +2,14 @@
 
 An application for measuring ELO within a small collections of players or groups of players.
 
-## API - What does our API do?
+## API Endpoints
 
-* `endpoint` - `explaination`
-* `endpoint` - `explaination`
-* `endpoint` - `explaination`
+* `/api/v1/user/@/results`  TODO Vebjørn
+* `/api/v1/user/@/teams`    TODO Vebjørn
+* `/api/v1/team/@/users`    TODO Vebjørn
+* `/api/v1/team/@/results`  TODO Vebjørn
+* `/api/v1/team/@/seasons`  TODO Vebjørn
+* `/api/v1/diagnostics`     TODO Adrian
 
 ## Group `8`: `GR8`
 
