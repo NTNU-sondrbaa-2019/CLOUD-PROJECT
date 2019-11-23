@@ -29,7 +29,7 @@ func HandleIndex(w http.ResponseWriter, r *http.Request) HTTPErrors.Error {
 	if !logged {
 		// Page to load if not logged in
 		page := &data{
-			Title:       "Login &bullet; gr8elo.com",
+			Title:       "Login - gr8elo.com",
 			CurrentYear: strconv.Itoa(currentTime.Year()),
 			Username:    "Unknown Username",
 		}
@@ -37,7 +37,7 @@ func HandleIndex(w http.ResponseWriter, r *http.Request) HTTPErrors.Error {
 		view.Render(w, "login", page)
 	} else {
 		// Page to load if logged in
-		page := &data{Title: "Homepage &bullet; gr8elo.com", CurrentYear: strconv.Itoa(currentTime.Year())}
+		page := &data{Title: "Homepage - gr8elo.com", CurrentYear: strconv.Itoa(currentTime.Year())}
 
 		view.Render(w, "ucp", page)
 	}
