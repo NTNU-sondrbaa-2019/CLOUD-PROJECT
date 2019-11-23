@@ -27,7 +27,7 @@ func Connect() {
 
 	if err != nil || connection.Ping() != nil {
 
-		log.Println("Couldn't connect to database using environment variables: ", err)
+		log.Println("Couldn't connect to database using environment variables: ", err, connection.Ping())
 
 		if !CO1Cache.Verify("db-config") {
 
