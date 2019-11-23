@@ -2,7 +2,7 @@
 
 An application for measuring ELO within a small collections of players or groups of players.
 
-## Endpoints
+## API - What does our API do?
 
 * `endpoint` - `explaination`
 * `endpoint` - `explaination`
