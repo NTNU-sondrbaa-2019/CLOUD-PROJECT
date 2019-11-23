@@ -10,12 +10,9 @@ import (
 )
 
 type data struct {
-	Title string // Title for page
-	Date string // For the current year
-	Username string // For username
-	GoogleFetchData string
-	GoogleClientID string
-	GoogleRedirectURI string
+	Title       string // Title for page
+	CurrentYear string // For the current year
+	Username    string // For username
 }
 
 func HandleIndex(w http.ResponseWriter, r *http.Request) HTTPErrors.Error {
@@ -32,20 +29,17 @@ func HandleIndex(w http.ResponseWriter, r *http.Request) HTTPErrors.Error {
 	if !logged {
 		// Page to load if not logged in
 		page := &data{
-			Title:             "Log in",
-			Date:              strconv.Itoa(currentTime.Year()),
-			GoogleFetchData:   gauth.GoogleOauthConfig.Scopes[0],
-			GoogleClientID:    gauth.GoogleOauthConfig.ClientID,
-			GoogleRedirectURI: gauth.GoogleOauthConfig.RedirectURL,
+			Title:       "Login &bullet; gr8elo.com",
+			CurrentYear: strconv.Itoa(currentTime.Year()),
+			Username:    "Unknown Username",
 		}
 
 		view.Render(w, "login", page)
 	} else {
 		// Page to load if logged in
-		page := &data{Title: "GR8ELO", Date: strconv.Itoa(currentTime.Year())}
+		page := &data{Title: "Homepage &bullet; gr8elo.com", CurrentYear: strconv.Itoa(currentTime.Year())}
 
 		view.Render(w, "ucp", page)
 	}
 	return HTTPErrors.NewError("", 0)
 }
-
