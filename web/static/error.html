@@ -19,7 +19,7 @@
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
                 integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
                 crossorigin="anonymous"></script>
-        <title>{{.ErrorMsg}}</title>
+        <title>Error &bullet; {{.ErrorMsg}}</title>
     </head>
     <body>
     <div class="container mt-5">
@@ -32,7 +32,7 @@
                 <div class="alert alert-warning">
                     <h2>
                         <i class="fa fa-exclamation-triangle"></i>
-                        Error code: {{.ErrorCode}}
+                        Error Code: {{.ErrorCode}}
                     </h2>
                     <pre>{{.ErrorMsg}}</pre>
                 </div>
