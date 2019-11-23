@@ -41,9 +41,29 @@ We plan on using this project for student activity groups. Such as `NTNUI-Gjøvi
 
 TODO What has changed?
 
+TODO Marcus
+
+TODO Sindre
+
+TODO Adrian
+
+TODO Sondre
+
+TODO Vebjørn
+
 ### What did we not achieve with the project?
 
 TODO What was not achieved?
+
+TODO Marcus
+
+TODO Sindre
+
+TODO Adrian
+
+TODO Sondre
+
+TODO Vebjørn
 
 ### Reflections
 
