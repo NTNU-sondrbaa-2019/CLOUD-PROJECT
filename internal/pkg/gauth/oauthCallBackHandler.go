@@ -65,14 +65,19 @@ func OauthCallBackHandler(w http.ResponseWriter, r *http.Request) HTTPErrors.Err
         if err != nil {
             return HTTPErrors.NewError("Could not modify existing user in database", http.StatusInternalServerError)
         }
-    }
 
-    tempCacheSession := userSession{
-        SessionID: sessionIDCookie.Value,
-        UserID:    *userID,
+        tempCacheSession := userSession{
+            SessionID: sessionIDCookie.Value,
+            UserID:    modUser.ID,
+        }
+        AddUserSession(tempCacheSession)
+    } else {
+        tempCacheSession := userSession{
+            SessionID: sessionIDCookie.Value,
+            UserID:    *userID,
+        }
+        AddUserSession(tempCacheSession)
     }
-
-    AddUserSession(tempCacheSession)
 
     // Now that the user is logged in, redirect to the logged in page
     http.Redirect(w, r, "/loggedin/", http.StatusPermanentRedirect)
