@@ -2,8 +2,15 @@
 
 ## Public
 
-### `func GetTeamElo(teamIdKey string)`
+### `func Initialize()`
+
 Only function that should be called from this package.
+
+Initializes the cron jobs that should take place in this package.
+
+## Private
+
+### `func GetTeamElo(teamIdKey string)`
 
 Parameter `teamIdKey` is the id of a team on lichess.org
 
@@ -12,7 +19,6 @@ Calls `sortGames` to sort these games. Calls `calculateElo` to calculate Elo.
 
 returns `[]TeamMember` with all team members in a team with an internal ELO in team.
 
-## Private
 
 ### `func getGamesInTeam(teamMembers [] TeamMember)`
 Parameter `teamMembers` is a slice of team members

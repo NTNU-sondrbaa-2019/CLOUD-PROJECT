@@ -1,66 +1,27 @@
 package main
 
 import (
-	"fmt"
 	"github.com/NTNU-sondrbaa-2019/CLOUD-O1/pkg/CO1Cache"
-
-	"github.com/NTNU-sondrbaa-2019/CLOUD-PROJECT/internal/handler"
-
-	"log"
-
-	"os"
-
+	"github.com/NTNU-sondrbaa-2019/CLOUD-PROJECT/internal/pkg/database"
 	"github.com/NTNU-sondrbaa-2019/CLOUD-PROJECT/internal/pkg/rating"
-	"github.com/robfig/cron/v3"
-	"net/http"
+	"github.com/NTNU-sondrbaa-2019/CLOUD-PROJECT/internal/pkg/server"
+	"log"
 )
 
 func main() {
-	type Test struct {
-		Name   string `json:"name"`
-		Author string `json:"author"`
-	}
 
-	test := Test{
-		"This is a test JSON",
-		"Sondre Benjamin Aasen",
-	}
-
+	// initialize cache
+	log.Println("Initializing cache...")
 	CO1Cache.Initialize()
-	CO1Cache.WriteJSON("test", test)
 
-	fmt.Println("Hello World!")
+	// write database config to cache
+	log.Println("Initializing database...")
+	database.Connect()
 
-	// Uncomment to run the lichess stuff.
+	// Setting up cronjobs
+	log.Println("Initializing automatic ELO fetching...")
+	rating.Initialize()
 
-	// Go service must be running for the cron job to take place
-	c := cron.New()	
-	teamIdKey := "storbukk-sjakklubb"
-	//_, err := c.AddFunc("0 2 * * *", func() {
-	// For testing purposes run every 10 minutes
-	_, err := c.AddFunc("*/10 * * * *", func() {
-		rating.GetTeamElo(teamIdKey)
-	})
-
-	if err != nil {
-		panic(err)
-	}
-
-	c.Start()
-
-	// 2 Options, either all handle requests are made here with new handlers
-	// Or each endpoint can be handled via switch in a "mainHandler"
-	//http.HandleFunc("/api/v1/", internal.MakeHandler(someHandler))
-
-	http.HandleFunc("/", handler.MakeHandler(handler.HandleIndex))
-	http.HandleFunc("/api/v1/", handler.MakeHandler(handler.HandleAPI))
-
-	port := os.Getenv("PORT")
-
-	if port == "" {
-		port = handler.DEFAULT_PORT
-	}
-
-	log.Println("Listening on port " + port)
-	log.Fatal(http.ListenAndServe(":" + port, nil))
+	// Starts the webserver
+	server.Start()
 }
