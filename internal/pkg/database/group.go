@@ -97,7 +97,7 @@ func SelectGroups(where string) (*[]GROUP, error) {
 
 func InsertGroup(group GROUP) (*int64, error) {
 
-	sth, err := connection.Prepare("INSERT INTO GROUP VALUES (NULL, ?, ?, ?, ?)")
+	sth, err := connection.Prepare("INSERT INTO `GROUP` VALUES (NULL, ?, ?, ?, ?)")
 
 	if err != nil {
 		return nil, err

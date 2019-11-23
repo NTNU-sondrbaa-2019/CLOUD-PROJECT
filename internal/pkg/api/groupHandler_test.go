@@ -50,11 +50,20 @@ func TestGroupHandler(t *testing.T) {
 		t.Fatal(err)
 	}
 	testUser.Email = "test@test.com"
+	//var id *int64
 
+	fmt.Println("Inserting data")
 
 	// Inserting Test Data to Database
-	database.InsertGroup(testGroup)
+	/*id,_ = database.InsertGroup(testGroup)
+	testGroup.ID = *id
+	id,_ = database.InsertUser(testUser)
+	testUser.ID = *id
+ */
 	database.InsertUser(testUser)
+	database.InsertGroup(testGroup)
+	fmt.Println("Data inserted")
+
 
 	var returnedGroup database.GROUP
 	// Need to get id's generated from database to delete
@@ -66,12 +75,8 @@ func TestGroupHandler(t *testing.T) {
 		fmt.Println(i,g) // For debugging, prints i and group
 		 returnedGroup = g
 	}
-	testGroup.ID = returnedGroup.ID
-	testGroup.Created = returnedGroup.Created
 
 	returnedUser, _ := database.SelectUserByEmail(testUser.Email)
-	testUser.ID = returnedUser.ID
-	testUser.Registered = returnedUser.Registered
 
 	// Setting test data for GROUP_USER
 	var testGroupUser database.GROUP_USER
@@ -103,6 +108,7 @@ func TestGroupHandler(t *testing.T) {
 			status, http.StatusOK)
 	}
 
+	fmt.Println(returnedUser)
 	fmt.Println(returnedGroup)
 	fmt.Println(rr.Body)
 	// Check the response body is what we expect.
