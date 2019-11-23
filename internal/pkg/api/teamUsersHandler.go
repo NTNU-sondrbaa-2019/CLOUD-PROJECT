@@ -11,13 +11,15 @@ import (
 
 func TeamUsersHandler(w http.ResponseWriter, r *http.Request) HTTPErrors.Error {
 	fmt.Println("Finding Users in group...")
-	// Since group is array this will return multiple teams
-	for i, s := range *group {
+	// Since groups is array this will return multiple teams
+	for i, s := range *groups {
 		fmt.Println("Printing group...")
 		fmt.Println(i,s)
 		var tmpValues returnType
 		group_user, _ = database.SelectGroupUserByGroupID(s.ID)
 		tmpValues.TeamName = s.Name
+
+		fmt.Println("Group name", s.Name)
 
 		// Loop through usersgroups
 		for n, ug := range *group_user {

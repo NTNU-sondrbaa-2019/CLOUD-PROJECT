@@ -11,6 +11,7 @@ type returnType struct {
 var someValues []returnType
 
 var user *database.USER
-var group *[]database.GROUP
+var group *database.GROUP
+var groups *[]database.GROUP
 var group_user *[]database.GROUP_USER
 

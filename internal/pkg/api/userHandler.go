@@ -58,14 +58,6 @@ type userTeams struct {
 	Groups []database.GROUP
 }
 
-func getGroup(id int64) *database.GROUP {
-	var tmpGroup *database.GROUP
-
-	tmpGroup,_ = database.SelectGroup(id)
-
-	return tmpGroup
-}
-
 func UserTeamsHandler(w http.ResponseWriter, r *http.Request) HTTPErrors.Error {
 	fmt.Println("Finding Users in group...")
 	// Since group is array this will return multiple teams
@@ -81,14 +73,12 @@ func UserTeamsHandler(w http.ResponseWriter, r *http.Request) HTTPErrors.Error {
 		fmt.Println("Printing users")
 		fmt.Println(n, ug)
 
-		for i, g := range *group {
-			fmt.Println(i,g)
-			ut.Groups = append(ut.Groups, g)
-		}
+		group, _ = database.SelectGroup(ug.GroupID)
+		ut.Groups = append(ut.Groups, *group)
 	}
 
 	// Encode new structure to JSON format
-	enc, err := json.Marshal(someValues)
+	enc, err := json.Marshal(ut)
 	if err != nil {
 		log.Fatalln(err)
 	}
