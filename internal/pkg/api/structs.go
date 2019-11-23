@@ -14,8 +14,8 @@ type userTeams struct {
 	Groups []database.GROUP `json:"groups"`
 }
 
-type teamRes struct {
-	TeamName string `json:"groupname"`
+type groupRes struct {
+	GroupName string             `json:"groupname"`
 	Results   *[]database.RESULT `json:"results"`
 }
 

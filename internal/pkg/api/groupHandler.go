@@ -12,7 +12,7 @@ import (
 	"strings"
 )
 
-func TeamHandler(w http.ResponseWriter, r *http.Request) HTTPErrors.Error {
+func GroupHandler(w http.ResponseWriter, r *http.Request) HTTPErrors.Error {
 	urlPart := strings.Split(r.URL.Path, "/")
 	switch r.Method {
 	case "GET":
@@ -24,10 +24,10 @@ func TeamHandler(w http.ResponseWriter, r *http.Request) HTTPErrors.Error {
 			if len(urlPart)>5 {
 				switch urlPart[5] {
 				case "users":
-					err := TeamUsersHandler(w,r)
+					err := GroupUsersHandler(w,r)
 					return err
 				case "results":
-					err := TeamResultsHandler(w,r)
+					err := GroupResultsHandler(w,r)
 					return err
 				case "seasons":
 					return HTTPErrors.NewError("Not Implemented", http.StatusNotImplemented)
@@ -56,23 +56,23 @@ func TeamHandler(w http.ResponseWriter, r *http.Request) HTTPErrors.Error {
 	return HTTPErrors.NewError("", 0)
 }
 
-func TeamResultsHandler(w http.ResponseWriter, r *http.Request) HTTPErrors.Error {
-	fmt.Println("Finding team results...")
+func GroupResultsHandler(w http.ResponseWriter, r *http.Request) HTTPErrors.Error {
+	fmt.Println("Finding group results...")
 
-	var tmpTeamResults teamRes
-	var teamResults []teamRes
+	var tmpGroupResults groupRes
+	var groupResults []groupRes
 
 	for i, g := range *groups {
 		fmt.Println(i,g)
 
-		tmpTeamResults.TeamName = g.Name
-		tmpTeamResults.Results, _  = database.SelectResults("WHERE group_id=" + strconv.FormatInt(g.ID, 10))
+		tmpGroupResults.GroupName = g.Name
+		tmpGroupResults.Results, _  = database.SelectResults("WHERE group_id=" + strconv.FormatInt(g.ID, 10))
 
-		teamResults = append(teamResults, tmpTeamResults)
+		groupResults = append(groupResults, tmpGroupResults)
 	}
 
 	// Encode new structure to JSON format
-	enc, err := json.Marshal(teamResults)
+	enc, err := json.Marshal(groupResults)
 	if err != nil {
 		log.Fatalln(err)
 	}

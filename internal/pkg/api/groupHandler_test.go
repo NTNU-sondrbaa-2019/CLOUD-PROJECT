@@ -18,7 +18,7 @@ func TestTeamHandler(t *testing.T) {
 
 	// We create a ResponseRecorder (which satisfies http.ResponseWriter) to record the response.
 	rr := httptest.NewRecorder()
-	handler := http.HandlerFunc(handler.MakeHandler(TeamHandler))
+	handler := http.HandlerFunc(handler.MakeHandler(GroupHandler))
 
 	// Our handlers satisfy http.Handler, so we can call their ServeHTTP method
 	// directly and pass in our Request and ResponseRecorder.

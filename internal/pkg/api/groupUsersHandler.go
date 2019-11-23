@@ -9,7 +9,7 @@ import (
 	"net/http"
 )
 
-func TeamUsersHandler(w http.ResponseWriter, r *http.Request) HTTPErrors.Error {
+func GroupUsersHandler(w http.ResponseWriter, r *http.Request) HTTPErrors.Error {
 	fmt.Println("Finding Users in group...")
 	// Since groups is array this will return multiple teams
 	for i, s := range *groups {
