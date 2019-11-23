@@ -4,12 +4,14 @@ import (
     "crypto/rand"
     "encoding/base64"
     "github.com/NTNU-sondrbaa-2019/CLOUD-PROJECT/internal/pkg/HTTPErrors"
+    "github.com/NTNU-sondrbaa-2019/CLOUD-PROJECT/internal/pkg/database"
     "net/http"
     "time"
 )
 
 type userInfoFromGoogle struct {
     Email       string      `json:"email"`
+    Name        string      `json:"name"`
 }
 
 
@@ -43,18 +45,42 @@ func OauthCallBackHandler(w http.ResponseWriter, r *http.Request) HTTPErrors.Err
     }
     http.SetCookie(w, &sessionIDCookie)
 
-    // Make a tempUser with the info we got from google and our new sessionID
-    tempUser := userInfo{
+    tempUser := database.USER{
+        Name:       tempUserFromGoogle.Name,
         Email:      tempUserFromGoogle.Email,
-        LichessKey: "",
-        LastSessionID: tempID,
+        Registered: time.Now(),
+        LastOnline: time.Now(),
     }
 
-    // Save our user's info to the struct in memory
-    dbSave(tempUser)
+    userID, err :=  database.InsertUser(tempUser)
+    // If err is not nil, then the user with this email already exists
+    // So we get that user and update the lastonline time to time.Now()
+    if err != nil {
+        modUser, err := database.SelectUserByEmail(tempUser.Email)
+        if err != nil {
+            return HTTPErrors.NewError("Could not select existing user from database", http.StatusInternalServerError)
+        }
+
+        err = database.ModifyUser(modUser.ID, tempUser)
+        if err != nil {
+            return HTTPErrors.NewError("Could not modify existing user in database", http.StatusInternalServerError)
+        }
+
+        tempCacheSession := userSession{
+            SessionID: sessionIDCookie.Value,
+            UserID:    modUser.ID,
+        }
+        AddUserSession(tempCacheSession)
+    } else {
+        tempCacheSession := userSession{
+            SessionID: sessionIDCookie.Value,
+            UserID:    *userID,
+        }
+        AddUserSession(tempCacheSession)
+    }
 
     // Now that the user is logged in, redirect to the logged in page
-    http.Redirect(w, r, "/loggedin/", http.StatusPermanentRedirect)
+    http.Redirect(w, r, "/", http.StatusPermanentRedirect)
 
     return HTTPErrors.NewError("", 0)
 }
