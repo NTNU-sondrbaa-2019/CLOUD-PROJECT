@@ -14,6 +14,44 @@ type RESULT struct {
 	Played        time.Time `json:"played" db:"played"`
 }
 
+func SelectCountResultByGroupID(id int64) (int, error) {
+	sth, err := connection.Preparex("SELECT COUNT(*) FROM RESULT WHERE id = ?")
+
+	if err != nil {
+		return nil, err
+	}
+
+	defer sth.Close()
+
+	var result int
+	err = sth.QueryRowx(id).StructScan(&result)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return result, nil
+}
+
+func SelectResultLastByGroupId(id int64) (*RESULT, error) {
+	sth, err := connection.Preparex("SELECT * FROM RESULT WHERE id = ? ORDER BY played DESC LIMIT 1")
+
+	if err != nil {
+		return nil, err
+	}
+
+	defer sth.Close()
+
+	var result RESULT
+	err = sth.QueryRowx(id).StructScan(&result)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return &result, nil
+}
+
 func SelectResult(id int64) (*RESULT, error) {
 	sth, err := connection.Preparex("SELECT * FROM RESULT WHERE id = ?")
 

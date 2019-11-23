@@ -12,6 +12,25 @@ type GROUP struct {
 	Created          time.Time `json:"created" db:"created"`
 }
 
+func SelectGroupByName(name string) (*GROUP, error) {
+	sth, err := connection.Preparex("SELECT * FROM `GROUP` WHERE name = ?")
+
+	if err != nil {
+		return nil, err
+	}
+
+	defer sth.Close()
+
+	var group GROUP
+	err = sth.QueryRowx(name).StructScan(&group)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return &group, nil
+}
+
 func SelectGroup(id int64) (*GROUP, error) {
 	sth, err := connection.Preparex("SELECT * FROM `GROUP` WHERE id = ?")
 
