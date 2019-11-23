@@ -30,3 +30,11 @@ type User struct {
 	ID   string `json:"id"`
 	Name string `json:"name"`
 }
+
+/*
+// test func to show initialization without full struct
+func Test() {
+	var games []Game
+	games = append(games, Game{Players: Players{White: Player{User: User{Name: "hyge"}}}})
+}
+*/
