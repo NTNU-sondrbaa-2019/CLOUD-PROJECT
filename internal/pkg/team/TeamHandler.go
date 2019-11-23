@@ -3,7 +3,7 @@ package team
 import (
 	"encoding/json"
 	"fmt"
-	view2 "github.com/NTNU-sondrbaa-2019/CLOUD-PROJECT/internal/pkg/view"
+	"github.com/NTNU-sondrbaa-2019/CLOUD-PROJECT/internal/pkg/view"
 	"log"
 	"net/http"
 	"strings"
@@ -32,13 +32,13 @@ func TeamHandler(w http.ResponseWriter, r *http.Request, title string) {
 			case "users":
 				UsersTeamHandler(w,r,title)
 			case "results":
-				view2.ErrorPage(w, "Not implemented", http.StatusNotImplemented)
+				view.ErrorPage(w, "Not implemented", http.StatusNotImplemented)
 			case "seasons":
-				view2.ErrorPage(w, "Not implemented", http.StatusNotImplemented)
+				view.ErrorPage(w, "Not implemented", http.StatusNotImplemented)
 			default:
-				view2.ErrorPage(w, "Not Found", http.StatusNotFound)
+				view.ErrorPage(w, "Not Found", http.StatusNotFound)
 			}
-		} else {
+		} else if (len(urlPart) == 5) {
 			// Search for team name urlPart[4]
 			localTeam := Team{
 				Name: "Name",
@@ -54,12 +54,14 @@ func TeamHandler(w http.ResponseWriter, r *http.Request, title string) {
 			w.Header().Set("Content-Type", "application/json")
 			w.WriteHeader(http.StatusOK)
 			w.Write(enc)
+		} else {
+			view.ErrorPage(w, "Not implemented", http.StatusNotImplemented)
 		}
 	default:
-		view2.ErrorPage(w, "Not implemented", http.StatusNotImplemented)
+		view.ErrorPage(w, "Not implemented", http.StatusNotImplemented)
 	}
 }
 
 func UsersTeamHandler(w http.ResponseWriter, r *http.Request, title string) {
-	view2.ErrorPage(w, "Not implemented", http.StatusNotImplemented)
+	view.ErrorPage(w, "Not implemented", http.StatusNotImplemented)
 }
