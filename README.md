@@ -53,10 +53,8 @@ TODO Vebjørn
 
 TODO What was not achieved?
 
-TODO Marcus
 We have some bugs and some other features that we did not manage to finish in time. We also could need some more tests that we did not achieve to do within the time frame we had. 
 
-TODO Sindre
 Wanted modularity, the rating package could be split into three packages.
 One for the lichess.org api calls, one for calculations, and the last for combining theese two and do the database queries.
 
@@ -77,7 +75,6 @@ A solution that would help with the development of the project for our group wou
 
 TODO What did we learn?
 
-TODO Marcus
 Learned how to deal with NDJSON structs, more about writing tests and how to work with another person on the same tasks. Time management is also something we can take as an big experience from this project. Its easy to dream big, but things takes time, and most of the cases it takes more time that you think and plan.  
 
 TODO Sindre
@@ -90,4 +87,4 @@ TODO Vebjørn
 
 ### Work Hours
 
-Total Worktime: 200 hours
+The group accumulated a total of 200 hours of work hours.
