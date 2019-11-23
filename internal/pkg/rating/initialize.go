@@ -20,7 +20,7 @@ func Initialize(){
 		for i := 0; i < len(teams); i++ { // "0 2 * * *" every night 2am
 			var team string
 			team = teams[i]
-			_, err := c.AddFunc("21 15 * * *", func() { // For testing use "min hour * * *" to set a time for the cronjob
+			_, err := c.AddFunc("10 23 * * *", func() { // For testing use "min hour * * *" to set a time for the cronjob
 				getTeamElo(team)
 			})
 			if err != nil {
