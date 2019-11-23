@@ -1,7 +1,6 @@
 package database_test
 
 import (
-	"github.com/NTNU-sondrbaa-2019/CLOUD-O1/pkg/CO1Cache"
 	"github.com/NTNU-sondrbaa-2019/CLOUD-PROJECT/internal/pkg/database"
 	"testing"
 	"time"
@@ -9,15 +8,7 @@ import (
 
 func TestUser(t *testing.T) {
 
-	CO1Cache.Initialize()
-	database.Connect()
-
-	_, err := database.GetConnection().Exec("START TRANSACTION")
-
-	if err != nil {
-		_, _ = database.GetConnection().Exec("ROLLBACK")
-		t.Fatal(err)
-	}
+	_before(t)
 
 	original := database.USER{}
 	original.Name = "TestUser"
@@ -28,14 +19,14 @@ func TestUser(t *testing.T) {
 	id, err := database.InsertUser(original)
 
 	if err != nil {
-		_, _ = database.GetConnection().Exec("ROLLBACK")
+		_rollback()
 		t.Fatal(err)
 	}
 
 	selected, err := database.SelectUserByID(*id)
 
 	if err != nil {
-		_, _ = database.GetConnection().Exec("ROLLBACK")
+		_rollback()
 		t.Fatal(err)
 	}
 
@@ -61,14 +52,14 @@ func TestUser(t *testing.T) {
 	err = database.ModifyUser(*id, modified)
 
 	if err != nil {
-		_, _ = database.GetConnection().Exec("ROLLBACK")
+		_rollback()
 		t.Fatal(err)
 	}
 
 	selected, err = database.SelectUserByEmail(original.Email)
 
 	if err != nil {
-		_, _ = database.GetConnection().Exec("ROLLBACK")
+		_rollback()
 		t.Fatal(err)
 	}
 
@@ -91,14 +82,14 @@ func TestUser(t *testing.T) {
 	err = database.DeleteUser(*id)
 
 	if err != nil {
-		_, _ = database.GetConnection().Exec("ROLLBACK")
+		_rollback()
 		t.Fatal(err)
 	}
 
 	users, err := database.SelectUsers("")
 
 	if err != nil {
-		_, _ = database.GetConnection().Exec("ROLLBACK")
+		_rollback()
 		t.Fatal(err)
 	}
 
@@ -108,6 +99,6 @@ func TestUser(t *testing.T) {
 		}
 	}
 
-	_, _ = database.GetConnection().Exec("ROLLBACK")
+	_after(t)
 
 }
