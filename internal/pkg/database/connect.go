@@ -39,8 +39,18 @@ func Connect() {
 
 			err = json.Unmarshal(CO1Cache.Read("db-config"), &db)
 
+			if err != nil {
+				log.Fatalln("Couldn't read database config file: ", err)
+			}
+
 			dsn := db.Username + ":" + db.Password + "@tcp(" + db.Host + ":" + db.Port + ")/" + db.Database + "?parseTime=true"
 			connection, err = sqlx.Open("mysql", dsn)
+
+			if err != nil {
+				log.Fatalln("Couldn't connect to database using .cache/db-config.json configuration: ", err)
+			}
+
+			err = connection.Ping()
 
 			if err != nil {
 				log.Fatalln("Couldn't connect to database using .cache/db-config.json configuration: ", err)
