@@ -49,8 +49,6 @@ TODO What was not achieved?
 
 We needed more time to design the project together instead of going straight to development. The scope of the project was too large for our group; since we're all very busy students.
 
-Time management is always a big issue with procjets like this. We all wish we had more time on the project, but this is also because of the large scope of our project.
-
 A solution that would help with the development of the project for our group would be this: in the early phase of the development; create packages with all structures, functions and the general layout of our project - without implementing anything - as empty shells. Just empty interfaces. This would help everybody understand each module with greater ease.
 
 ### New Experiences and Knowledge
