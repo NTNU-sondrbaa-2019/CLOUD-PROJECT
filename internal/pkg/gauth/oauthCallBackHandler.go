@@ -45,17 +45,6 @@ func OauthCallBackHandler(w http.ResponseWriter, r *http.Request) HTTPErrors.Err
     }
     http.SetCookie(w, &sessionIDCookie)
 
-    // Make a tempUser with the info we got from google and our new sessionID
-    tempWebUser := userInfo{
-        Email:      tempUserFromGoogle.Email,
-        Name:       tempUserFromGoogle.Name,
-        LichessKey: "",
-        LastSessionID: tempID,
-    }
-
-    // Save our user's info to the struct in memory
-    dbSave(tempWebUser)
-
     tempUser := database.USER{
         Name:       tempUserFromGoogle.Name,
         Email:      tempUserFromGoogle.Email,
@@ -63,7 +52,7 @@ func OauthCallBackHandler(w http.ResponseWriter, r *http.Request) HTTPErrors.Err
         LastOnline: time.Now(),
     }
 
-    _, err =  database.InsertUser(tempUser)
+    userID, err :=  database.InsertUser(tempUser)
     // If err is not nil, then the user with this email already exists
     // So we get that user and update the lastonline time to time.Now()
     if err != nil {
@@ -77,6 +66,13 @@ func OauthCallBackHandler(w http.ResponseWriter, r *http.Request) HTTPErrors.Err
             return HTTPErrors.NewError("Could not modify existing user in database", http.StatusInternalServerError)
         }
     }
+
+    tempCacheSession := userSession{
+        SessionID: sessionIDCookie.Value,
+        UserID:    userID,
+    }
+
+    AddUserSession(tempCacheSession)
 
     // Now that the user is logged in, redirect to the logged in page
     http.Redirect(w, r, "/loggedin/", http.StatusPermanentRedirect)
