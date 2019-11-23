@@ -80,7 +80,7 @@ func OauthCallBackHandler(w http.ResponseWriter, r *http.Request) HTTPErrors.Err
     }
 
     // Now that the user is logged in, redirect to the logged in page
-    http.Redirect(w, r, "/loggedin/", http.StatusPermanentRedirect)
+    http.Redirect(w, r, "/", http.StatusPermanentRedirect)
 
     return HTTPErrors.NewError("", 0)
 }
