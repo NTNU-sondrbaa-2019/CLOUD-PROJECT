@@ -93,4 +93,4 @@ TODO Vebjørn
 
 ### Work Hours
 
-The group accumulated a total of 200 hours of work hours.
+The group accumulated a total of 200 work hours.
