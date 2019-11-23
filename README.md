@@ -47,8 +47,6 @@ TODO Sindre
 
 TODO Adrian
 
-TODO Sondre
-
 TODO Vebjørn
 
 ### What did we not achieve with the project?
@@ -60,8 +58,6 @@ TODO Marcus
 TODO Sindre
 
 TODO Adrian
-
-TODO Sondre
 
 TODO Vebjørn
 
@@ -81,7 +77,7 @@ TODO Sindre
 
 TODO Adrian
 
-TODO Sondre
+We worked with an `AWS RDS` database and learned how to setup the instance, connect to it and run SQL from Go. This will be useful in the future since persitent data is useful for every project.
 
 TODO Vebjørn
 
