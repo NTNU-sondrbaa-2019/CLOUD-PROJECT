@@ -23,7 +23,7 @@ func GetUserIDFromSessionID (sessionID string) (int64, error){
     var tempUserSession userSession
     err := json.Unmarshal(CO1Cache.Read(sessionID), &tempUserSession)
     if err != nil {
-        return nil, err
+        return 0, err
     }
     return tempUserSession.UserID, nil
 }
