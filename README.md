@@ -57,6 +57,11 @@ TODO Marcus
 We have some bugs and some other features that we did not manage to finish in time. We also could need some more tests that we did not achieve to do within the time frame we had. 
 
 TODO Sindre
+Wanted modularity, the rating package could be split into three packages.
+One for the lichess.org api calls, one for calculations, and the last for combining theese two and do the database queries.
+
+The rating package has a bug at the moment when it fetches the current elo of a player in the database, elo is always set to 1500 before a new calculation is done to the players elo.
+This makes the use case of this package unusable as the elo always will be 1500 +- rating change of one match.
 
 TODO Adrian
 
