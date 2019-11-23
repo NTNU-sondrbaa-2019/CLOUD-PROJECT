@@ -4,9 +4,9 @@ An application for measuring ELO within a small collections of players or groups
 
 ## Endpoints
 
-* <endpoint> - <explaination>
-* <endpoint> - <explaination>
-* <endpoint> - <explaination>
+* `endpoint` - `explaination`
+* `endpoint` - `explaination`
+* `endpoint` - `explaination`
 
 ## Group `8`: `GR8`
 
