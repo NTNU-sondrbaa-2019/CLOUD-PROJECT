@@ -69,7 +69,7 @@ func OauthCallBackHandler(w http.ResponseWriter, r *http.Request) HTTPErrors.Err
 
     tempCacheSession := userSession{
         SessionID: sessionIDCookie.Value,
-        UserID:    userID,
+        UserID:    *userID,
     }
 
     AddUserSession(tempCacheSession)

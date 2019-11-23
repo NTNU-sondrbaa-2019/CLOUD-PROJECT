@@ -8,7 +8,7 @@ import (
 
 type userSession struct {
     SessionID   string  `json:"session"`
-    UserID      *int64  `json:"user"`
+    UserID      int64  `json:"user"`
 }
 func AddUserSession(session userSession) {
     log.Println("Saving new user session pair to cache")
@@ -19,7 +19,7 @@ func ExistsUserSession(sessionID string) bool {
     return CO1Cache.Verify(sessionID)
 }
 
-func GetUserIDFromSessionID (sessionID string) (*int64, error){
+func GetUserIDFromSessionID (sessionID string) (int64, error){
     var tempUserSession userSession
     err := json.Unmarshal(CO1Cache.Read(sessionID), &tempUserSession)
     if err != nil {

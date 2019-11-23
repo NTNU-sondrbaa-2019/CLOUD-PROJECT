@@ -19,8 +19,8 @@ func LoggedInHandler(w http.ResponseWriter, r *http.Request) HTTPErrors.Error {
             return HTTPErrors.NewError("Failed getting userID from database using sessionID",
                 http.StatusInternalServerError)
         }
-        if userID != nil {
-            userInfo, err := database.SelectUserByID(*userID)
+        if userID != 0 {
+            userInfo, err := database.SelectUserByID(userID)
             if err != nil {
                 return HTTPErrors.NewError("Failed getting userInfo", http.StatusInternalServerError)
             }
