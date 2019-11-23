@@ -2,6 +2,12 @@
 
 An application for measuring ELO within a small collections of players or groups of players.
 
+## Endpoints
+
+* <endpoint> - <explaination>
+* <endpoint> - <explaination>
+* <endpoint> - <explaination>
+
 ## Group `8`: `GR8`
 
 * `Sondre Benjamin Aasen` (`sondrbaa`)
