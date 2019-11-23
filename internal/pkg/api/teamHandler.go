@@ -8,6 +8,7 @@ import (
 	"github.com/NTNU-sondrbaa-2019/CLOUD-PROJECT/internal/pkg/view"
 	"log"
 	"net/http"
+	"strconv"
 	"strings"
 )
 
@@ -56,6 +57,30 @@ func TeamHandler(w http.ResponseWriter, r *http.Request) HTTPErrors.Error {
 }
 
 func TeamResultsHandler(w http.ResponseWriter, r *http.Request) HTTPErrors.Error {
+	fmt.Println("Finding team results...")
+
+	var tmpTeamResults teamRes
+	var teamResults []teamRes
+
+	for i, g := range *groups {
+		fmt.Println(i,g)
+
+		tmpTeamResults.TeamName = g.Name
+		tmpTeamResults.Results, _  = database.SelectResults("WHERE group_id=" + strconv.FormatInt(g.ID, 10))
+
+		teamResults = append(teamResults, tmpTeamResults)
+	}
+
+	// Encode new structure to JSON format
+	enc, err := json.Marshal(teamResults)
+	if err != nil {
+		log.Fatalln(err)
+	}
+
+	// Gives JSON response for requests
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	w.Write(enc)
 
 	return HTTPErrors.NewError("", 0)
 }
