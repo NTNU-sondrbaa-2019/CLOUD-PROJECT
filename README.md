@@ -56,9 +56,13 @@ A solution that would help with the development of the project for our group wou
 TODO What did we learn?
 
 TODO Marcus
+
 TODO Sindre
+
 TODO Adrian
+
 TODO Sondre
+
 TODO Vebjørn
 
 ### Work Hours
