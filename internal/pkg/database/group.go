@@ -71,7 +71,7 @@ func SelectGroups(where string) (*[]GROUP, error) {
 
 	var groups []GROUP
 
-	rows, err := connection.Queryx("SELECT * FROM GROUP " + where)
+	rows, err := connection.Queryx("SELECT * FROM `GROUP` " + where)
 
 	if err != nil {
 		return nil, err
