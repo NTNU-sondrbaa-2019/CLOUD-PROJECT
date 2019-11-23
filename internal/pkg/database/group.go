@@ -13,7 +13,7 @@ type GROUP struct {
 }
 
 func SelectGroup(id int64) (*GROUP, error) {
-	sth, err := connection.Preparex("SELECT * FROM GROUP WHERE id = ?")
+	sth, err := connection.Preparex("SELECT * FROM `GROUP` WHERE id = ?")
 
 	if err != nil {
 		return nil, err
