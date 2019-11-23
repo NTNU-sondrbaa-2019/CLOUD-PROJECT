@@ -11,6 +11,14 @@ import (
 	"strings"
 )
 
+// Struct to store data gathered
+type returnType struct {
+	TeamName string
+	Users []database.USER
+}
+
+var someValues []returnType
+
 var user *database.USER
 var team *[]database.GROUP
 var grouping *[]database.GROUP_USER
@@ -21,7 +29,6 @@ func TeamHandler(w http.ResponseWriter, r *http.Request) HTTPErrors.Error {
 	switch r.Method {
 	case "GET":
 		if (urlPart[4] != "") {
-			fmt.Println( "Team handler called. length 4")
 			// Search for team name urlPart[4]
 			// This will now use ID, but in the future I would like to change this to something like by Name or Nickname
 			team, _ = database.SelectGroups("WHERE name=\""+urlPart[4] + "\"")
@@ -31,7 +38,8 @@ func TeamHandler(w http.ResponseWriter, r *http.Request) HTTPErrors.Error {
 					err := TeamUsersHandler(w,r)
 					return err
 				case "results":
-					return HTTPErrors.NewError("Not Implemented", http.StatusNotImplemented)
+					err := TeamResultsHandler(w,r)
+					return err
 				case "seasons":
 					return HTTPErrors.NewError("Not Implemented", http.StatusNotImplemented)
 				default:
@@ -60,13 +68,6 @@ func TeamHandler(w http.ResponseWriter, r *http.Request) HTTPErrors.Error {
 }
 
 func TeamUsersHandler(w http.ResponseWriter, r *http.Request) HTTPErrors.Error {
-	// Struct to store data gathered
-	type returnType struct {
-		TeamName string
-		Users []database.USER
-	}
-
-	var someValues []returnType
 	fmt.Println("Finding Users in team...")
 	// Since team is array this will return multiple teams
 	for i, s := range *team {
@@ -86,7 +87,7 @@ func TeamUsersHandler(w http.ResponseWriter, r *http.Request) HTTPErrors.Error {
 		}
 		someValues = append(someValues, tmpValues)
 	}
-	
+
 	// Encode new structure to JSON format
 	enc, err := json.Marshal(someValues)
 	if err != nil {
@@ -97,6 +98,11 @@ func TeamUsersHandler(w http.ResponseWriter, r *http.Request) HTTPErrors.Error {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
 	w.Write(enc)
+
+	return HTTPErrors.NewError("", 0)
+}
+
+func TeamResultsHandler(w http.ResponseWriter, r *http.Request) HTTPErrors.Error {
 
 	return HTTPErrors.NewError("", 0)
 }
