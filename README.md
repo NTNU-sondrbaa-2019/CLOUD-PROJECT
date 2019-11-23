@@ -43,21 +43,7 @@ We plan on using this project for student activity groups. Such as `NTNUI-Gjøvi
 
 ## Report
 
-### What changed from our original project idea?
-
-TODO What has changed?
-
-TODO Marcus
-
-TODO Sindre
-
-TODO Adrian
-
-TODO Vebjørn
-
 ### What did we not achieve with the project?
-
-TODO What was not achieved?
 
 We have some bugs and some other features that we did not manage to finish in time. We also could need some more tests that we did not achieve to do within the time frame we had. 
 
@@ -79,11 +65,7 @@ A solution that would help with the development of the project for our group wou
 
 ### New Experiences and Knowledge
 
-TODO What did we learn?
-
 Learned how to deal with NDJSON structs, more about writing tests and how to work with another person on the same tasks. Time management is also something we can take as an big experience from this project. Its easy to dream big, but things takes time, and most of the cases it takes more time that you think and plan.  
-
-TODO Sindre
 
 TODO Adrian
 
