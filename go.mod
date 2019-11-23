@@ -4,6 +4,7 @@ go 1.13
 
 // +heroku goVersion go1.13
 require (
+	github.com/DATA-DOG/go-sqlmock v1.3.3
 	github.com/NTNU-sondrbaa-2019/CLOUD-O1 v0.0.0-20191020204558-b35729f3a3a7
 	github.com/go-sql-driver/mysql v1.4.1
 	github.com/jmoiron/sqlx v1.2.0
