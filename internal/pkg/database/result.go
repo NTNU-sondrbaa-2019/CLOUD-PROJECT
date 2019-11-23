@@ -14,6 +14,82 @@ type RESULT struct {
 	Played        time.Time `json:"played" db:"played"`
 }
 
+func SelectResultPlayedLastByPlatform(platformID int64) (*time.Time, error) {
+	sth, err := connection.Preparex("SELECT MAX(played) FROM RESULT JOIN RESULT_PLATFORM_ELO ON result_id = id WHERE platform_elo_id = ?")
+
+	if err != nil {
+		return nil, err
+	}
+
+	defer sth.Close()
+
+	var result time.Time
+	err = sth.QueryRowx(platformID).StructScan(&result)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return &result, nil
+}
+
+func SelectCountResultByGroupID(id int64) (*int, error) {
+	sth, err := connection.Preparex("SELECT COUNT(*) FROM RESULT WHERE group_id = ?")
+
+	if err != nil {
+		return nil, err
+	}
+
+	defer sth.Close()
+
+	var result int
+	err = sth.QueryRowx(id).StructScan(&result)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return &result, nil
+}
+
+func SelectResultLast() (*RESULT, error) {
+	sth, err := connection.Preparex("SELECT * FROM RESULT ORDER BY played DESC LIMIT 1")
+
+	if err != nil {
+		return nil, err
+	}
+
+	defer sth.Close()
+
+	var result RESULT
+	err = sth.QueryRowx().StructScan(&result)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return &result, nil
+}
+
+func SelectResultLastByGroupId(id int64) (*RESULT, error) {
+	sth, err := connection.Preparex("SELECT * FROM RESULT WHERE id = ? ORDER BY played DESC LIMIT 1")
+
+	if err != nil {
+		return nil, err
+	}
+
+	defer sth.Close()
+
+	var result RESULT
+	err = sth.QueryRowx(id).StructScan(&result)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return &result, nil
+}
+
 func SelectResult(id int64) (*RESULT, error) {
 	sth, err := connection.Preparex("SELECT * FROM RESULT WHERE id = ?")
 

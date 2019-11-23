@@ -7,8 +7,11 @@ type PLATFORM_USER struct {
 	VerificationKey string `json:"verification_key" db:"verification_key"`
 }
 
-func SelectPlatformUser(user_id int64, platform_id int64) (*PLATFORM_USER, error) {
-	sth, err := connection.Preparex("SELECT * FROM PLATFORM_USER WHERE user_id = ? AND platform_id = ?")
+func SelectPlatformUserByUserID(user_id int64) (*[]PLATFORM_USER, error) {
+
+	var platform_users []PLATFORM_USER
+
+	sth, err := connection.Preparex("SELECT * FROM PLATFORM_USER WHERE user_id = ?")
 
 	if err != nil {
 		return nil, err
@@ -16,21 +19,7 @@ func SelectPlatformUser(user_id int64, platform_id int64) (*PLATFORM_USER, error
 
 	defer sth.Close()
 
-	var platform_user PLATFORM_USER
-	err = sth.QueryRowx(user_id, platform_id).StructScan(&platform_user)
-
-	if err != nil {
-		return nil, err
-	}
-
-	return &platform_user, nil
-}
-
-func SelectPlatformUsers(where string) (*[]PLATFORM_USER, error) {
-
-	var platform_users []PLATFORM_USER
-
-	rows, err := connection.Queryx("SELECT * FROM PLATFORM_USER " + where)
+	rows, err := sth.Queryx(user_id)
 
 	if err != nil {
 		return nil, err
@@ -51,7 +40,43 @@ func SelectPlatformUsers(where string) (*[]PLATFORM_USER, error) {
 
 	}
 
-	return &platform_users, rows.Err()
+	return &platform_users, nil
+}
+
+func SelectPlatformUserByPlatformID(platform_id int64) (*[]PLATFORM_USER, error) {
+
+	var platform_users []PLATFORM_USER
+
+	sth, err := connection.Preparex("SELECT * FROM PLATFORM_USER WHERE platform_id = ?")
+
+	if err != nil {
+		return nil, err
+	}
+
+	defer sth.Close()
+
+	rows, err := sth.Queryx(platform_id)
+
+	if err != nil {
+		return nil, err
+	}
+
+	defer rows.Close()
+
+	for rows.Next() {
+
+		var platform_user PLATFORM_USER
+		err = rows.StructScan(&platform_user)
+
+		if err != nil {
+			return nil, err
+		}
+
+		platform_users = append(platform_users, platform_user)
+
+	}
+
+	return &platform_users, nil
 }
 
 func InsertPlatformUser(platform_user PLATFORM_USER) (*int64, error) {

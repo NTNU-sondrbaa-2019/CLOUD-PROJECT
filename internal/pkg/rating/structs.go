@@ -13,6 +13,7 @@ type TeamMember struct {
 type Game struct {
 	ID        string  `json:"id"`
 	CreatedAt int     `json:"createdAt"`
+	Status    string  `json:"status"`
 	Players   Players `json:"players"`
 	Winner    string  `json:"winner"`
 }
