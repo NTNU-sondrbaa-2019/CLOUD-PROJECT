@@ -3,34 +3,32 @@ package gauth
 import (
     "crypto/rand"
     "encoding/base64"
-    "log"
+    "github.com/NTNU-sondrbaa-2019/CLOUD-PROJECT/internal/pkg/HTTPErrors"
+    "github.com/NTNU-sondrbaa-2019/CLOUD-PROJECT/internal/pkg/database"
     "net/http"
     "time"
 )
 
 type userInfoFromGoogle struct {
     Email       string      `json:"email"`
+    Name        string      `json:"name"`
 }
 
 
-func OauthCallBackHandler(w http.ResponseWriter, r *http.Request, title string) {
+func OauthCallBackHandler(w http.ResponseWriter, r *http.Request) HTTPErrors.Error{
 
     // Read state from cookie
     oauthState, _ := r.Cookie("oauthstate")
 
     // Compare state of callback to our local state
     if r.FormValue("state") != oauthState.Value {
-        log.Print("Invalid google oauth state")
-        http.Redirect(w, r, "/", http.StatusTemporaryRedirect)
-        return
+        return HTTPErrors.NewError("Invalid state from google", http.StatusInternalServerError)
     }
 
     // Get our user's data from google
     tempUserFromGoogle, err := getUserDataFromGoogle(r.FormValue("code"))
     if err != nil {
-        log.Println(err.Error())
-        http.Redirect(w, r, "/", http.StatusTemporaryRedirect)
-        return
+        return HTTPErrors.NewError("Could not get user data from google", http.StatusInternalServerError)
     }
 
     //Make a random 16 characters long ID for this user
@@ -48,16 +46,40 @@ func OauthCallBackHandler(w http.ResponseWriter, r *http.Request, title string) 
     http.SetCookie(w, &sessionIDCookie)
 
     // Make a tempUser with the info we got from google and our new sessionID
-    tempUser := userInfo{
+    tempWebUser := userInfo{
         Email:      tempUserFromGoogle.Email,
+        Name:       tempUserFromGoogle.Name,
         LichessKey: "",
         LastSessionID: tempID,
     }
 
     // Save our user's info to the struct in memory
-    dbSave(tempUser)
+    dbSave(tempWebUser)
+
+    tempUser := database.USER{
+        Name:       tempUserFromGoogle.Name,
+        Email:      tempUserFromGoogle.Email,
+        Registered: time.Now(),
+        LastOnline: time.Now(),
+    }
+
+    _, err =  database.InsertUser(tempUser)
+    // If err is not nil, then the user with this email already exists
+    // So we get that user and update the lastonline time to time.Now()
+    if err != nil {
+        modUser, err := database.SelectUserByEmail(tempUser.Email)
+        if err != nil {
+            return HTTPErrors.NewError("Could not select existing user from database", http.StatusInternalServerError)
+        }
+
+        err = database.ModifyUser(modUser.ID, tempUser)
+        if err != nil {
+            return HTTPErrors.NewError("Could not modify existing user in database", http.StatusInternalServerError)
+        }
+    }
 
     // Now that the user is logged in, redirect to the logged in page
     http.Redirect(w, r, "/loggedin/", http.StatusPermanentRedirect)
 
+    return HTTPErrors.NewError("", 0)
 }

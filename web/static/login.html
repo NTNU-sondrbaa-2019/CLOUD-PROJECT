@@ -16,24 +16,10 @@
         <script src="https://apis.google.com/js/platform.js" async defer></script>
     </head>
     <body>
-    <a href="/api/v1/login/">
-    <div class="container mt-5">
-        <div class="g-signin2"
-             data-onsuccess="onSignIn"
-             data-theme="dark"
-             data-redirecturi="{{.GoogleRedirectURI}}"></div>
-        <script>
-            // TODO: Adrian må håndtere data håndtering - du kan bruke jQuery AJAX funksjoner for å sende nye POST/GET requests (søk på Google)
-            function onSignIn(googleUser) {
-                var profile = googleUser.getBasicProfile();
-                console.log("ID: " + profile.getId());
-                console.log('Full Name: ' + profile.getName());
-                console.log("Email: " + profile.getEmail());
-                var id_token = googleUser.getAuthResponse().id_token;
-                console.log("ID Token: " + id_token);
-            }
-        </script>
-    </div>
+    <a href="/login/">
+        <div class="container mt-5">
+            <p>Login with google</p>
+        </div>
     </a>
     <footer>
         <div class="container text-center">

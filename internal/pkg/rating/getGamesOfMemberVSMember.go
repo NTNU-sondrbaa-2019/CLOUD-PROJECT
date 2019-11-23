@@ -18,7 +18,7 @@ func getGamesOfMemberVSMember(member TeamMember, vsMember TeamMember) []Game {
 	} else {
 		lastCreatedAt = member.InternalCreatedAt
 	}
-	//TODO remove lastCreatedAt
+	//TODO remove lastCreatedAt, should be fetched from database.
 	//lastCreatedAt = 1572607209000 //11.01.2019
 	lastCreatedAt = 1546350046000 //01.01.2019
 	print(member.Username + "\t vs \t" + vsMember.Username + "\n")
@@ -30,8 +30,10 @@ func getGamesOfMemberVSMember(member TeamMember, vsMember TeamMember) []Game {
 		time.Sleep(LICHESS_RATE_LIMIT * time.Second) // Waiting over 1 min for lichess' rate limit
 		response = getRequest(client, request)
 	}
+
+	// START of code needed to parse the ndjson
+
 	reader := bufio.NewReader(response.Body)
-	var i = 0
 
 	line, err := reader.ReadBytes('\n')
 	if string(line) != "" {
@@ -45,8 +47,6 @@ func getGamesOfMemberVSMember(member TeamMember, vsMember TeamMember) []Game {
 			log.Print(err)
 		}
 		games = append(games, tmp)
-		i++
-		ifPrint := false
 		for {
 			if err != nil {
 				break
@@ -63,15 +63,9 @@ func getGamesOfMemberVSMember(member TeamMember, vsMember TeamMember) []Game {
 				log.Print(err)
 			}
 			games = append(games, tmp)
-			i++
-			ifPrint = true
-		}
-
-		if ifPrint {
-			for i = 0; i < 1; i++ {
-				print("Game :\n\tWhite: " + games[i].Players.White.User.Name + "\n\tBlack: " + games[i].Players.Black.User.Name + "\n\tWinner: " + games[i].Winner + "\n")
-			}
 		}
 	}
+
+	// END of code needed to parse the ndjson
 	return games
 }
