@@ -19,7 +19,6 @@ func UserTeamsHandler(w http.ResponseWriter, r *http.Request) HTTPErrors.Error {
 	ut.UserID = user.ID
 	ut.Username = user.Name
 
-
 	for n, ug := range *group_user {
 		fmt.Println("Printing users")
 		fmt.Println(n, ug)

@@ -14,7 +14,7 @@ func GroupUsersHandler(w http.ResponseWriter, r *http.Request) HTTPErrors.Error 
 	// Since groups is array this will return multiple teams
 	for i, s := range *groups {
 		fmt.Println("Printing group...")
-		fmt.Println(i,s)
+		fmt.Println(i, s)
 		var tmpValues teamsUser
 		group_user, _ = database.SelectGroupUserByGroupID(s.ID)
 		tmpValues.TeamName = s.Name

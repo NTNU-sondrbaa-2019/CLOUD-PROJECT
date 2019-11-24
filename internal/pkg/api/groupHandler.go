@@ -27,13 +27,13 @@ func GroupHandler(w http.ResponseWriter, r *http.Request) HTTPErrors.Error {
 			var groups []database.GROUP
 
 			fmt.Println(groups)
-			if len(urlPart)>5 {
+			if len(urlPart) > 5 {
 				switch urlPart[5] {
 				case "users":
-					err := GroupUsersHandler(w,r)
+					err := GroupUsersHandler(w, r)
 					return err
 				case "results":
-					err := GroupResultsHandler(w,r)
+					err := GroupResultsHandler(w, r)
 					return err
 				case "seasons":
 					return HTTPErrors.NewError("Not Implemented", http.StatusNotImplemented)
@@ -77,10 +77,10 @@ func GroupResultsHandler(w http.ResponseWriter, r *http.Request) HTTPErrors.Erro
 	database.InsertGroup(data)
 
 	for i, g := range *groups {
-		fmt.Println(i,g)
+		fmt.Println(i, g)
 
 		tmpGroupResults.GroupName = g.Name
-		tmpGroupResults.Results, _  = database.SelectResults("WHERE group_id=" + strconv.FormatInt(g.ID, 10))
+		tmpGroupResults.Results, _ = database.SelectResults("WHERE group_id=" + strconv.FormatInt(g.ID, 10))
 
 		groupResults = append(groupResults, tmpGroupResults)
 	}

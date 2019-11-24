@@ -17,14 +17,14 @@ func UserHandler(w http.ResponseWriter, r *http.Request) HTTPErrors.Error {
 	switch r.Method {
 	case "GET":
 		if (urlPart[4] != "") {
-			userID,_ := strconv.ParseInt(urlPart[4], 10, 64)
+			userID, _ := strconv.ParseInt(urlPart[4], 10, 64)
 			user, _ = database.SelectUserByID(userID)
 			if len(urlPart) > 5 {
 				switch urlPart[5] {
 				case "results":
 					return HTTPErrors.NewError("Not Implemented", http.StatusNotImplemented)
 				case "teams":
-					err := UserTeamsHandler(w,r)
+					err := UserTeamsHandler(w, r)
 					return err
 				default:
 					return HTTPErrors.NewError("Bad Request", http.StatusBadRequest)

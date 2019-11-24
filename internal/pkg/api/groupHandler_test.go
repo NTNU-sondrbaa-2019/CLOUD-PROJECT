@@ -15,7 +15,6 @@ import (
 func TestGroupHandler(t *testing.T) {
 	var groups *[]database.GROUP
 
-
 	CO1Cache.Initialize()
 	database.Connect()
 
@@ -59,11 +58,10 @@ func TestGroupHandler(t *testing.T) {
 	testGroup.ID = *id
 	id,_ = database.InsertUser(testUser)
 	testUser.ID = *id
- */
+	*/
 	database.InsertUser(testUser)
 	database.InsertGroup(testGroup)
 	fmt.Println("Data inserted")
-
 
 	var returnedGroup database.GROUP
 	// Need to get id's generated from database to delete
@@ -72,8 +70,8 @@ func TestGroupHandler(t *testing.T) {
 		t.Fatal(err)
 	}
 	for i, g := range *groups {
-		fmt.Println(i,g) // For debugging, prints i and group
-		 returnedGroup = g
+		fmt.Println(i, g) // For debugging, prints i and group
+		returnedGroup = g
 	}
 
 	returnedUser, _ := database.SelectUserByEmail(testUser.Email)
@@ -92,13 +90,13 @@ func TestGroupHandler(t *testing.T) {
 	// returnedGroupUser
 
 	// Testing api/v1/group/testGroup
-	req, err := http.NewRequest("GET", "/api/v1/team/" + testGroup.Name, nil)
+	req, err := http.NewRequest("GET", "/api/v1/team/"+testGroup.Name, nil)
 	if err != nil {
 		t.Fatal(err)
 	}
 
 	rr := httptest.NewRecorder()
-	handler:= makeHandler(GroupHandler)
+	handler := makeHandler(GroupHandler)
 
 	handler.ServeHTTP(rr, req)
 
@@ -112,7 +110,7 @@ func TestGroupHandler(t *testing.T) {
 	fmt.Println(returnedGroup)
 	fmt.Println(rr.Body)
 	// Check the response body is what we expect.
-	expected := `[{"id":"` + strconv.FormatInt(testGroup.ID,10) + `","league_id":"` + strconv.FormatInt(testGroup.LeagueID,10) + `","league_season_name":"` + testGroup.LeagueSeasonName + `","name":"`+testGroup.Name+`","created":"2019-11-22 14:16:06"}]`
+	expected := `[{"id":"` + strconv.FormatInt(testGroup.ID, 10) + `","league_id":"` + strconv.FormatInt(testGroup.LeagueID, 10) + `","league_season_name":"` + testGroup.LeagueSeasonName + `","name":"` + testGroup.Name + `","created":"2019-11-22 14:16:06"}]`
 
 	if rr.Body.String() != expected {
 		t.Errorf("handler returned unexpected body: got %v want %v",
