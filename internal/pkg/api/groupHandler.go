@@ -19,7 +19,12 @@ func GroupHandler(w http.ResponseWriter, r *http.Request) HTTPErrors.Error {
 		if (urlPart[4] != "") {
 			// Search for group name urlPart[4]
 			// This will now use ID, but in the future I would like to change this to something like by Name or Nickname
-			groups, _ = database.SelectGroups("WHERE name=\""+urlPart[4] + "\"")
+
+			// SQL INJECTION - Disabled by Sondre
+			// groups, _ = database.SelectGroups("WHERE name=\""+urlPart[4] + "\"")
+
+			var groups []database.GROUP
+
 			fmt.Println(groups)
 			if len(urlPart)>5 {
 				switch urlPart[5] {
