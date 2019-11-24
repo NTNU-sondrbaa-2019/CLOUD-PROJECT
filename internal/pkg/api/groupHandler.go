@@ -10,6 +10,7 @@ import (
 	"net/http"
 	"strconv"
 	"strings"
+	"time"
 )
 
 func GroupHandler(w http.ResponseWriter, r *http.Request) HTTPErrors.Error {
@@ -66,6 +67,14 @@ func GroupResultsHandler(w http.ResponseWriter, r *http.Request) HTTPErrors.Erro
 
 	var tmpGroupResults groupRes
 	var groupResults []groupRes
+
+	data := database.GROUP{}
+	data.Created = time.Now()
+	data.Name = "Name"
+	data.LeagueSeasonName = "TestName"
+	data.LeagueID = 2
+
+	database.InsertGroup(data)
 
 	for i, g := range *groups {
 		fmt.Println(i,g)

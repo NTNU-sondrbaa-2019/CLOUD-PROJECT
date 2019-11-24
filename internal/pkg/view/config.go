@@ -1,9 +1,14 @@
 package view
 
-import "html/template"
+import (
+	"html/template"
+	"os"
+)
+
+var GOPATH = os.Getenv("GOPATH")
 
 var Templates = template.Must(template.ParseFiles(
-	"web/static/login.html",
-	"web/static/ucp.html",
-	"web/static/error.html",
+	GOPATH + "/src/CLOUD-PROJECT/web/static/login.html",
+	GOPATH + "/src/CLOUD-PROJECT/web/static/ucp.html",
+	GOPATH + "/src/CLOUD-PROJECT/web/static/error.html",
 	))
