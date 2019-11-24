@@ -14,6 +14,27 @@ type LEAGUE struct {
 	End            time.Time `json:"end" db:"end"`
 }
 
+func LeagueExists(leagueName string) (bool, error) {
+	sth, err := connection.Prepare("SELECT COUNT(*) FROM LEAGUE WHERE name = '?'")
+
+	if err != nil {
+		return false, err
+	}
+
+	defer sth.Close()
+
+	var count int
+	err = sth.QueryRow(leagueName).Scan(&count)
+
+	if err != nil {
+		return false, err
+	}
+
+	flag := count > 0
+
+	return flag, nil
+}
+
 func SelectLeague(id int64) (*LEAGUE, error) {
 	sth, err := connection.Preparex("SELECT * FROM LEAGUE WHERE id = ?")
 

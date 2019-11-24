@@ -3,6 +3,7 @@ package rating
 import (
 	"bufio"
 	"encoding/json"
+	"github.com/NTNU-sondrbaa-2019/CLOUD-PROJECT/internal/pkg/database"
 	"log"
 	"net/http"
 	"strconv"
@@ -12,17 +13,25 @@ import (
 // Gets all matches between two members.
 func getGamesOfMemberVSMember(member TeamMember, vsMember TeamMember) []Game {
 	var games [] Game
-	lastCreatedAt := 0
+	/*lastCreatedAt := 0
 	if member.InternalCreatedAt < vsMember.InternalCreatedAt {
 		lastCreatedAt = vsMember.InternalCreatedAt
 	} else {
 		lastCreatedAt = member.InternalCreatedAt
 	}
-	//TODO remove lastCreatedAt, should be fetched from database.
-	//lastCreatedAt = 1572607209000 //11.01.2019
-	lastCreatedAt = 1546350046000 //01.01.2019
+
+	 */
+	since, err := database.SelectResultPlayedLastByPlatform(PLATFORM_ID)
+	var sinceTime int
+	if err == nil && since != nil {
+		sinceTime = int(since.UnixNano())/1000000
+	}  else {
+		log.Println(err)
+		// TODO set to leagues start time
+		sinceTime = 1572607209000 // 11.01.2019
+	}
 	print(member.Username + "\t vs \t" + vsMember.Username + "\n")
-	request := "https://lichess.org/api/games/user/" + member.Username + "?vs=" + vsMember.Username + "&perftype=blitz,classical,rapid,correspondence&since=" + strconv.Itoa(lastCreatedAt)
+	request := "https://lichess.org/api/games/user/" + member.Username + "?vs=" + vsMember.Username + "&perftype=blitz,classical,rapid,correspondence&since=" + strconv.Itoa(sinceTime)
 	client := http.DefaultClient
 	response := getRequest(client, request)
 	if response.StatusCode == 429 {
@@ -62,10 +71,12 @@ func getGamesOfMemberVSMember(member TeamMember, vsMember TeamMember) []Game {
 				log.Print("Unmarshall Error:")
 				log.Print(err)
 			}
+			//games = append(games, Game{"",1,"", {{{"Hyge", "Hyge"}}, {{"Hyge", "Hyge"}}}, "black"})
 			games = append(games, tmp)
 		}
+
 	}
 
-	// END of code needed to parse the ndjson
+		// END of code needed to parse the ndjson
 	return games
 }

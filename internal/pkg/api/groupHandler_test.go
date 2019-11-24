@@ -113,6 +113,7 @@ func TestGroupHandler(t *testing.T) {
 	fmt.Println(rr.Body)
 	// Check the response body is what we expect.
 	expected := `[{"id":"` + strconv.FormatInt(testGroup.ID,10) + `","league_id":"` + strconv.FormatInt(testGroup.LeagueID,10) + `","league_season_name":"` + testGroup.LeagueSeasonName + `","name":"`+testGroup.Name+`","created":"2019-11-22 14:16:06"}]`
+
 	if rr.Body.String() != expected {
 		t.Errorf("handler returned unexpected body: got %v want %v",
 			rr.Body.String(), expected)

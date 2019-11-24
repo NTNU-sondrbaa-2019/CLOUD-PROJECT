@@ -12,6 +12,25 @@ type GROUP struct {
 	Created          time.Time `json:"created" db:"created"`
 }
 
+func SelectGroupByName(name string) (*GROUP, error) {
+	sth, err := connection.Preparex("SELECT * FROM `GROUP` WHERE name = ?")
+
+	if err != nil {
+		return nil, err
+	}
+
+	defer sth.Close()
+
+	var group GROUP
+	err = sth.QueryRowx(name).StructScan(&group)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return &group, nil
+}
+
 func SelectGroup(id int64) (*GROUP, error) {
 	sth, err := connection.Preparex("SELECT * FROM `GROUP` WHERE id = ?")
 
@@ -35,7 +54,7 @@ func SelectGroupsByLeagueIDAndLeagueSeasonName(league_id int64, league_season_na
 
 	var groups []GROUP
 
-	sth, err := connection.Preparex("SELECT * FROM GROUP WHERE league_id = ? AND league_season_name = ?")
+	sth, err := connection.Preparex("SELECT * FROM `GROUP` WHERE league_id = ? AND league_season_name = ?")
 
 	if err != nil {
 		return nil, err
@@ -105,7 +124,7 @@ func InsertGroup(group GROUP) (*int64, error) {
 
 	defer sth.Close()
 
-	result, err := sth.Exec(group.LeagueID, group.Name, group.LeagueSeasonName, group.Name, group.Created)
+	result, err := sth.Exec(group.LeagueID, group.LeagueSeasonName, group.Name, group.Created)
 
 	if err != nil {
 		return nil, err
@@ -124,7 +143,7 @@ func ModifyGroup(id int64, group GROUP) error {
 
 	if len(group.Name) > 0 {
 
-		sth, err := connection.Prepare("UPDATE GROUP SET name = ? WHERE id = ?")
+		sth, err := connection.Prepare("UPDATE `GROUP` SET name = ? WHERE id = ?")
 
 		if err != nil {
 			return err
@@ -145,7 +164,7 @@ func ModifyGroup(id int64, group GROUP) error {
 
 func DeleteGroup(id int64) error {
 
-	sth, err := connection.Prepare("DELETE FROM GROUP WHERE id = ?")
+	sth, err := connection.Prepare("DELETE FROM `GROUP` WHERE id = ?")
 
 	if err != nil {
 		return err
