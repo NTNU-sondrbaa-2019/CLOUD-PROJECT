@@ -14,7 +14,7 @@ type RESULT struct {
 	Played        time.Time `json:"played" db:"played"`
 }
 
-func SelectResultPlayedLastByPlatformID(platform_id int64) (*time.Time, error) {
+func SelectResultLastPlayedByPlatformID(platform_id int64) (*time.Time, error) {
 
 	sth, err := connection.Prepare("SELECT MAX(played) FROM RESULT JOIN RESULT_PLATFORM_ELO ON result_id = id WHERE platform_elo_id = ?")
 

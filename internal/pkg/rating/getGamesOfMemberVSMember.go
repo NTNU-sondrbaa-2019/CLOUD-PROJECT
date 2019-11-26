@@ -21,7 +21,7 @@ func getGamesOfMemberVSMember(member TeamMember, vsMember TeamMember) []Game {
 	}
 
 	 */
-	since, err := database.SelectResultPlayedLastByPlatformID(PLATFORM_ID)
+	since, err := database.SelectResultLastPlayedByPlatformID(PLATFORM_ID)
 	var sinceTime int
 	if err == nil && since != nil {
 		sinceTime = int(since.UnixNano())/1000000
