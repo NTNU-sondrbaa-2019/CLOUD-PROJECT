@@ -17,6 +17,7 @@ func init() {
 	//http.HandleFunc("/api/v1/", handler.MakeHandler(api.HandleAPI))
 	http.HandleFunc("/api/v1/group/", handler.MakeHandler(api.GroupHandler))
 	http.HandleFunc("/api/v1/user/", handler.MakeHandler(api.UserHandler))
+	http.HandleFunc("/api/v1/league/", handler.MakeHandler(api.LeagueHandler))
 	http.HandleFunc("/seasontable/", handler.MakeHandler(index.EloDisplay))
 	//http.HandleFunc("/api/v1/diagnostics/", handler.MakeHandler(api.DiagnosticsHandler))
 }
