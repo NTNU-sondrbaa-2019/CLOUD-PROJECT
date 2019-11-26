@@ -1,25 +1,28 @@
 package database_test
 
 import (
-	"github.com/NTNU-sondrbaa-2019/CLOUD-O1/pkg/CO1Cache"
 	"github.com/NTNU-sondrbaa-2019/CLOUD-PROJECT/internal/pkg/database"
+	"github.com/NTNU-sondrbaa-2019/CLOUD-PROJECT/internal/pkg/rating"
 	"testing"
+	"time"
 )
 
 func TestGroup(t *testing.T) {
 
-	CO1Cache.Initialize()
-	database.Connect()
+	_before(t)
 
-	_, err := database.GetConnection().Exec("START TRANSACTION")
-
-	if err != nil {
-		_, _ = database.GetConnection().Exec("ROLLBACK")
-		t.Fatal(err)
+	inserted := database.GROUP{
+		LeagueID:         rating.LICHESS_LEAGUE_ID,
+		LeagueSeasonName: rating.LICHESS_LEAGUE_SEASON_NAME,
+		Name:             "A Temporary Group Name",
+		Created:          time.Now(),
 	}
 
-	// TODO tests
+	t.Log("Inserting group...")
+	_, err := database.InsertGroup(inserted)
+	_error_fatal(t, err)
+	t.Log("Group inserted!")
 
-	_, _ = database.GetConnection().Exec("ROLLBACK")
+	_after(t)
 
 }

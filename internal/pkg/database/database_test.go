@@ -31,3 +31,17 @@ func _rollback() {
 	_, _ = database.GetConnection().Exec("ROLLBACK")
 
 }
+
+func _error_fatal(t *testing.T, err error) {
+	if err != nil {
+		_rollback()
+		t.Fatal(err)
+	}
+}
+
+func _error_error(t *testing.T, err error) {
+	if err != nil {
+		_rollback()
+		t.Error(err)
+	}
+}
