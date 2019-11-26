@@ -14,8 +14,9 @@ type RESULT struct {
 	Played        time.Time `json:"played" db:"played"`
 }
 
-func SelectResultPlayedLastByPlatform(platformID int64) (*time.Time, error) {
-	sth, err := connection.Preparex("SELECT MAX(played) FROM RESULT JOIN RESULT_PLATFORM_ELO ON result_id = id WHERE platform_elo_id = ?")
+func SelectResultPlayedLastByPlatformID(platform_id int64) (*time.Time, error) {
+
+	sth, err := connection.Prepare("SELECT MAX(played) FROM RESULT JOIN RESULT_PLATFORM_ELO ON result_id = id WHERE platform_elo_id = ?")
 
 	if err != nil {
 		return nil, err
@@ -23,18 +24,21 @@ func SelectResultPlayedLastByPlatform(platformID int64) (*time.Time, error) {
 
 	defer sth.Close()
 
-	var result time.Time
-	err = sth.QueryRowx(platformID).StructScan(&result)
+	var played time.Time
+
+	err = sth.QueryRow(platform_id).Scan(&played)
 
 	if err != nil {
 		return nil, err
 	}
 
-	return &result, nil
+	return &played, nil
+
 }
 
-func SelectCountResultByGroupID(id int64) (*int, error) {
-	sth, err := connection.Preparex("SELECT COUNT(*) FROM RESULT WHERE group_id = ?")
+func SelectResultCountByGroupID(id int64) (*int, error) {
+
+	sth, err := connection.Prepare("SELECT COUNT(*) FROM RESULT WHERE group_id = ?")
 
 	if err != nil {
 		return nil, err
@@ -42,17 +46,19 @@ func SelectCountResultByGroupID(id int64) (*int, error) {
 
 	defer sth.Close()
 
-	var result int
-	err = sth.QueryRowx(id).StructScan(&result)
+	var count int
+	err = sth.QueryRow(id).Scan(&count)
 
 	if err != nil {
 		return nil, err
 	}
 
-	return &result, nil
+	return &count, nil
+
 }
 
-func SelectResultLast() (*RESULT, error) {
+func SelectResultLastPlayed() (*RESULT, error) {
+
 	sth, err := connection.Preparex("SELECT * FROM RESULT ORDER BY played DESC LIMIT 1")
 
 	if err != nil {
@@ -62,6 +68,7 @@ func SelectResultLast() (*RESULT, error) {
 	defer sth.Close()
 
 	var result RESULT
+
 	err = sth.QueryRowx().StructScan(&result)
 
 	if err != nil {
@@ -69,6 +76,7 @@ func SelectResultLast() (*RESULT, error) {
 	}
 
 	return &result, nil
+
 }
 
 func SelectResultLastByGroupId(id int64) (*RESULT, error) {
