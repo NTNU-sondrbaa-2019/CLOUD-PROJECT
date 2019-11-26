@@ -24,8 +24,8 @@ func calculateElo(games []Game, teamMembers []TeamMember) []TeamMember {
 		group2, _ := database.SelectGroupByName(black.Username)
 
 		//TODO get elo from own database
-		count1, err1 := database.SelectCountResultByGroupID(group1.ID)
-		count2, err2 := database.SelectCountResultByGroupID(group2.ID)
+		count1, err1 := database.SelectResultCountByGroupID(group1.ID)
+		count2, err2 := database.SelectResultCountByGroupID(group2.ID)
 		log.Println("count 1 then 2")
 		log.Println(count1, count2)
 
