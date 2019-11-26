@@ -11,7 +11,7 @@ func Initialize(){
 	c := cron.New()
 
 	// Get lichess.org teams to automatically fetch data about from environment
-	_ = os.Setenv("LICHESS_TEAMS", "storbukk-sjakklubb,testclub")
+	//_ = os.Setenv("LICHESS_TEAMS", "storbukk-sjakklubb,testclub")
 	tmp := os.Getenv("LICHESS_TEAMS")
 	teams := strings.Split(tmp, ",")
 
@@ -30,7 +30,7 @@ func Initialize(){
 	}else {		// If no teams, use storbukk-sjakklub
 		// For testing purposes run every 10 minutes
 		log.Println("No enviroment variable for teams, using default value '" + LICHESS_DEFAULT_TEAM + "'")
-		_, err := c.AddFunc("*/10 * * * *", func() {
+		_, err := c.AddFunc("46 17 * * *", func() {
 			getTeamElo(LICHESS_DEFAULT_TEAM)
 		})
 		if err != nil {
