@@ -80,7 +80,7 @@ func SelectResultLastPlayed() (*RESULT, error) {
 }
 
 func SelectResultLastByGroupId(id int64) (*RESULT, error) {
-	sth, err := connection.Preparex("SELECT * FROM RESULT WHERE id = ? ORDER BY played DESC LIMIT 1")
+	sth, err := connection.Preparex("SELECT * FROM RESULT WHERE group_id = ? ORDER BY played DESC LIMIT 1")
 
 	if err != nil {
 		return nil, err
