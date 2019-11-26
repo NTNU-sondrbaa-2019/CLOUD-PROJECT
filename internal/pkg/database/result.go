@@ -36,6 +36,27 @@ func SelectResultLastPlayedByPlatformID(platform_id int64) (*time.Time, error) {
 
 }
 
+func SelectResultLastPlayedByLeagueID(league_id int64) (*time.Time, error) {
+
+	sth, err := connection.Prepare("SELECT MAX(played) FROM RESULT JOIN `GROUP` g ON g.id = group_id WHERE league_id = ?")
+
+	if err != nil {
+		return nil, err
+	}
+
+	defer sth.Close()
+
+	var played *time.Time
+	err = sth.QueryRow(league_id).Scan(&played)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return played, nil
+
+}
+
 func SelectResultCountByGroupID(id int64) (*int, error) {
 
 	sth, err := connection.Prepare("SELECT COUNT(*) FROM RESULT WHERE group_id = ?")
