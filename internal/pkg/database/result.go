@@ -36,7 +36,7 @@ func SelectResultLastPlayedByPlatformID(platform_id int64) (*time.Time, error) {
 
 }
 
-func SelectResultsByLeagueID(league_id int64) (*time.Time, error) {
+func SelectResultsByLeagueID(league_id int64) (*[]RESULT, error) {
 
 	sth, err := connection.Prepare("SELECT * FROM RESULT JOIN `GROUP` G on RESULT.group_id = G.id WHERE league_id = ?")
 
@@ -46,14 +46,14 @@ func SelectResultsByLeagueID(league_id int64) (*time.Time, error) {
 
 	defer sth.Close()
 
-	var played *time.Time
-	err = sth.QueryRow(league_id).Scan(&played)
+	var results *[]RESULT
+	err = sth.QueryRow(league_id).Scan(&results)
 
 	if err != nil {
 		return nil, err
 	}
 
-	return played, nil
+	return results, nil
 
 }
 
