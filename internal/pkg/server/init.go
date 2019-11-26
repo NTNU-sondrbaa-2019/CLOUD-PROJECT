@@ -15,7 +15,7 @@ func init() {
 	http.HandleFunc("/logout/", handler.MakeHandler(gauth.LogoutHandler))
 	http.HandleFunc("/oauth2callback/", handler.MakeHandler(gauth.OauthCallBackHandler))
 	//http.HandleFunc("/api/v1/", handler.MakeHandler(api.HandleAPI))
-	http.HandleFunc("/api/v1/team/", handler.MakeHandler(api.GroupHandler))
+	http.HandleFunc("/api/v1/group/", handler.MakeHandler(api.GroupHandler))
 	http.HandleFunc("/api/v1/user/", handler.MakeHandler(api.UserHandler))
 	//http.HandleFunc("/api/v1/diagnostics/", handler.MakeHandler(api.DiagnosticsHandler))
 }
