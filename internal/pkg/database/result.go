@@ -36,6 +36,64 @@ func SelectResultLastPlayedByPlatformID(platform_id int64) (*time.Time, error) {
 
 }
 
+func SelectResultsByLeagueID(league_id int64) (*[]RESULT, error) {
+
+	sth, err := connection.Preparex("SELECT * FROM RESULT JOIN `GROUP` G on RESULT.group_id = G.id WHERE league_id = ?")
+
+	if err != nil {
+		return nil, err
+	}
+
+	defer sth.Close()
+
+	var results []RESULT
+	rows, err := sth.Queryx(league_id)
+
+
+	if err != nil {
+		return nil, err
+	}
+
+	defer rows.Close()
+
+	for rows.Next() {
+
+		var result RESULT
+		err = rows.StructScan(&result)
+
+		if err != nil {
+			return nil, err
+		}
+
+		results = append(results, result)
+
+	}
+
+	return &results, nil
+
+}
+
+func SelectResultLastPlayedByLeagueID(league_id int64) (*time.Time, error) {
+
+	sth, err := connection.Prepare("SELECT MAX(played) FROM RESULT JOIN `GROUP` g ON g.id = group_id WHERE league_id = ?")
+
+	if err != nil {
+		return nil, err
+	}
+
+	defer sth.Close()
+
+	var played *time.Time
+	err = sth.QueryRow(league_id).Scan(&played)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return played, nil
+
+}
+
 func SelectResultCountByGroupID(id int64) (*int, error) {
 
 	sth, err := connection.Prepare("SELECT COUNT(*) FROM RESULT WHERE group_id = ?")
