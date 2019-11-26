@@ -23,7 +23,7 @@ func UserTeamsHandler(w http.ResponseWriter, r *http.Request) HTTPErrors.Error {
 		fmt.Println("Printing users")
 		fmt.Println(n, ug)
 
-		group, _ = database.SelectGroup(ug.GroupID)
+		group, _ = database.SelectGroupByID(ug.GroupID)
 		ut.Groups = append(ut.Groups, *group)
 	}
 

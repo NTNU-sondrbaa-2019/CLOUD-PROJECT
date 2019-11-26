@@ -12,8 +12,9 @@ type GROUP struct {
 	Created          time.Time `json:"created" db:"created"`
 }
 
-func SelectGroupByName(name string) (*GROUP, error) {
-	sth, err := connection.Preparex("SELECT * FROM `GROUP` WHERE name = ?")
+func SelectGroupByLeagueIDAndLeagueSeasonNameAndName(league_id int64, league_season_name string, name string) (*GROUP, error) {
+
+	sth, err := connection.Preparex("SELECT * FROM `GROUP` WHERE league_id = ? AND league_season_name = ? AND name = ?")
 
 	if err != nil {
 		return nil, err
@@ -22,16 +23,18 @@ func SelectGroupByName(name string) (*GROUP, error) {
 	defer sth.Close()
 
 	var group GROUP
-	err = sth.QueryRowx(name).StructScan(&group)
+	err = sth.QueryRowx(league_id, league_season_name, name).StructScan(&group)
 
 	if err != nil {
 		return nil, err
 	}
 
 	return &group, nil
+
 }
 
-func SelectGroup(id int64) (*GROUP, error) {
+func SelectGroupByID(id int64) (*GROUP, error) {
+
 	sth, err := connection.Preparex("SELECT * FROM `GROUP` WHERE id = ?")
 
 	if err != nil {
@@ -48,6 +51,7 @@ func SelectGroup(id int64) (*GROUP, error) {
 	}
 
 	return &group, nil
+
 }
 
 func SelectGroupsByLeagueIDAndLeagueSeasonName(league_id int64, league_season_name string) (*[]GROUP, error) {

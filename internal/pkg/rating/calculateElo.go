@@ -20,12 +20,12 @@ func calculateElo(games []Game, teamMembers []TeamMember) []TeamMember {
 		tmp := getWhiteAndBlackFromGame(games[i], newTeamMembers)
 		white := tmp[0]
 		black := tmp[1]
-		group1, _ := database.SelectGroupByName(white.Username)
-		group2, _ := database.SelectGroupByName(black.Username)
+		group1, _ := database.SelectGroupByLeagueIDAndLeagueSeasonNameAndName(LICHESS_LEAGUE_ID, LICHESS_LEAGUE_SEASON_NAME, white.Username)
+		group2, _ := database.SelectGroupByLeagueIDAndLeagueSeasonNameAndName(LICHESS_LEAGUE_ID, LICHESS_LEAGUE_SEASON_NAME, black.Username)
 
 		//TODO get elo from own database
-		count1, err1 := database.SelectCountResultByGroupID(group1.ID)
-		count2, err2 := database.SelectCountResultByGroupID(group2.ID)
+		count1, err1 := database.SelectResultCountByGroupID(group1.ID)
+		count2, err2 := database.SelectResultCountByGroupID(group2.ID)
 		log.Println("count 1 then 2")
 		log.Println(count1, count2)
 
@@ -134,7 +134,7 @@ func calculateElo(games []Game, teamMembers []TeamMember) []TeamMember {
 		log.Println("Insert before: " + strconv.Itoa(results[i].ELOBefore) + " after: " + strconv.Itoa(results[i].ELOAfter) + " user: " + strconv.Itoa(int(results[i].GroupID)))
 		id, _ := database.InsertResult(results[i])
 		var resultPlatformElo database.RESULT_PLATFORM_ELO
-		resultPlatformElo.PlatformEloID = PLATFORM_ID
+		resultPlatformElo.PlatformEloID = LICHESS_PLATFORM_ID
 		if id != nil{
 			resultPlatformElo.ResultID = *id
 		}

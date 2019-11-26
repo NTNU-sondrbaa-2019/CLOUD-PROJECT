@@ -25,7 +25,6 @@ func SelectResultLastPlayedByPlatformID(platform_id int64) (*time.Time, error) {
 	defer sth.Close()
 
 	var played time.Time
-
 	err = sth.QueryRow(platform_id).Scan(&played)
 
 	if err != nil {
@@ -68,7 +67,6 @@ func SelectResultLastPlayed() (*RESULT, error) {
 	defer sth.Close()
 
 	var result RESULT
-
 	err = sth.QueryRowx().StructScan(&result)
 
 	if err != nil {
