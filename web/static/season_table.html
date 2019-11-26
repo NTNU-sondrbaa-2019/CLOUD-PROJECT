@@ -20,9 +20,9 @@
                 integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
                 crossorigin="anonymous"></script>
         <script type="text/javascript">
-            $(document).load(function () {
+            $(document).ready(function () {
                 $(".math-add").each(function () {
-                    $(this).text($(this).text() + 1);
+                    $(this).text(parseInt($(this).text()) + 1);
                 });
             });
         </script>
