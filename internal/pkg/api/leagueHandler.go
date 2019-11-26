@@ -28,19 +28,15 @@ func LeagueHandler(w http.ResponseWriter, r *http.Request) HTTPErrors.Error {
 				switch urlPart[5] {
 				case "results":
 					fmt.Println("Results")
-					groups,_ := database.SelectGroups("WHERE league_id=" + strconv.FormatInt(leagueID,10))
-					var results []database.RESULT
-					for i, group := range *groups {
-						fmt.Println(i,group)
-						tmp,_ := database.SelectResultLastByGroupId(group.ID)
-
-						results = append(results, *tmp)
+					results, err := database.SelectResultsByLeagueID(leagueID)
+					if err != nil {
+						log.Println("Couldn't get results by league id: ", err)
 					}
-
+					fmt.Println(results)
 					// Encode new structure to JSON format
 					enc, err := json.Marshal(results)
 					if err != nil {
-						log.Fatalln(err)
+						log.Println(err)
 					}
 
 					// Gives JSON response for requests
@@ -54,7 +50,7 @@ func LeagueHandler(w http.ResponseWriter, r *http.Request) HTTPErrors.Error {
 					// Encode new structure to JSON format
 					enc, err := json.Marshal(groups)
 					if err != nil {
-						log.Fatalln(err)
+						log.Println(err)
 					}
 
 					// Gives JSON response for requests
@@ -68,7 +64,7 @@ func LeagueHandler(w http.ResponseWriter, r *http.Request) HTTPErrors.Error {
 				// Encode new structure to JSON format
 				enc, err := json.Marshal(Leagues)
 				if err != nil {
-					log.Fatalln(err)
+					log.Println(err)
 				}
 
 				// Gives JSON response for requests

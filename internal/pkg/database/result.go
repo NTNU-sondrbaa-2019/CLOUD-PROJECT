@@ -38,7 +38,7 @@ func SelectResultLastPlayedByPlatformID(platform_id int64) (*time.Time, error) {
 
 func SelectResultsByLeagueID(league_id int64) (*[]RESULT, error) {
 
-	sth, err := connection.Preparex("SELECT * FROM RESULT JOIN `GROUP` G on RESULT.group_id = G.id WHERE league_id = ?")
+	sth, err := connection.Preparex("SELECT r.id, group_id, elo_before, elo_after, elo_difference, outcome, played FROM RESULT r JOIN `GROUP` g ON g.id = group_id WHERE league_id = ?")
 
 	if err != nil {
 		return nil, err
@@ -48,7 +48,6 @@ func SelectResultsByLeagueID(league_id int64) (*[]RESULT, error) {
 
 	var results []RESULT
 	rows, err := sth.Queryx(league_id)
-
 
 	if err != nil {
 		return nil, err
@@ -60,7 +59,7 @@ func SelectResultsByLeagueID(league_id int64) (*[]RESULT, error) {
 
 		var result RESULT
 		err = rows.StructScan(&result)
-
+		fmt.Println(result)
 		if err != nil {
 			return nil, err
 		}
