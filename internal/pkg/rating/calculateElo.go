@@ -12,7 +12,6 @@ func calculateElo(games []Game, teamMembers []TeamMember) []TeamMember {
 
 	newTeamMembers := teamMembers
 
-	var results [] database.RESULT
 	var lichessIDS [] string
 	// Loops through all games and calculates elo
 	for i := 0; i < len(games); i++ {
@@ -24,10 +23,18 @@ func calculateElo(games []Game, teamMembers []TeamMember) []TeamMember {
 		group2, _ := database.SelectGroupByName(black.Username)
 
 		//TODO get elo from own database
+		log.Println("Group1 id: ", group1.ID)
+		log.Println("Group2 id: ", group2.ID)
 		count1, err1 := database.SelectResultCountByGroupID(group1.ID)
 		count2, err2 := database.SelectResultCountByGroupID(group2.ID)
+		if err1 != nil {
+			log.Println("Error SelectResultCountByGroupID: ", err1)
+		}
+		if err1 != nil {
+			log.Println("Error SelectResultCountByGroupID: ", err2)
+		}
 		log.Println("count 1 then 2")
-		log.Println(count1, count2)
+		log.Println(*count1, *count2)
 
 		if err1 != nil {
 			log.Println(err1)
@@ -53,7 +60,7 @@ func calculateElo(games []Game, teamMembers []TeamMember) []TeamMember {
 		}
 
 		if count2 != nil && *count2 > 0{
-			lastResultBlack, err := database.SelectResultLastByGroupId(group1.ID)
+			lastResultBlack, err := database.SelectResultLastByGroupId(group2.ID)
 			if err != nil {
 				log.Println(err)
 			}
@@ -123,22 +130,28 @@ func calculateElo(games []Game, teamMembers []TeamMember) []TeamMember {
 		result1.Played = time.Unix(int64(seconds), int64(nanoseconds)) // time, unix convert
 		result2.Played = result1.Played // time, unix convert
 
-		results = append(results, result1)
-		results = append(results, result2)
 		lichessIDS = append(lichessIDS, games[i].ID)
 		lichessIDS = append(lichessIDS, games[i].ID)
-	}
 
-	for i := 0; i < len(results); i++ {
 		// TODO see if we get the result id from this function. Add result to RESULT_PLATFORM_ELO
-		log.Println("Insert before: " + strconv.Itoa(results[i].ELOBefore) + " after: " + strconv.Itoa(results[i].ELOAfter) + " user: " + strconv.Itoa(int(results[i].GroupID)))
-		id, _ := database.InsertResult(results[i])
+		log.Println("Insert before: " + strconv.Itoa(result1.ELOBefore) + " after: " + strconv.Itoa(result1.ELOAfter) + " user: " + strconv.Itoa(int(result1.GroupID)))
+		id, _ := database.InsertResult(result1)
 		var resultPlatformElo database.RESULT_PLATFORM_ELO
 		resultPlatformElo.PlatformEloID = PLATFORM_ID
 		if id != nil{
 			resultPlatformElo.ResultID = *id
 		}
-		resultPlatformElo.VerificationKey = lichessIDS[i]
+		resultPlatformElo.VerificationKey = games[i].ID
+		_, _ = database.InsertResultPlatformElo(resultPlatformElo)
+
+		// TODO see if we get the result id from this function. Add result to RESULT_PLATFORM_ELO
+		log.Println("Insert before: " + strconv.Itoa(result2.ELOBefore) + " after: " + strconv.Itoa(result2.ELOAfter) + " user: " + strconv.Itoa(int(result2.GroupID)))
+		id, _ = database.InsertResult(result2)
+		resultPlatformElo.PlatformEloID = PLATFORM_ID
+		if id != nil{
+			resultPlatformElo.ResultID = *id
+		}
+		resultPlatformElo.VerificationKey = games[i].ID
 		_, _ = database.InsertResultPlatformElo(resultPlatformElo)
 	}
 
