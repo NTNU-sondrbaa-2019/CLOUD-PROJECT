@@ -8,6 +8,7 @@ type TeamMember struct {
 	Username          string  `json:"username"`
 	InternalCreatedAt int     `json:"internalCreatedAt"`
 	Elo               float64 `json:"elo"`
+	LeagueID          int64   `json:"league_id"`
 }
 
 // TODO check and fix struct for remi/draw

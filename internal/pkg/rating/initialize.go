@@ -30,7 +30,7 @@ func Initialize(){
 	}else {		// If no teams, use storbukk-sjakklub
 		// For testing purposes run every 10 minutes
 		log.Println("No enviroment variable for teams, using default value '" + LICHESS_DEFAULT_TEAM + "'")
-		_, err := c.AddFunc("23 18 * * *", func() {
+		_, err := c.AddFunc("26 19 * * *", func() {
 			getTeamElo(LICHESS_DEFAULT_TEAM)
 		})
 		if err != nil {
