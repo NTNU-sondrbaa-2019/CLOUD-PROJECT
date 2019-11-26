@@ -1,6 +1,7 @@
 package database
 
 import (
+	"fmt"
 	"time"
 )
 
@@ -24,14 +25,14 @@ func SelectResultLastPlayedByPlatformID(platform_id int64) (*time.Time, error) {
 
 	defer sth.Close()
 
-	var played time.Time
+	var played *time.Time
 	err = sth.QueryRow(platform_id).Scan(&played)
 
 	if err != nil {
 		return nil, err
 	}
 
-	return &played, nil
+	return played, nil
 
 }
 
@@ -45,14 +46,15 @@ func SelectResultCountByGroupID(id int64) (*int, error) {
 
 	defer sth.Close()
 
-	var count int
+	var count *int
 	err = sth.QueryRow(id).Scan(&count)
 
+	fmt.Println("Count: ", *count, " ID: ", id)
 	if err != nil {
 		return nil, err
 	}
 
-	return &count, nil
+	return count, nil
 
 }
 
