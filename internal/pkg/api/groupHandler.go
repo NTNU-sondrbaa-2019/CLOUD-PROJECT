@@ -41,8 +41,9 @@ func GroupHandler(w http.ResponseWriter, r *http.Request) HTTPErrors.Error {
 				case "results":
 					err := GroupResultsHandler(w, r)
 					return err
-				case "seasons":
-					return HTTPErrors.NewError("Not Implemented", http.StatusNotImplemented)
+				case "leagues":
+					err := GroupLeaguesHandler(w, r)
+					return err
 				default:
 					return HTTPErrors.NewError("Bad Request", http.StatusBadRequest)
 				}
