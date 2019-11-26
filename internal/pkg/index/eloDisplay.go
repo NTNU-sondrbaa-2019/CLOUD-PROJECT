@@ -29,7 +29,7 @@ func EloDisplay(w http.ResponseWriter, r *http.Request) HTTPErrors.Error {
 		view.ErrorPage(w, "Parameter Error", http.StatusInternalServerError)
 	}
 
-	selectedLeague, err := database.SelectLeagueSeason(league, season)
+	selectedLeague, err := database.SelectLeague(league)
 	if err != nil {
 		view.ErrorPage(w, "Parameter Error", http.StatusInternalServerError)
 	}
