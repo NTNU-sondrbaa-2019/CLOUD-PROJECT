@@ -5,10 +5,9 @@ An application for measuring ELO within a small collections of players or groups
 ## API Endpoints
 
 * `/api/v1/user/@/results`  TODO Vebjørn
-* `/api/v1/user/@/teams`    TODO Vebjørn
-* `/api/v1/team/@/users`    TODO Vebjørn
+* `/api/v1/user/@/seasons`    TODO Vebjørn
+* `/api/v1/team/@/groups`    TODO Vebjørn
 * `/api/v1/team/@/results`  TODO Vebjørn
-* `/api/v1/team/@/seasons`  TODO Vebjørn
 * `/api/v1/diagnostics`     TODO Adrian
 
 ## Group `8`: `GR8`
