@@ -19,6 +19,13 @@
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
                 integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
                 crossorigin="anonymous"></script>
+        <script type="text/javascript">
+            $(document).ready(function () {
+                $(".math-add").each(function () {
+                    $(this).text(parseInt($(this).text()) + 1);
+                });
+            });
+        </script>
         <title>Season Table &bullet; {{.LeagueName}} &bullet; {{.SeasonName}}</title>
     </head>
     <body>
@@ -38,7 +45,7 @@
             <tbody>
             {{range $index, $group := .Groups}}
                 <tr>
-                    <th scope="row">$index</th>
+                    <th scope="row" class="math-add">{{$index}}</th>
                     <td>{{$group.ID}}</td>
                     <td>{{$group.Name}}</td>
                     <td>{{$group.CurrentELO}}</td>

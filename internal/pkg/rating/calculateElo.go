@@ -49,7 +49,7 @@ func calculateElo(games []Game, teamMembers []TeamMember) []TeamMember {
 				log.Println(err)
 			}
 			if lastResultWhite != nil && err == nil {
-				log.Println("Elo of resultwhite: ")
+				log.Println("Elo of result white: ")
 				log.Println(lastResultWhite.ELOAfter)
 				log.Println("Result found, setting elo for this user to " + strconv.Itoa(lastResultWhite.ELOAfter))
 				white.Elo = float64(lastResultWhite.ELOAfter)
