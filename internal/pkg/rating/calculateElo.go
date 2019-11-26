@@ -19,8 +19,8 @@ func calculateElo(games []Game, teamMembers []TeamMember) []TeamMember {
 		tmp := getWhiteAndBlackFromGame(games[i], newTeamMembers)
 		white := tmp[0]
 		black := tmp[1]
-		group1, _ := database.SelectGroupByLeagueIDAndLeagueSeasonNameAndName(LICHESS_LEAGUE_ID, LICHESS_LEAGUE_SEASON_NAME, white.Username)
-		group2, _ := database.SelectGroupByLeagueIDAndLeagueSeasonNameAndName(LICHESS_LEAGUE_ID, LICHESS_LEAGUE_SEASON_NAME, black.Username)
+		group1, _ := database.SelectGroupByLeagueIDAndLeagueSeasonNameAndName(white.LeagueID, LICHESS_LEAGUE_SEASON_NAME, white.Username)
+		group2, _ := database.SelectGroupByLeagueIDAndLeagueSeasonNameAndName(black.LeagueID, LICHESS_LEAGUE_SEASON_NAME, black.Username)
 
 		//TODO get elo from own database
 		log.Println("Group1 id: ", group1.ID)
