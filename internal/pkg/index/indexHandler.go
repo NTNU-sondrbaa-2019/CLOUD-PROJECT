@@ -18,21 +18,25 @@ type data struct {
 }
 
 func HandleIndex(w http.ResponseWriter, r *http.Request) HTTPErrors.Error {
+
 	url := r.URL.Path
 	fmt.Println(url)
+
 	if url == "/" {
-		logged := false // Doesnt check currently if actually logged in
+
+		signed_in := false // Doesnt check currently if actually signed_in in
 		currentTime := time.Now()
 
 		// Gets the value od the sessionID cokkie from the users browser
 		sessionID := gauth.GetCookieValueByName(r.Cookies(), "sessionID")
-		// If the sessionID is not empty, we are logged in
+		// If the sessionID is not empty, we are signed_in in
 		if sessionID != "" {
-			logged = true
+			signed_in = true
 		}
 
-		if !logged {
-			// Page to load if not logged in
+		if !signed_in {
+
+			// Page to load if not signed_in in
 			page := &data{
 				Title:       "Login - gr8elo.com",
 				CurrentYear: strconv.Itoa(currentTime.Year()),
@@ -40,12 +44,12 @@ func HandleIndex(w http.ResponseWriter, r *http.Request) HTTPErrors.Error {
 			}
 
 			view.Render(w, "login", page)
+
 		} else {
 
 			var user *database.USER
 
-			session_cookie := gauth.GetCookieValueByName(r.Cookies(), "sessionID")
-			user_id, err := gauth.GetUserIDFromSessionID(session_cookie)
+			user_id, err := gauth.GetUserIDFromSessionID(sessionID)
 
 			if err != nil {
 
@@ -63,17 +67,23 @@ func HandleIndex(w http.ResponseWriter, r *http.Request) HTTPErrors.Error {
 
 			}
 
-			// Page to load if logged in
+			// Page to load if signed_in in
 			page := &data{
-				Title: "Homepage - gr8elo.com",
+				Title:       "Homepage - gr8elo.com",
 				CurrentYear: strconv.Itoa(currentTime.Year()),
-				Username: user.Name,
+				Username:    user.Name,
 			}
 
 			view.Render(w, "ucp", page)
+
 		}
+
 	} else {
-		view.ErrorPage(w, "Not found", http.StatusNotFound)
+
+		return HTTPErrors.NewError("Not found", http.StatusNotFound)
+
 	}
-	return HTTPErrors.NewError("", 0)
+
+	return HTTPErrors.NewError("Something went wrong", http.StatusInternalServerError)
+
 }
