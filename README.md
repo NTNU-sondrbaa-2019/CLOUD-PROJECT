@@ -4,11 +4,20 @@ An application for measuring ELO within a small collections of players or groups
 
 ## API Endpoints
 
-* `/api/v1/user/@/results`  TODO Vebjørn
-* `/api/v1/user/@/teams`    TODO Vebjørn
-* `/api/v1/team/@/users`    TODO Vebjørn
-* `/api/v1/team/@/results`  TODO Vebjørn
-* `/api/v1/diagnostics`     TODO Adrian
+These endpoints all return json objects in the body of the response.
+
+* `/api/v1/league/[league_id]/groups`
+Returns all groups that are a part of the given league
+
+* `/api/v1/league/[league_id]/results`
+Returns the results of all matches played in the given league
+
+* `/api/v1/groups/[group_id]/leagues`
+Returns the leagues of which the given group  is a part of
+
+* `/api/v1/groups/[group_id]/results`
+Returns the results of all matches played by this group
+
 
 ## Group `8`: `GR8`
 
@@ -55,10 +64,6 @@ One for the lichess.org api calls, one for calculations, and the last for combin
 The rating package has a bug at the moment when it fetches the current elo of a player in the database, elo is always set to 1500 before a new calculation is done to the players elo.
 This makes the use case of this package unusable as the elo always will be 1500 +- rating change of one match.
 
-TODO Adrian
-
-TODO Vebjørn
-
 ### Reflections
 
 We needed more time to design the project together instead of going straight to development. The scope of the project was too large for our group; since we're all very busy students.
@@ -69,11 +74,7 @@ A solution that would help with the development of the project for our group wou
 
 Learned how to deal with NDJSON structs, more about writing tests and how to work with another person on the same tasks. Time management is also something we can take as an big experience from this project. Its easy to dream big, but things takes time, and most of the cases it takes more time that you think and plan.  
 
-TODO Adrian
-
 We worked with an `AWS RDS` database and learned how to setup the instance, connect to it and run SQL from Go. This will be useful in the future since persitent data is useful for every project.
-
-TODO Vebjørn
 
 ### Work Hours
 

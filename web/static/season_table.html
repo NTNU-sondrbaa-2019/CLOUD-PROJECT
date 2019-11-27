@@ -1,4 +1,4 @@
-{{define "ucp"}}
+{{define "season_table"}}
     <!DOCTYPE html>
     <html lang="en">
     <head>
@@ -19,7 +19,14 @@
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
                 integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
                 crossorigin="anonymous"></script>
-        <title>{{.Title}}</title>
+        <script type="text/javascript">
+            $(document).ready(function () {
+                $(".math-add").each(function () {
+                    $(this).text(parseInt($(this).text()) + 1);
+                });
+            });
+        </script>
+        <title>Season Table &bullet; {{.LeagueName}} &bullet; {{.SeasonName}}</title>
     </head>
     <body>
     <header>
@@ -33,11 +40,11 @@
                 </button>
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav mr-auto">
-                        <li class="nav-item active">
-                            <a class="nav-link" href="/">User Control Panel <span class="sr-only">(current)</span></a>
-                        </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="/season-table/?league=3&season=Sjakksesong">Season Table</a>
+                            <a class="nav-link" href="/">User Control Panel</a>
+                        </li>
+                        <li class="nav-item active">
+                            <a class="nav-link" href="/season-table/?league=3&season=Sjakksesong">Season Table <span class="sr-only">(current)</span></a>
                         </li>
                     </ul>
                     <div class="navbar-text my-2 my-lg-0">
@@ -48,45 +55,36 @@
         </nav>
     </header>
     <div class="container mt-5">
-        <h1 class="display-3">Welcome back, {{.Username}}</h1>
-        <div class="card">
-            <div class="card-body">
-                <h2>lichess.org Configurations</h2>
-                <form method="POST">
-                    <div class="form-group">
-                        <label for="access-token">Access Token:</label>
-                        <input type="text" class="form-control" name="ACCESS_TOKEN" id="access-token"
-                               placeholder="ABC-DEF-GHI">
-                        <small class="form-text text-muted">The access token is used to connect your gr8elo.com account
-                            with your lichess.org account.</small>
-                    </div>
-                    <div>
-                        <input type="hidden" name="FORM_TOKEN" value="lichess_config">
-                        <input type="submit" class="btn btn-lg btn-primary" value="Save Settings">
-                    </div>
-                </form>
-                <hr>
-                <form>
-                    <div class="alert alert-warning">
-                        <i class="fa fa-exclamation mr-3"></i>
-                        This feature has been temporarily disabled.
-                    </div>
-                    <div class="form-group">
-                        <label for="team-id">Team ID:</label>
-                        <input type="text" class="form-control" name="TEAM_ID" id="team-id"
-                               placeholder="storbukk-sjakklubb"
-                               disabled>
-                        <small class="form-text text-muted">Write the lichess.org Team ID you want to fetch ELO for
-                            right
-                            now.</small>
-                    </div>
-                    <div class="form-group">
-                        <input type="hidden" name="FORM_TOKEN" value="lichess_team">
-                        <input type="submit" class="btn btn-secondary" value="Fetch Team Data" disabled>
-                    </div>
-                </form>
-            </div>
-        </div>
+        <h1 class="display-3">{{.SeasonName}}</h1>
+        <h2>a season by {{.LeagueName}}</h2>
+        <table class="table mt-5">
+            <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">ID</th>
+                <th scope="col">Name</th>
+                <th scope="col">ELO</th>
+                <th scope="col">Last Played</th>
+            </tr>
+            </thead>
+            <tbody>
+            {{range $index, $group := .Groups}}
+                <tr>
+                    <th scope="row" class="math-add">{{$index}}</th>
+                    <td>{{$group.ID}}</td>
+                    <td>{{$group.Name}}</td>
+                    <td>{{$group.CurrentELO}}</td>
+                    <td>{{$group.LastPlayed}}</td>
+                </tr>
+            {{else}}
+                <tr>
+                    <td colspan="4">
+                        No groups found for your parameters.
+                    </td>
+                </tr>
+            {{end}}
+            </tbody>
+        </table>
     </div>
     <footer>
         <div class="container text-center mt-3">

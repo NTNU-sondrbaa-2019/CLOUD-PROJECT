@@ -6,15 +6,16 @@ import (
 	"github.com/NTNU-sondrbaa-2019/CLOUD-PROJECT/internal/pkg/HTTPErrors"
 	"github.com/NTNU-sondrbaa-2019/CLOUD-PROJECT/internal/pkg/database"
 	"github.com/NTNU-sondrbaa-2019/CLOUD-PROJECT/internal/pkg/view"
+	"github.com/kennygrant/sanitize"
 	"log"
 	"net/http"
 	"strconv"
 	"strings"
-	"time"
 )
 
 func GroupHandler(w http.ResponseWriter, r *http.Request) HTTPErrors.Error {
 	urlPart := strings.Split(r.URL.Path, "/")
+	fmt.Println("In Group Handler")
 	switch r.Method {
 	case "GET":
 		if (urlPart[4] != "") {
@@ -22,9 +23,14 @@ func GroupHandler(w http.ResponseWriter, r *http.Request) HTTPErrors.Error {
 			// This will now use ID, but in the future I would like to change this to something like by Name or Nickname
 
 			// SQL INJECTION - Disabled by Sondre
-			// groups, _ = database.SelectGroups("WHERE name=\""+urlPart[4] + "\"")
+			var safeQuery string
+			safeQuery = urlPart[4]
+			safeQuery = sanitize.Accents(safeQuery)
+			safeQuery = sanitize.HTML(safeQuery)
 
-			var groups []database.GROUP
+			groups, _ = database.SelectGroups("WHERE name=\""+safeQuery + "\"")
+
+
 
 			fmt.Println(groups)
 			if len(urlPart) > 5 {
@@ -35,8 +41,9 @@ func GroupHandler(w http.ResponseWriter, r *http.Request) HTTPErrors.Error {
 				case "results":
 					err := GroupResultsHandler(w, r)
 					return err
-				case "seasons":
-					return HTTPErrors.NewError("Not Implemented", http.StatusNotImplemented)
+				case "leagues":
+					err := GroupLeaguesHandler(w, r)
+					return err
 				default:
 					return HTTPErrors.NewError("Bad Request", http.StatusBadRequest)
 				}
@@ -67,14 +74,6 @@ func GroupResultsHandler(w http.ResponseWriter, r *http.Request) HTTPErrors.Erro
 
 	var tmpGroupResults groupRes
 	var groupResults []groupRes
-
-	data := database.GROUP{}
-	data.Created = time.Now()
-	data.Name = "Name"
-	data.LeagueSeasonName = "TestName"
-	data.LeagueID = 2
-
-	database.InsertGroup(data)
 
 	for i, g := range *groups {
 		fmt.Println(i, g)

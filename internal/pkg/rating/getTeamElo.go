@@ -93,6 +93,7 @@ func getTeamElo(teamIDKey string) []TeamMember {
 		tmpGroup.Name = teamMembers[i].Username
 		tmpGroup.LeagueSeasonName = "Sjakksesong"
 		tmpGroup.Created = time.Now()
+		teamMembers[i].LeagueID = leageIDFromDB.ID
 		_, err = database.InsertGroup(tmpGroup)
 		if err != nil {
 			log.Println(err)

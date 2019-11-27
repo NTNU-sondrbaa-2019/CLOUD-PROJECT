@@ -21,14 +21,17 @@ func getGamesOfMemberVSMember(member TeamMember, vsMember TeamMember) []Game {
 	}
 
 	 */
-	since, err := database.SelectResultPlayedLastByPlatform(PLATFORM_ID)
+
+	// todo this since variable does not make sense. Can make other teams games disapear
+	since, err := database.SelectResultLastPlayedByLeagueID(member.LeagueID)
 	var sinceTime int
 	if err == nil && since != nil {
-		sinceTime = int(since.UnixNano())/1000000
+		sinceTime = (int(since.UnixNano())/1000000) + 1000
+		log.Println("Unix epoch time in milliseconds:\t", sinceTime)
 	}  else {
 		log.Println(err)
 		// TODO set to leagues start time
-		sinceTime = 1572607209000 // 11.01.2019
+		sinceTime = 1572607209000 // 01.11.2019
 	}
 	print(member.Username + "\t vs \t" + vsMember.Username + "\n")
 	request := "https://lichess.org/api/games/user/" + member.Username + "?vs=" + vsMember.Username + "&perftype=blitz,classical,rapid,correspondence&since=" + strconv.Itoa(sinceTime)
