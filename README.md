@@ -18,6 +18,7 @@ Returns the leagues of which the given group  is a part of
 * `/api/v1/groups/[group_id]/results`
 Returns the results of all matches played by this group
 
+
 ## Group `8`: `GR8`
 
 * `Sondre Benjamin Aasen` (`sondrbaa`)
