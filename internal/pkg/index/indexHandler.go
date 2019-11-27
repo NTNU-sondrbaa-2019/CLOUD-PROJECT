@@ -3,6 +3,7 @@ package index
 import (
 	"fmt"
 	"github.com/NTNU-sondrbaa-2019/CLOUD-PROJECT/internal/pkg/HTTPErrors"
+	"github.com/NTNU-sondrbaa-2019/CLOUD-PROJECT/internal/pkg/database"
 	"github.com/NTNU-sondrbaa-2019/CLOUD-PROJECT/internal/pkg/gauth"
 	"github.com/NTNU-sondrbaa-2019/CLOUD-PROJECT/internal/pkg/view"
 	"net/http"
@@ -40,8 +41,34 @@ func HandleIndex(w http.ResponseWriter, r *http.Request) HTTPErrors.Error {
 
 			view.Render(w, "login", page)
 		} else {
+
+			var user *database.USER
+
+			session_cookie := gauth.GetCookieValueByName(r.Cookies(), "sessionID")
+			user_id, err := gauth.GetUserIDFromSessionID(session_cookie)
+
+			if err != nil {
+
+				return HTTPErrors.NewError("Couldn't fetch user id from session", http.StatusInternalServerError)
+
+			} else {
+
+				user, err = database.SelectUserByID(user_id)
+
+				if err != nil {
+
+					return HTTPErrors.NewError("Couldn't fetch user with user id (from session)", http.StatusInternalServerError)
+
+				}
+
+			}
+
 			// Page to load if logged in
-			page := &data{Title: "Homepage - gr8elo.com", CurrentYear: strconv.Itoa(currentTime.Year())}
+			page := &data{
+				Title: "Homepage - gr8elo.com",
+				CurrentYear: strconv.Itoa(currentTime.Year()),
+				Username: user.Name,
+			}
 
 			view.Render(w, "ucp", page)
 		}
