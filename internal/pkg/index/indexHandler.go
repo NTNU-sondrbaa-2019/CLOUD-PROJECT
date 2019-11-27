@@ -36,7 +36,7 @@ func HandleIndex(w http.ResponseWriter, r *http.Request) HTTPErrors.Error {
 			page := &data{
 				Title:       "Login - gr8elo.com",
 				CurrentYear: strconv.Itoa(currentTime.Year()),
-				Username:    "Unknown Username",
+				Username:    "Guest",
 			}
 
 			view.Render(w, "login", page)
