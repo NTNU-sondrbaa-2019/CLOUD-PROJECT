@@ -29,14 +29,15 @@ func HandleIndex(w http.ResponseWriter, r *http.Request) HTTPErrors.Error {
 
 		// Gets the value od the sessionID cokkie from the users browser
 		sessionID := gauth.GetCookieValueByName(r.Cookies(), "sessionID")
-		// If the sessionID is not empty, we are signed_in in
+
+		// If the sessionID is not empty, we are signed in
 		if sessionID != "" {
 			signed_in = true
 		}
 
 		if !signed_in {
 
-			// Page to load if not signed_in in
+			// Page to load if not signed in
 			page := &data{
 				Title:       "Login - gr8elo.com",
 				CurrentYear: strconv.Itoa(currentTime.Year()),
@@ -67,7 +68,7 @@ func HandleIndex(w http.ResponseWriter, r *http.Request) HTTPErrors.Error {
 
 			}
 
-			// Page to load if signed_in in
+			// Page to load if signed in
 			page := &data{
 				Title:       "Homepage - gr8elo.com",
 				CurrentYear: strconv.Itoa(currentTime.Year()),
